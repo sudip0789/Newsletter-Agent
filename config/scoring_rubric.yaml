@@ -1,0 +1,15 @@
+# Scoring weights — must sum to 1.0
+weights:
+  ai_relevance: 0.25
+  impact: 0.30
+  audience_relevance: 0.15
+  novelty: 0.15
+  source_quality: 0.10
+  buzz_momentum: 0.05
+
+# Selection constraints
+selection:
+  total_top: 30
+
+# Model
+model: "gpt-5.4"

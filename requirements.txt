@@ -1,0 +1,13 @@
+openai
+anthropic
+httpx
+feedparser
+beautifulsoup4
+trafilatura
+lxml_html_clean
+pydantic>=2.0
+python-dotenv
+pyyaml
+numpy
+scikit-learn
+streamlit
