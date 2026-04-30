@@ -200,7 +200,7 @@ class Scorer:
     def select_top_30(self, stories: list[ScoredStory]) -> list[ScoredStory]:
         """
         1. Sort all stories by composite_score descending.
-        2. Apply section diversity: no more than 8 stories from any single section.
+        2. Apply section diversity: no more than 6 stories from any single section.
         3. Select top 30 that satisfy constraints.
         4. Return the 30 stories.
         """
@@ -215,7 +215,7 @@ class Scorer:
         for story in sorted_stories:
             if len(selected) >= self.selection_total:
                 break
-            if section_counts[story.section] >= 8:
+            if section_counts[story.section] >= 6:
                 continue
             selected.append(story)
             section_counts[story.section] += 1

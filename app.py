@@ -9,6 +9,8 @@ from typing import Any
 
 import streamlit as st
 
+from src.text_utils import to_safe_html_text
+
 
 st.set_page_config(page_title="AI Upload Review", layout="wide")
 
@@ -286,7 +288,7 @@ def render_summary(model_key: str, summary: str | None) -> None:
     st.markdown(f"**{MODEL_LABELS[model_key]}**")
     if summary:
         st.markdown(
-            f'<div class="summary-box">{escape(summary)}</div>',
+            f'<div class="summary-box">{to_safe_html_text(summary)}</div>',
             unsafe_allow_html=True,
         )
     else:
@@ -433,7 +435,10 @@ def render_article_card(article: dict[str, Any]) -> None:
             format_score_breakdown(article.get("scores", {}))
         with details_col:
             rationale = article.get("rationale") or "No rationale available."
-            st.markdown(f"*{rationale}*")
+            st.markdown(
+                f'<div class="summary-box"><em>{to_safe_html_text(rationale)}</em></div>',
+                unsafe_allow_html=True,
+            )
             st.markdown(
                 f"**Coverage** — Covered by {article['coverage_count']} outlets: {coverage_sources}"
             )

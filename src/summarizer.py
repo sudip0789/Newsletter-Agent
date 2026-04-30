@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 from openai import OpenAI
 
 from src.models import ScoredStory, StoryCluster, SummarizedStory
+from src.text_utils import escape_dollar_signs_for_markdown
 
 LOGGER = logging.getLogger(__name__)
 
@@ -31,7 +32,7 @@ Article text:
 
 
 class Summarizer:
-    DEFAULT_TOP_N = 10
+    DEFAULT_TOP_N = 30
     DEFAULT_MODEL = "gpt-5.4"
     MAX_WORKERS = 5
     MAX_TEXT_CHARS = 10000
@@ -219,7 +220,7 @@ class Summarizer:
                 "section": scored_story.section,
                 "tier": scored_story.tier,
             },
-            "summary": story.summary,
+            "summary": escape_dollar_signs_for_markdown(story.summary),
             "needs_manual_review": story.needs_manual_review,
         }
 

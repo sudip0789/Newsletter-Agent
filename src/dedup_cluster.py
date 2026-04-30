@@ -17,7 +17,7 @@ class Deduplicator:
     def __init__(
         self,
         input_path: str = "data/output/relevant_articles.json",
-        similarity_threshold: float = 0.70,
+        similarity_threshold: float = 0.60,
         recompute_embeddings: bool = False,
         show_clusters: bool = False,
     ):

@@ -185,6 +185,38 @@ class TestSummarizer(unittest.TestCase):
         self.assertIn("scored_story", payload[0])
         self.assertNotIn("all_articles", payload[0]["scored_story"]["cluster"])
 
+    def test_save_results_escapes_dollar_signs_in_summary(self) -> None:
+        story = self._scored_story("currency", 0.8, "A" * 200, "full")
+        summarized = SummarizedStory(
+            scored_story=story,
+            summary="$97 billion on infrastructure to win $37 billion",
+            needs_manual_review=False,
+        )
+        summarizer = self._make_summarizer([story])
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            summarizer.output_path = Path(tmpdir) / "summarized_stories.json"
+            summarizer.save_results([summarized])
+            payload = json.loads(summarizer.output_path.read_text(encoding="utf-8"))
+
+        self.assertEqual(
+            payload[0]["summary"],
+            r"\$97 billion on infrastructure to win \$37 billion",
+        )
+
+    def test_save_results_escapes_dollar_signs_for_snippet_summaries(self) -> None:
+        story = self._scored_story("snippet-currency", 0.8, "$12 million saved", "snippet")
+        summarizer = self._make_summarizer([story], top_n=1)
+        summarized = summarizer.handle_snippet(story)
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            summarizer.output_path = Path(tmpdir) / "summarized_stories.json"
+            summarizer.save_results([summarized])
+            payload = json.loads(summarizer.output_path.read_text(encoding="utf-8"))
+
+        self.assertEqual(payload[0]["summary"], r"\$12 million saved")
+        self.assertTrue(payload[0]["needs_manual_review"])
+
     @patch("src.summarizer.load_dotenv")
     @patch.object(Summarizer, "_build_client")
     @patch("src.summarizer.os.getenv")

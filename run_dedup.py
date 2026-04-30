@@ -4,7 +4,7 @@ Deduplicate and cluster articles into story groups.
 Usage:
     python run_dedup.py
     python run_dedup.py --input data/output/relevant_articles.json
-    python run_dedup.py --threshold 0.85
+    python run_dedup.py --threshold 0.60
     python run_dedup.py --recompute-embeddings
     python run_dedup.py --show-clusters
 """
@@ -28,7 +28,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--threshold",
         type=float,
-        default=0.70,
+        default=0.60,
         help=(
             "Cosine similarity threshold for clustering. "
             "Higher is stricter; lower is more aggressive."
