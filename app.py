@@ -204,111 +204,6 @@ def load_optional_json(filename: str) -> tuple[list[dict[str, Any]], Path | None
     return data if isinstance(data, list) else [], file_path
 
 
-def load_uploaded_json(uploaded_file: Any) -> list[dict[str, Any]]:
-    if uploaded_file is None:
-        return []
-    try:
-        payload = json.loads(uploaded_file.getvalue().decode("utf-8"))
-    except (UnicodeDecodeError, json.JSONDecodeError):
-        st.error(f"Could not parse `{uploaded_file.name}` as UTF-8 JSON.")
-        return []
-    if not isinstance(payload, list):
-        st.error(f"`{uploaded_file.name}` must contain a JSON array.")
-        return []
-    return payload
-
-
-def derive_scored_stories(
-    gpt_items: list[dict[str, Any]],
-    sonnet_items: list[dict[str, Any]],
-) -> list[dict[str, Any]]:
-    derived: dict[str, dict[str, Any]] = {}
-
-    for item in [*gpt_items, *sonnet_items]:
-        scored_story = item.get("scored_story")
-        if not isinstance(scored_story, dict):
-            continue
-
-        primary = scored_story.get("cluster", {}).get("primary_article", {})
-        url = primary.get("url")
-        cluster_id = scored_story.get("cluster", {}).get("cluster_id")
-        key = url or cluster_id
-        if key:
-            derived[key] = scored_story
-
-    return list(derived.values())
-
-
-def resolve_story_inputs() -> tuple[
-    list[dict[str, Any]],
-    list[dict[str, Any]],
-    list[dict[str, Any]],
-    list[str],
-]:
-    local_scored_stories, scored_path = load_optional_json("scored_stories.json")
-    local_gpt_items, gpt_path = load_optional_json("summarized_stories_openai_gpt_5_4.json")
-    local_sonnet_items, sonnet_path = load_optional_json(
-        "summarized_stories_anthropic_sonnet_4_6.json"
-    )
-
-    with st.sidebar:
-        st.markdown("### Data Inputs")
-        st.caption(
-            "Streamlit Cloud will not see ignored `data/output/` files. Upload existing JSON outputs here to review them without rerunning the pipeline."
-        )
-        uploaded_scored = st.file_uploader(
-            "Scored stories JSON",
-            type=["json"],
-            key="scored_stories_upload",
-            help="Optional. Use `scored_stories.json` if you want the full ranked list.",
-        )
-        uploaded_gpt = st.file_uploader(
-            "GPT-5.4 summaries JSON",
-            type=["json"],
-            key="gpt_summaries_upload",
-            help="Upload `summarized_stories_openai_gpt_5_4.json`.",
-        )
-        uploaded_sonnet = st.file_uploader(
-            "Claude Sonnet 4.6 summaries JSON",
-            type=["json"],
-            key="sonnet_summaries_upload",
-            help="Upload `summarized_stories_anthropic_sonnet_4_6.json`.",
-        )
-
-    scored_stories = (
-        load_uploaded_json(uploaded_scored) if uploaded_scored is not None else local_scored_stories
-    )
-    gpt_items = load_uploaded_json(uploaded_gpt) if uploaded_gpt is not None else local_gpt_items
-    sonnet_items = (
-        load_uploaded_json(uploaded_sonnet) if uploaded_sonnet is not None else local_sonnet_items
-    )
-
-    notices: list[str] = []
-    if uploaded_scored is not None:
-        notices.append(f"Using uploaded scored stories: `{uploaded_scored.name}`")
-    elif scored_path:
-        notices.append(f"Using local scored stories: `{scored_path.name}`")
-
-    if uploaded_gpt is not None:
-        notices.append(f"Using uploaded GPT-5.4 summaries: `{uploaded_gpt.name}`")
-    elif gpt_path:
-        notices.append(f"Using local GPT-5.4 summaries: `{gpt_path.name}`")
-
-    if uploaded_sonnet is not None:
-        notices.append(f"Using uploaded Claude Sonnet 4.6 summaries: `{uploaded_sonnet.name}`")
-    elif sonnet_path:
-        notices.append(f"Using local Claude Sonnet 4.6 summaries: `{sonnet_path.name}`")
-
-    if not scored_stories and (gpt_items or sonnet_items):
-        scored_stories = derive_scored_stories(gpt_items, sonnet_items)
-        if scored_stories:
-            notices.append(
-                "Derived ranked stories from uploaded summary files because `scored_stories.json` was not provided."
-            )
-
-    return scored_stories, gpt_items, sonnet_items, notices
-
-
 def parse_date(value: str | None) -> str:
     if not value:
         return "Date unavailable"
@@ -559,19 +454,17 @@ def main() -> None:
     inject_styles()
     st.title("AI Upload Review")
 
-    scored_stories, gpt_items, sonnet_items, notices = resolve_story_inputs()
-    if not scored_stories:
-        st.info(
-            "No story data found. On Streamlit Cloud, upload `scored_stories.json` or your two summary JSON files in the sidebar."
-        )
+    scored_stories, scored_path = load_optional_json("scored_stories.json")
+    if not scored_path:
+        st.info("No scored stories found. Run the pipeline first: python run_pipeline.py")
         return
 
-    for notice in notices:
-        st.caption(notice)
+    gpt_items, gpt_path = load_optional_json("summarized_stories_openai_gpt_5_4.json")
+    sonnet_items, sonnet_path = load_optional_json("summarized_stories_anthropic_sonnet_4_6.json")
 
-    if not gpt_items:
+    if not gpt_path:
         st.info("GPT-5.4 summaries not found")
-    if not sonnet_items:
+    if not sonnet_path:
         st.info("Claude Sonnet 4.6 summaries not found")
 
     articles = build_article_records(
