@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The AI Upload Weekly Digest</title>
+  <style>
+    :root {
+      --brand-red: #8b0000;
+      --ink: #1f1f1f;
+      --muted: #666666;
+      --paper: #ffffff;
+      --line: #d8d2cd;
+      --panel: #2f2f2f;
+      --panel-hover: #434343;
+      --soft: #f7f3f0;
+      --shadow: 0 16px 36px rgba(24, 18, 14, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #f5efeb 0%, #ffffff 180px);
+      color: var(--ink);
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .page {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 22px 24px 48px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 38px 0 30px;
+      border-bottom: 4px solid var(--brand-red);
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: flex-start;
+      gap: 22px;
+      min-width: 0;
+    }
+
+    .header-logo {
+      width: 146px;
+      height: 146px;
+      border-radius: 30px;
+      object-fit: cover;
+      background: #ffffff;
+      border: 1px solid rgba(139, 0, 0, 0.12);
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .header-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .header-lockup {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .header-lockup-line {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.02;
+    }
+
+    .header-lockup-top {
+      font-size: clamp(1.55rem, 2.4vw, 2.6rem);
+    }
+
+    .header-lockup-top .stanford {
+      color: #b22222;
+    }
+
+    .header-lockup-top .law-school {
+      color: #8e8e8e;
+    }
+
+    .header-lockup-bottom {
+      color: #111111;
+      font-size: clamp(1.35rem, 2.1vw, 2.35rem);
+    }
+
+    .header-copy h1 {
+      margin: 0;
+      color: var(--brand-red);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.8rem, 2.8vw, 2.9rem);
+      line-height: 1.08;
+    }
+
+    .header-copy p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .header-date {
+      flex-shrink: 0;
+      padding: 14px 18px;
+      background: var(--paper);
+      border: 1px solid rgba(139, 0, 0, 0.18);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      color: var(--brand-red);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.05rem;
+      text-align: right;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 228px minmax(0, 1fr);
+      gap: 28px;
+      margin-top: 28px;
+      align-items: start;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 20px;
+      height: calc(100vh - 40px);
+      min-height: 720px;
+      overflow: hidden;
+      padding: 22px 18px 20px;
+      background:
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.12), transparent 46%),
+        linear-gradient(180deg, #3a3a3a 0%, #242424 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      color: #ffffff;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-logo {
+      width: 100%;
+      max-width: 126px;
+      display: block;
+      margin: 0 auto 20px;
+      border-radius: 20px;
+      background: #ffffff;
+      padding: 10px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+    }
+
+    .sidebar-label {
+      margin: 0 0 16px;
+      color: rgba(255, 255, 255, 0.74);
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1 1 0;
+      min-height: 0;
+      padding: 13px 13px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      color: #ffffff;
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0.05);
+      transition: background 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
+    }
+
+    .sidebar-link:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.16);
+      transform: translateX(2px);
+    }
+
+    .sidebar-link img {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: #ffffff;
+      object-fit: cover;
+      padding: 5px;
+    }
+
+    .main {
+      min-width: 0;
+    }
+
+    .module {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .module + .module {
+      margin-top: 22px;
+    }
+
+    .module-title {
+      margin: 0 0 18px;
+      color: var(--brand-red);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.55rem;
+    }
+
+    .headline-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .headline-card {
+      display: grid;
+      grid-template-columns: 132px minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+      padding: 16px;
+      border: 1px solid rgba(139, 0, 0, 0.14);
+      border-radius: 20px;
+      color: inherit;
+      text-decoration: none;
+      background: linear-gradient(135deg, #fffaf7 0%, #ffffff 100%);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .headline-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(24, 18, 14, 0.1);
+    }
+
+    .headline-card img {
+      width: 132px;
+      height: 132px;
+      object-fit: cover;
+      border-radius: 18px;
+      background: var(--soft);
+      border: 1px solid rgba(139, 0, 0, 0.1);
+    }
+
+    .headline-card h3 {
+      margin: 0 0 8px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.4rem;
+      line-height: 1.18;
+    }
+
+    .headline-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .toc-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .toc-list a {
+      display: block;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: var(--soft);
+      border: 1px solid transparent;
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .toc-list a:hover {
+      border-color: rgba(139, 0, 0, 0.18);
+      color: var(--brand-red);
+    }
+
+    .section-block + .section-block {
+      margin-top: 28px;
+    }
+
+    .section-heading {
+      margin: 0 0 18px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid rgba(139, 0, 0, 0.12);
+      color: var(--brand-red);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 2rem;
+    }
+
+    .article {
+      padding: 0 0 24px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .article + .article {
+      margin-top: 22px;
+    }
+
+    .article:last-child {
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .article-title {
+      margin: 0 0 10px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.45rem;
+      line-height: 1.22;
+    }
+
+    .article-source {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    .article-source a {
+      color: var(--brand-red);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .article-source a:hover {
+      text-decoration: underline;
+    }
+
+    .article p {
+      margin: 0 0 12px;
+      font-size: 1rem;
+    }
+
+    .article p:last-child {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page {
+        padding: 0 16px 36px;
+      }
+
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .header-brand {
+        gap: 16px;
+      }
+
+      .header-logo {
+        width: 112px;
+        height: 112px;
+        padding: 13px;
+      }
+
+      .header-copy {
+        gap: 12px;
+      }
+
+      .header-lockup-top {
+        font-size: 1.45rem;
+      }
+
+      .header-lockup-bottom {
+        font-size: 1.2rem;
+      }
+
+      .header-date {
+        width: 100%;
+        text-align: left;
+      }
+
+      .headline-card {
+        grid-template-columns: 88px minmax(0, 1fr);
+        gap: 14px;
+        align-items: flex-start;
+        padding: 14px;
+      }
+
+      .headline-card img {
+        width: 88px;
+        height: 88px;
+      }
+
+      .headline-card h3 {
+        font-size: 1.12rem;
+      }
+
+      .headline-card p {
+        font-size: 0.94rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="header-brand">
+        <img class="header-logo" src="{{ logo_path }}" alt="The AI Upload logo">
+        <div class="header-copy">
+          <div class="header-lockup" aria-label="Stanford Law School Robert Crown Law Library">
+            <p class="header-lockup-line header-lockup-top">
+              <span class="stanford">Stanford</span><span class="law-school">LawSchool</span>
+            </p>
+            <p class="header-lockup-line header-lockup-bottom">Robert Crown Law Library</p>
+          </div>
+          <h1>The AI Upload Weekly Digest</h1>
+          <p>Curated coverage of AI developments</p>
+        </div>
+      </div>
+      <div class="header-date">{{ publish_date }}</div>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar" aria-label="Section navigation">
+        <img class="sidebar-logo" src="{{ sidebar_logo_path }}" alt="Section logo">
+        <p class="sidebar-label">Sections</p>
+        <nav class="sidebar-nav">
+          {% for section_key, section_name in active_sections %}
+          <a class="sidebar-link" href="#{{ section_key }}">
+            <img src="{{ sidebar_logo_path }}" alt="">
+            <span>{{ section_name }}</span>
+          </a>
+          {% endfor %}
+        </nav>
+      </aside>
+
+      <main class="main">
+        <section class="module">
+          <h2 class="module-title">This Week&#39;s Headlines</h2>
+          <div class="headline-list">
+            {% for headline in headlines %}
+            <a class="headline-card" href="{{ headline.url }}" target="_blank" rel="noreferrer">
+              <img src="{{ headline.image_path }}" alt="{{ headline.title }}">
+              <div>
+                <h3>{{ headline.title }}</h3>
+                <p>{{ headline.blurb }}</p>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+        </section>
+
+        <section class="module">
+          <h2 class="module-title">In This Issue</h2>
+          <ul class="toc-list">
+            {% for section_key, section_name in active_sections %}
+            <li><a href="#{{ section_key }}">{{ section_name }}</a></li>
+            {% endfor %}
+          </ul>
+        </section>
+
+        {% for section in sections %}
+        <section class="module section-block" id="{{ section.key }}">
+          <h2 class="section-heading">{{ section.name }}</h2>
+          {% for article in section.articles %}
+          <article class="article">
+            <h3 class="article-title">{{ article.title }}</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="{{ article.url }}" target="_blank" rel="noreferrer">{{ article.source_name }}</a>
+            </p>
+            {% for paragraph in article.summary_paragraphs %}
+            <p>{{ paragraph }}</p>
+            {% endfor %}
+          </article>
+          {% endfor %}
+        </section>
+        {% endfor %}
+      </main>
+    </div>
+  </div>
+</body>
+</html>

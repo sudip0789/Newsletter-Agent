@@ -11,3 +11,4 @@ pyyaml
 numpy
 scikit-learn
 streamlit
+Jinja2

@@ -90,18 +90,18 @@ class TestHeadlineSelector(unittest.TestCase):
 
         self.assertEqual(
             [pick["section"] for pick in picks],
-            ["industry", "tools_and_products", "policy"],
+            ["industry", "tools_and_products", "legal_intelligence"],
         )
         self.assertEqual(
             [pick["title"] for pick in picks],
-            ["Story industry_top", "Story tools_keep", "Story policy_fallback"],
+            ["Story industry_top", "Story tools_keep", "Story legal_other"],
         )
         self.assertEqual(
             [pick["blurb"] for pick in picks],
             [
                 "Teaser for Story industry_top",
                 "Teaser for Story tools_keep",
-                "Teaser for Story policy_fallback",
+                "Teaser for Story legal_other",
             ],
         )
 
@@ -121,11 +121,11 @@ class TestHeadlineSelector(unittest.TestCase):
 
         self.assertEqual(
             [pick["title"] for pick in picks],
-            ["Story creative", "Story industry", "Story tools"],
+            ["Story creative", "Story policy", "Story industry"],
         )
         self.assertEqual(
             [pick["composite_score"] for pick in picks],
-            [0.97, 0.91, 0.88],
+            [0.97, 0.96, 0.91],
         )
 
     def test_run_uses_input_order_as_tiebreaker(self) -> None:
@@ -199,6 +199,70 @@ class TestHeadlineSelector(unittest.TestCase):
 
         with self.assertRaisesRegex(ValueError, "under 20 words"):
             selector.generate_blurb({"title": "Test", "summary": "Summary"})
+
+    def test_run_rewrites_long_headline_titles_before_returning_picks(self) -> None:
+        long_title = (
+            "Microsoft lays out a sweeping new enterprise AI rollout across "
+            "copilots models platforms and internal tooling"
+        )
+        input_path = self._write_input(
+            [
+                self._story_payload("industry", "industry", 0.97, "Industry summary"),
+                self._story_payload("legal", "legal_intelligence", 0.96, "Legal summary"),
+                self._story_payload(
+                    "tools",
+                    "tools_and_products",
+                    0.95,
+                    "Tools summary",
+                    title=long_title,
+                ),
+            ]
+        )
+        selector = HeadlineSelector(input_path=str(input_path))
+        selector.generate_blurb = MagicMock(side_effect=lambda story: story["title"])
+        selector.generate_short_title = MagicMock(
+            return_value="Microsoft's enterprise AI push"
+        )
+
+        picks = selector.run()
+
+        self.assertEqual(picks[0]["title"], "Story industry")
+        self.assertEqual(picks[1]["title"], "Story legal")
+        self.assertEqual(picks[2]["title"], "Microsoft's enterprise AI push")
+        selector.generate_short_title.assert_called_once_with(
+            {"title": long_title, "summary": "Tools summary"}
+        )
+
+    def test_generate_short_title_uses_anthropic_and_enforces_word_count(self) -> None:
+        input_path = self._write_input([])
+        selector = HeadlineSelector(input_path=str(input_path))
+        selector.blurb_client = MagicMock()
+        selector.blurb_client.messages.create.return_value = MagicMock(
+            content=[MagicMock(type="text", text="  OpenAI courtroom trial showdown begins  ")]
+        )
+
+        short_title = selector.generate_short_title(
+            {
+                "title": "Elon gets his day in trial against Sam Altman and OpenAI",
+                "summary": "A summary about the trial and testimony.",
+            }
+        )
+
+        self.assertEqual(short_title, "OpenAI courtroom trial showdown begins")
+        call_kwargs = selector.blurb_client.messages.create.call_args.kwargs
+        self.assertEqual(call_kwargs["model"], "claude-sonnet-4-20250514")
+        self.assertIn("Original title:", call_kwargs["messages"][0]["content"])
+
+    def test_generate_short_title_raises_when_word_count_is_out_of_range(self) -> None:
+        input_path = self._write_input([])
+        selector = HeadlineSelector(input_path=str(input_path))
+        selector.blurb_client = MagicMock()
+        selector.blurb_client.messages.create.return_value = MagicMock(
+            content=[MagicMock(type="text", text="too short")]
+        )
+
+        with self.assertRaisesRegex(ValueError, "5-8 words"):
+            selector.generate_short_title({"title": "Test", "summary": "Summary"})
 
     def test_generate_headline_image_saves_file_and_returns_path(
         self,

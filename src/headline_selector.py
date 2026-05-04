@@ -21,6 +21,11 @@ BLURB_SYSTEM_PROMPT = (
     "Just the core hook that makes someone want to read more."
 )
 
+SHORT_TITLE_SYSTEM_PROMPT = (
+    "Rewrite long newsletter headlines into a catchy 5-8 word title. "
+    "Preserve the core news angle, avoid clickbait, and return only the rewritten title."
+)
+
 
 class HeadlineSelector:
     HEADLINE_CATEGORIES = ["industry", "legal_intelligence", "creative_ai"]
@@ -46,14 +51,25 @@ class HeadlineSelector:
         Select 3 headline stories, generate blurbs, and return the headline payloads.
         """
         selected_stories = self._select_headline_stories()
-        return [
-            {
-                **story,
-                "blurb": self.generate_blurb(story),
-                "image_path": None,
-            }
-            for story in selected_stories
-        ]
+        headlines: list[dict] = []
+        for story in selected_stories:
+            blurb = self.generate_blurb(story)
+            title = story["title"]
+            if self._title_word_count(title) >= 18:
+                title = self.generate_short_title(
+                    {"title": story["title"], "summary": story["summary"]}
+                )
+
+            headlines.append(
+                {
+                    **story,
+                    "title": title,
+                    "blurb": blurb,
+                    "image_path": None,
+                }
+            )
+
+        return headlines
 
     def generate_blurb(self, story: dict) -> str:
         """
@@ -79,6 +95,33 @@ class HeadlineSelector:
         if len(blurb.split()) >= 20:
             raise ValueError("Blurb must be under 20 words.")
         return blurb
+
+    def generate_short_title(self, story: dict) -> str:
+        """
+        Rewrite long headline titles into a concise 5-8 word version.
+        """
+        client = self._get_blurb_client()
+        user_message = (
+            f"Original title: {story['title']}\n"
+            f"Summary: {story['summary']}"
+        )
+        response = client.messages.create(
+            model=self.BLURB_MODEL,
+            max_tokens=50,
+            temperature=0.5,
+            system=SHORT_TITLE_SYSTEM_PROMPT,
+            messages=[{"role": "user", "content": user_message}],
+        )
+        text_parts = [
+            block.text
+            for block in response.content
+            if getattr(block, "type", None) == "text"
+        ]
+        short_title = self._normalize_text("".join(text_parts))
+        word_count = self._title_word_count(short_title)
+        if word_count < 5 or word_count > 8:
+            raise ValueError("Short headline titles must be 5-8 words.")
+        return short_title
 
     def generate_headline_image(self, story: dict, index: int) -> str | None:
         """
@@ -279,3 +322,6 @@ class HeadlineSelector:
         normalized = dict(payload)
         normalized["scored_story"] = normalized_scored_story
         return normalized
+
+    def _title_word_count(self, title: str) -> int:
+        return len(self._normalize_text(title).split())
