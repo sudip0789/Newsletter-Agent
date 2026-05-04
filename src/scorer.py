@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import logging
 from collections import Counter
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any
 
@@ -76,8 +77,16 @@ SCORE_FIELDS = (
     "buzz_momentum",
 )
 
+LOWER_BUZZ_THRESHOLD_SECTIONS = {
+    "creative_ai",
+    "tools_and_products",
+    "higher_education",
+}
+
 
 class Scorer:
+    MAX_WORKERS = 6
+
     def __init__(
         self,
         input_path: str = "data/output/clustered_stories.json",
@@ -93,7 +102,7 @@ class Scorer:
         raw_clusters = json.loads(self.input_path.read_text(encoding="utf-8"))
         self.clusters = [StoryCluster.model_validate(item) for item in raw_clusters]
         self.weights = self._validate_weights(self.rubric.get("weights", {}))
-        self.selection_total = int(self.rubric.get("selection", {}).get("total_top", 30))
+        self.selection_total = int(self.rubric.get("selection", {}).get("total_top", 25))
         self.model = str(self.rubric.get("model", "gpt-5.4"))
         self.client = OpenAI()
 
@@ -104,29 +113,31 @@ class Scorer:
     def run(self) -> list[ScoredStory]:
         """
         Full pipeline:
-        1. Score each cluster via LLM call
+        1. Score each cluster via LLM call, using up to 6 worker threads
         2. Compute composite scores using rubric weights
         3. Assign newsletter sections
-        4. Select top 30
-        Return all 30 sorted by composite score.
+        4. Select top 25
+        Return all 25 sorted by composite score.
         """
         scored: list[ScoredStory] = []
         self.failed_clusters = []
 
-        for cluster in self.clusters:
-            try:
-                scored.append(self.score_story(cluster))
-            except Exception as exc:  # pragma: no cover - defensive against API/runtime issues
-                title = cluster.primary_article.title
-                LOGGER.warning("Skipping cluster '%s' due to scoring error: %s", title, exc)
-                self.failed_clusters.append(title)
+        with ThreadPoolExecutor(max_workers=self.MAX_WORKERS) as executor:
+            for scored_story, failed_title in executor.map(
+                self._score_cluster_with_error_handling,
+                self.clusters,
+            ):
+                if scored_story is not None:
+                    scored.append(scored_story)
+                elif failed_title is not None:
+                    self.failed_clusters.append(failed_title)
 
         self.all_scored_stories = sorted(
             scored,
             key=lambda story: story.composite_score,
             reverse=True,
         )
-        self.selected_stories = self.select_top_30(self.all_scored_stories)
+        self.selected_stories = self.select_top_25(self.all_scored_stories)
         self._assign_tiers(self.selected_stories)
         self.print_summary(self.selected_stories)
         self.save_results(self.selected_stories)
@@ -188,6 +199,17 @@ class Scorer:
             tier="body",
         )
 
+    def _score_cluster_with_error_handling(
+        self,
+        cluster: StoryCluster,
+    ) -> tuple[ScoredStory | None, str | None]:
+        try:
+            return self.score_story(cluster), None
+        except Exception as exc:  # pragma: no cover - defensive against API/runtime issues
+            title = cluster.primary_article.title
+            LOGGER.warning("Skipping cluster '%s' due to scoring error: %s", title, exc)
+            return None, title
+
     def compute_composite(self, scores: dict[str, float]) -> float:
         """
         Weighted sum using rubric weights:
@@ -197,28 +219,23 @@ class Scorer:
         """
         return sum(scores.get(name, 0.0) * self.weights[name] for name in SCORE_FIELDS)
 
-    def select_top_30(self, stories: list[ScoredStory]) -> list[ScoredStory]:
+    def select_top_25(self, stories: list[ScoredStory]) -> list[ScoredStory]:
         """
         1. Sort all stories by composite_score descending.
         2. Apply section diversity: no more than 6 stories from any single section.
-        3. Select top 30 that satisfy constraints.
-        4. Return the 30 stories.
+        3. Apply buzz threshold gating unless fewer than 20 stories qualify.
+        4. Select top 25 that satisfy constraints.
+        5. Return the 25 stories.
         """
-        selected: list[ScoredStory] = []
-        section_counts: Counter[str] = Counter()
         sorted_stories = sorted(
             stories,
             key=lambda story: story.composite_score,
             reverse=True,
         )
 
-        for story in sorted_stories:
-            if len(selected) >= self.selection_total:
-                break
-            if section_counts[story.section] >= 6:
-                continue
-            selected.append(story)
-            section_counts[story.section] += 1
+        selected = self._select_stories(sorted_stories, apply_buzz_filter=True)
+        if len(selected) < 20:
+            selected = self._select_stories(sorted_stories, apply_buzz_filter=False)
 
         if len(selected) < min(self.selection_total, len(sorted_stories)):
             LOGGER.warning(
@@ -228,6 +245,32 @@ class Scorer:
             )
 
         return selected
+
+    def _select_stories(
+        self,
+        sorted_stories: list[ScoredStory],
+        *,
+        apply_buzz_filter: bool,
+    ) -> list[ScoredStory]:
+        """Select stories in score order while enforcing section caps and optional buzz gating."""
+        selected: list[ScoredStory] = []
+        section_counts: Counter[str] = Counter()
+
+        for story in sorted_stories:
+            if len(selected) >= self.selection_total:
+                break
+            if section_counts[story.section] >= 6:
+                continue
+            if apply_buzz_filter and not self._meets_buzz_threshold(story):
+                continue
+            selected.append(story)
+            section_counts[story.section] += 1
+
+        return selected
+
+    def _meets_buzz_threshold(self, story: ScoredStory) -> bool:
+        threshold = 0.3 if story.section in LOWER_BUZZ_THRESHOLD_SECTIONS else 0.4
+        return story.scores.get("buzz_momentum", 0.0) >= threshold
 
     def print_summary(self, stories: list[ScoredStory]) -> None:
         """Print scoring summary."""

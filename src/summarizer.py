@@ -34,7 +34,7 @@ Article text:
 class Summarizer:
     DEFAULT_TOP_N = 30
     DEFAULT_MODEL = "gpt-5.4"
-    MAX_WORKERS = 5
+    MAX_WORKERS = 6
     MAX_TEXT_CHARS = 10000
     MIN_TEXT_CHARS = 100
     FAILURE_SUMMARY = "Summary generation failed — manual review required."
@@ -89,7 +89,7 @@ class Summarizer:
         2. For each story, check text_completeness:
            - If 'full' or 'partial': summarize via LLM call.
            - If 'snippet': skip LLM, use the existing text as-is, flag for manual review.
-        3. Run LLM calls in parallel using ThreadPoolExecutor (max 5 workers).
+        3. Run LLM calls in parallel using ThreadPoolExecutor (max 6 workers).
         4. Return list of SummarizedStory objects.
         """
         top_stories = sorted(
