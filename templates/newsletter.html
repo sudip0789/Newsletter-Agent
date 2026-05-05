@@ -443,7 +443,7 @@
         <div class="header-copy">
           <div class="header-lockup" aria-label="Stanford Law School Robert Crown Law Library">
             <p class="header-lockup-line header-lockup-top">
-              <span class="stanford">Stanford</span><span class="law-school">LawSchool</span>
+              <span class="stanford">Stanford</span><span class="law-school"> Law School</span>
             </p>
             <p class="header-lockup-line header-lockup-bottom">Robert Crown Law Library</p>
           </div>
@@ -459,10 +459,10 @@
         <img class="sidebar-logo" src="{{ sidebar_logo_path }}" alt="Section logo">
         <p class="sidebar-label">Sections</p>
         <nav class="sidebar-nav">
-          {% for section_key, section_name in active_sections %}
-          <a class="sidebar-link" href="#{{ section_key }}">
-            <img src="{{ sidebar_logo_path }}" alt="">
-            <span>{{ section_name }}</span>
+          {% for section in active_sections %}
+          <a class="sidebar-link" href="#{{ section.key }}">
+            <img src="{{ section.icon_path }}" alt="">
+            <span>{{ section.name }}</span>
           </a>
           {% endfor %}
         </nav>
@@ -487,8 +487,8 @@
         <section class="module">
           <h2 class="module-title">In This Issue</h2>
           <ul class="toc-list">
-            {% for section_key, section_name in active_sections %}
-            <li><a href="#{{ section_key }}">{{ section_name }}</a></li>
+            {% for section in active_sections %}
+            <li><a href="#{{ section.key }}">{{ section.name }}</a></li>
             {% endfor %}
           </ul>
         </section>

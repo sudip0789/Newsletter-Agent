@@ -76,7 +76,7 @@ class TestScorer(unittest.TestCase):
 
         self.assertAlmostEqual(composite, 0.75)
 
-    def test_select_top_25_enforces_six_per_section(self) -> None:
+    def test_select_top_30_enforces_six_per_section(self) -> None:
         scorer = self._make_scorer()
         stories = [
             self._make_story(f"industry_{idx}", "industry", 0.95 - idx * 0.01)
@@ -86,13 +86,13 @@ class TestScorer(unittest.TestCase):
             self._make_story("security_1", "security", 0.87),
         ]
 
-        selected = scorer.select_top_25(stories)
+        selected = scorer.select_top_30(stories)
 
         self.assertEqual(len(selected), 6)
         self.assertEqual(sum(1 for story in selected if story.section == "industry"), 6)
         self.assertEqual(selected[-1].section, "industry")
 
-    def test_select_top_25_skips_low_buzz_special_sections_when_enough_stories_exist(
+    def test_select_top_30_skips_low_buzz_special_sections_when_enough_stories_exist(
         self,
     ) -> None:
         scorer = self._make_scorer()
@@ -128,14 +128,14 @@ class TestScorer(unittest.TestCase):
             } else 0.30
             stories.append(story)
 
-        selected = scorer.select_top_25(stories)
+        selected = scorer.select_top_30(stories)
 
         self.assertEqual(len(selected), 21)
         self.assertNotIn("creative_low", [story.cluster.cluster_id for story in selected])
         self.assertNotIn("tools_low", [story.cluster.cluster_id for story in selected])
         self.assertNotIn("higher_ed_low", [story.cluster.cluster_id for story in selected])
 
-    def test_select_top_25_skips_low_buzz_other_sections_when_enough_stories_exist(
+    def test_select_top_30_skips_low_buzz_other_sections_when_enough_stories_exist(
         self,
     ) -> None:
         scorer = self._make_scorer()
@@ -169,13 +169,13 @@ class TestScorer(unittest.TestCase):
             } else 0.70
             stories.append(story)
 
-        selected = scorer.select_top_25(stories)
+        selected = scorer.select_top_30(stories)
 
         self.assertEqual(len(selected), 21)
         self.assertNotIn("industry_low", [story.cluster.cluster_id for story in selected])
         self.assertNotIn("policy_low", [story.cluster.cluster_id for story in selected])
 
-    def test_select_top_25_includes_boundary_buzz_scores(self) -> None:
+    def test_select_top_30_includes_boundary_buzz_scores(self) -> None:
         scorer = self._make_scorer()
         scorer.selection_total = 4
         stories = [
@@ -189,7 +189,7 @@ class TestScorer(unittest.TestCase):
         stories[2].scores["buzz_momentum"] = 0.40
         stories[3].scores["buzz_momentum"] = 0.40
 
-        selected = scorer.select_top_25(stories)
+        selected = scorer.select_top_30(stories)
 
         self.assertEqual(
             [story.cluster.cluster_id for story in selected],
@@ -201,7 +201,7 @@ class TestScorer(unittest.TestCase):
             ],
         )
 
-    def test_select_top_25_disables_buzz_filter_when_fewer_than_twenty_pass(self) -> None:
+    def test_select_top_30_disables_buzz_filter_when_fewer_than_twenty_pass(self) -> None:
         scorer = self._make_scorer()
         scorer.selection_total = 25
         passing_sections = ["industry", "policy", "security"]
@@ -219,7 +219,7 @@ class TestScorer(unittest.TestCase):
             story.scores["buzz_momentum"] = 0.39
             failing.append(story)
 
-        selected = scorer.select_top_25(passing + failing)
+        selected = scorer.select_top_30(passing + failing)
 
         self.assertEqual(len(selected), 22)
         self.assertEqual(
@@ -228,7 +228,7 @@ class TestScorer(unittest.TestCase):
         )
         self.assertIn("low_0", [story.cluster.cluster_id for story in selected])
 
-    def test_select_top_25_keeps_section_caps_after_buzz_fallback(self) -> None:
+    def test_select_top_30_keeps_section_caps_after_buzz_fallback(self) -> None:
         scorer = self._make_scorer()
         scorer.selection_total = 25
         industry = [
@@ -252,7 +252,7 @@ class TestScorer(unittest.TestCase):
         for story in security:
             story.scores["buzz_momentum"] = 0.39
 
-        selected = scorer.select_top_25(industry + policy + security)
+        selected = scorer.select_top_30(industry + policy + security)
 
         self.assertEqual(len(selected), 14)
         self.assertEqual(sum(1 for story in selected if story.section == "industry"), 6)
@@ -300,7 +300,7 @@ class TestScorer(unittest.TestCase):
     @patch.object(Scorer, "save_results")
     @patch.object(Scorer, "print_summary")
     @patch.object(Scorer, "_assign_tiers")
-    @patch.object(Scorer, "select_top_25")
+    @patch.object(Scorer, "select_top_30")
     @patch("src.scorer.ThreadPoolExecutor")
     def test_run_scores_clusters_with_max_workers_and_continues_after_failures(
         self,

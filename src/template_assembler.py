@@ -20,6 +20,16 @@ class TemplateAssembler:
         ("higher_education", "Higher Education"),
         ("research", "Research"),
     ]
+    SECTION_ICON_FILENAMES = {
+        "industry": "industry.png",
+        "legal_intelligence": "legal_intelligence.png",
+        "tools_and_products": "tools.png",
+        "security": "security.png",
+        "policy": "policy.png",
+        "creative_ai": "creative_ai.png",
+        "higher_education": "higher_education.png",
+        "research": "research.png",
+    }
 
     def __init__(
         self,
@@ -40,14 +50,26 @@ class TemplateAssembler:
     def run(
         self,
         publish_date: date | datetime | str | None = None,
-        output_path: str = "data/output/newsletter.html",
+        output_path: str | None = None,
     ) -> str:
-        output_file = Path(output_path)
+        output_file = (
+            self.project_root / "public" / "index.html"
+            if output_path is None
+            else Path(output_path)
+        )
         output_file.parent.mkdir(parents=True, exist_ok=True)
 
         exclude_urls = [headline.get("url", "") for headline in self.headlines]
         grouped = self.group_by_section(self.stories, exclude_urls=exclude_urls)
         active_sections = self.get_active_sections(grouped)
+        section_navigation = [
+            {
+                "key": key,
+                "name": name,
+                "icon_path": self._resolve_section_icon_path(output_file, key),
+            }
+            for key, name in active_sections
+        ]
         sections = [
             {
                 "key": key,
@@ -57,9 +79,13 @@ class TemplateAssembler:
             for key, name in active_sections
         ]
 
-        logo_path = self._to_relative_asset_path(
+        logo_path = self._resolve_project_asset_path(
             output_file,
-            self.project_root / "assets" / "logos" / "newsletter_logo.png",
+            Path("assets/logos/newsletter_logo.png"),
+        )
+        sidebar_logo_path = self._resolve_project_asset_path(
+            output_file,
+            Path("assets/logos/news_brief.png"),
         )
         headlines = [
             {
@@ -73,9 +99,9 @@ class TemplateAssembler:
         html = template.render(
             publish_date=self._format_publish_date(publish_date),
             logo_path=logo_path,
-            sidebar_logo_path=logo_path,
+            sidebar_logo_path=sidebar_logo_path,
             headlines=headlines,
-            active_sections=active_sections,
+            active_sections=section_navigation,
             sections=sections,
         )
         output_file.write_text(html, encoding="utf-8")
@@ -139,11 +165,34 @@ class TemplateAssembler:
     def _resolve_headline_image_path(self, output_file: Path, headline: dict[str, Any]) -> str:
         raw_path = headline.get("image_path")
         if raw_path:
-            return self._to_relative_asset_path(output_file, self.project_root / raw_path)
-        return self._to_relative_asset_path(
+            return self._resolve_project_asset_path(output_file, Path(raw_path))
+        return self._resolve_project_asset_path(
             output_file,
-            self.project_root / "assets" / "logos" / "newsletter_logo.png",
+            Path("assets/logos/newsletter_logo.png"),
         )
+
+    def _resolve_section_icon_path(self, output_file: Path, section_key: str) -> str:
+        filename = self.SECTION_ICON_FILENAMES.get(section_key, "newsletter_logo.png")
+        return self._resolve_project_asset_path(
+            output_file,
+            Path("assets/logos") / filename,
+        )
+
+    def _resolve_project_asset_path(self, output_file: Path, relative_asset_path: Path) -> str:
+        asset_root = (
+            self.project_root / "public"
+            if self._is_public_output(output_file)
+            else self.project_root
+        )
+        return self._to_relative_asset_path(output_file, asset_root / relative_asset_path)
+
+    def _is_public_output(self, output_file: Path) -> bool:
+        public_root = (self.project_root / "public").resolve()
+        try:
+            output_file.resolve().relative_to(public_root)
+        except ValueError:
+            return False
+        return True
 
     def _to_relative_asset_path(self, output_file: Path, asset_path: Path) -> str:
         return os.path.relpath(asset_path.resolve(), start=output_file.parent.resolve())

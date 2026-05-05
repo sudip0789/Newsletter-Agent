@@ -238,3 +238,63 @@ class TestTemplateAssembler(unittest.TestCase):
             self.assertIn("<p>Paragraph two.</p>", html)
             self.assertIn("../../assets/generated/headline_1.png", html)
             self.assertIn("../../assets/logos/newsletter_logo.png", html)
+
+    def test_run_defaults_to_public_index_html(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir_name:
+            tmpdir = Path(tmpdir_name)
+            project_root = tmpdir / "project"
+            project_root.mkdir()
+            (project_root / "assets" / "generated").mkdir(parents=True)
+            (project_root / "assets" / "logos").mkdir(parents=True)
+            (project_root / "templates").mkdir()
+            (project_root / "data" / "output").mkdir(parents=True)
+            (project_root / "public").mkdir()
+
+            stories_path = project_root / "data" / "output" / "summarized_stories.json"
+            headlines_path = project_root / "data" / "output" / "headline_picks.json"
+            template_path = project_root / "templates" / "newsletter.html"
+            output_path = project_root / "public" / "index.html"
+            repo_template_path = (
+                Path(__file__).resolve().parent.parent / "templates" / "newsletter.html"
+            )
+
+            self._write_json(
+                stories_path,
+                [
+                    self._story_payload(
+                        "security_story",
+                        "security",
+                        0.94,
+                        "Paragraph one.\n\nParagraph two.",
+                        title="Security story",
+                    ),
+                ],
+            )
+            self._write_json(
+                headlines_path,
+                [
+                    self._headline_payload(
+                        "https://example.com/other_headline",
+                        "Other headline",
+                        "assets/generated/headline_1.png",
+                    ),
+                ],
+            )
+            template_path.write_text(repo_template_path.read_text(encoding="utf-8"))
+
+            assembler = TemplateAssembler(
+                stories_path=str(stories_path),
+                headlines_path=str(headlines_path),
+                template_path=str(template_path),
+            )
+
+            html = assembler.run(publish_date="2026-05-01")
+
+            self.assertTrue(output_path.exists())
+            self.assertEqual(output_path.read_text(encoding="utf-8"), html)
+            self.assertIn("May 1st, 2026", html)
+            self.assertNotIn("{{ publish_date }}", html)
+            self.assertIn("src=\"assets/logos/newsletter_logo.png\"", html)
+            self.assertIn("src=\"assets/logos/news_brief.png\"", html)
+            self.assertIn("src=\"assets/logos/security.png\"", html)
+            self.assertIn("src=\"assets/generated/headline_1.png\"", html)

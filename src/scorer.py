@@ -102,7 +102,7 @@ class Scorer:
         raw_clusters = json.loads(self.input_path.read_text(encoding="utf-8"))
         self.clusters = [StoryCluster.model_validate(item) for item in raw_clusters]
         self.weights = self._validate_weights(self.rubric.get("weights", {}))
-        self.selection_total = int(self.rubric.get("selection", {}).get("total_top", 25))
+        self.selection_total = int(self.rubric.get("selection", {}).get("total_top", 30))
         self.model = str(self.rubric.get("model", "gpt-5.4"))
         self.client = OpenAI()
 
@@ -116,8 +116,8 @@ class Scorer:
         1. Score each cluster via LLM call, using up to 6 worker threads
         2. Compute composite scores using rubric weights
         3. Assign newsletter sections
-        4. Select top 25
-        Return all 25 sorted by composite score.
+        4. Select top 30
+        Return all 30 sorted by composite score.
         """
         scored: list[ScoredStory] = []
         self.failed_clusters = []
@@ -137,7 +137,7 @@ class Scorer:
             key=lambda story: story.composite_score,
             reverse=True,
         )
-        self.selected_stories = self.select_top_25(self.all_scored_stories)
+        self.selected_stories = self.select_top_30(self.all_scored_stories)
         self._assign_tiers(self.selected_stories)
         self.print_summary(self.selected_stories)
         self.save_results(self.selected_stories)
@@ -219,13 +219,13 @@ class Scorer:
         """
         return sum(scores.get(name, 0.0) * self.weights[name] for name in SCORE_FIELDS)
 
-    def select_top_25(self, stories: list[ScoredStory]) -> list[ScoredStory]:
+    def select_top_30(self, stories: list[ScoredStory]) -> list[ScoredStory]:
         """
         1. Sort all stories by composite_score descending.
         2. Apply section diversity: no more than 6 stories from any single section.
         3. Apply buzz threshold gating unless fewer than 20 stories qualify.
-        4. Select top 25 that satisfy constraints.
-        5. Return the 25 stories.
+        4. Select top 30 that satisfy constraints.
+        5. Return the 30 stories.
         """
         sorted_stories = sorted(
             stories,

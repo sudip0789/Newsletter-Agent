@@ -4,7 +4,7 @@ Render the newsletter HTML from summarized stories and headline picks.
 Usage:
     python3 run_template_assembler.py
     python3 run_template_assembler.py --date 2026-05-01
-    python3 run_template_assembler.py --output data/output/newsletter.html
+    python3 run_template_assembler.py --output public/index.html
 """
 
 from __future__ import annotations
@@ -37,7 +37,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--output",
-        default="data/output/newsletter.html",
+        default="public/index.html",
         help="Output HTML path.",
     )
     parser.add_argument(

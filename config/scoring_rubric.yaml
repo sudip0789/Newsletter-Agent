@@ -9,7 +9,7 @@ weights:
 
 # Selection constraints
 selection:
-  total_top: 25
+  total_top: 30
 
 # Model
 model: "gpt-5.4"
