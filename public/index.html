@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The AI Upload Weekly Digest</title>
+  <style>
+    :root {
+      --brand-red: #8b0000;
+      --ink: #1f1f1f;
+      --muted: #666666;
+      --paper: #ffffff;
+      --line: #d8d2cd;
+      --panel: #2f2f2f;
+      --panel-hover: #434343;
+      --soft: #f7f3f0;
+      --shadow: 0 16px 36px rgba(24, 18, 14, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #f5efeb 0%, #ffffff 180px);
+      color: var(--ink);
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .page {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 22px 24px 48px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 38px 0 30px;
+      border-bottom: 4px solid var(--brand-red);
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: flex-start;
+      gap: 22px;
+      min-width: 0;
+    }
+
+    .header-logo {
+      width: 146px;
+      height: 146px;
+      border-radius: 30px;
+      object-fit: cover;
+      background: #ffffff;
+      border: 1px solid rgba(139, 0, 0, 0.12);
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .header-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .header-lockup {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .header-lockup-line {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.02;
+    }
+
+    .header-lockup-top {
+      font-size: clamp(1.55rem, 2.4vw, 2.6rem);
+    }
+
+    .header-lockup-top .stanford {
+      color: #b22222;
+    }
+
+    .header-lockup-top .law-school {
+      color: #8e8e8e;
+    }
+
+    .header-lockup-bottom {
+      color: #111111;
+      font-size: clamp(1.35rem, 2.1vw, 2.35rem);
+    }
+
+    .header-copy h1 {
+      margin: 0;
+      color: var(--brand-red);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.8rem, 2.8vw, 2.9rem);
+      line-height: 1.08;
+    }
+
+    .header-copy p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .header-date {
+      flex-shrink: 0;
+      padding: 14px 18px;
+      background: var(--paper);
+      border: 1px solid rgba(139, 0, 0, 0.18);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      color: var(--brand-red);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.05rem;
+      text-align: right;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 228px minmax(0, 1fr);
+      gap: 28px;
+      margin-top: 28px;
+      align-items: start;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 20px;
+      height: calc(100vh - 40px);
+      min-height: 720px;
+      overflow: hidden;
+      padding: 22px 18px 20px;
+      background:
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.12), transparent 46%),
+        linear-gradient(180deg, #3a3a3a 0%, #242424 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      color: #ffffff;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-logo {
+      width: 100%;
+      max-width: 126px;
+      display: block;
+      margin: 0 auto 20px;
+      border-radius: 20px;
+      background: #ffffff;
+      padding: 10px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+    }
+
+    .sidebar-label {
+      margin: 0 0 16px;
+      color: rgba(255, 255, 255, 0.74);
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1 1 0;
+      min-height: 0;
+      padding: 13px 13px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      color: #ffffff;
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0.05);
+      transition: background 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
+    }
+
+    .sidebar-link:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.16);
+      transform: translateX(2px);
+    }
+
+    .sidebar-link img {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: #ffffff;
+      object-fit: cover;
+      padding: 5px;
+    }
+
+    .main {
+      min-width: 0;
+    }
+
+    .module {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .module + .module {
+      margin-top: 22px;
+    }
+
+    .module-title {
+      margin: 0 0 18px;
+      color: var(--brand-red);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.55rem;
+    }
+
+    .headline-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .headline-card {
+      display: grid;
+      grid-template-columns: 132px minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+      padding: 16px;
+      border: 1px solid rgba(139, 0, 0, 0.14);
+      border-radius: 20px;
+      color: inherit;
+      text-decoration: none;
+      background: linear-gradient(135deg, #fffaf7 0%, #ffffff 100%);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .headline-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(24, 18, 14, 0.1);
+    }
+
+    .headline-card img {
+      width: 132px;
+      height: 132px;
+      object-fit: cover;
+      border-radius: 18px;
+      background: var(--soft);
+      border: 1px solid rgba(139, 0, 0, 0.1);
+    }
+
+    .headline-card h3 {
+      margin: 0 0 8px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.4rem;
+      line-height: 1.18;
+    }
+
+    .headline-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .toc-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .toc-list a {
+      display: block;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: var(--soft);
+      border: 1px solid transparent;
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .toc-list a:hover {
+      border-color: rgba(139, 0, 0, 0.18);
+      color: var(--brand-red);
+    }
+
+    .section-block + .section-block {
+      margin-top: 28px;
+    }
+
+    .section-heading {
+      margin: 0 0 18px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid rgba(139, 0, 0, 0.12);
+      color: var(--brand-red);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 2rem;
+    }
+
+    .article {
+      padding: 0 0 24px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .article + .article {
+      margin-top: 22px;
+    }
+
+    .article:last-child {
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .article-title {
+      margin: 0 0 10px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.45rem;
+      line-height: 1.22;
+    }
+
+    .article-source {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    .article-source a {
+      color: var(--brand-red);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .article-source a:hover {
+      text-decoration: underline;
+    }
+
+    .article p {
+      margin: 0 0 12px;
+      font-size: 1rem;
+    }
+
+    .article p:last-child {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page {
+        padding: 0 16px 36px;
+      }
+
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .header-brand {
+        gap: 16px;
+      }
+
+      .header-logo {
+        width: 112px;
+        height: 112px;
+        padding: 13px;
+      }
+
+      .header-copy {
+        gap: 12px;
+      }
+
+      .header-lockup-top {
+        font-size: 1.45rem;
+      }
+
+      .header-lockup-bottom {
+        font-size: 1.2rem;
+      }
+
+      .header-date {
+        width: 100%;
+        text-align: left;
+      }
+
+      .headline-card {
+        grid-template-columns: 88px minmax(0, 1fr);
+        gap: 14px;
+        align-items: flex-start;
+        padding: 14px;
+      }
+
+      .headline-card img {
+        width: 88px;
+        height: 88px;
+      }
+
+      .headline-card h3 {
+        font-size: 1.12rem;
+      }
+
+      .headline-card p {
+        font-size: 0.94rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="header-brand">
+        <img class="header-logo" src="assets/logos/newsletter_logo.png" alt="The AI Upload logo">
+        <div class="header-copy">
+          <div class="header-lockup" aria-label="Stanford Law School Robert Crown Law Library">
+            <p class="header-lockup-line header-lockup-top">
+              <span class="stanford">Stanford</span><span class="law-school">LawSchool</span>
+            </p>
+            <p class="header-lockup-line header-lockup-bottom">Robert Crown Law Library</p>
+          </div>
+          <h1>The AI Upload Weekly Digest</h1>
+          <p>Curated coverage of AI developments</p>
+        </div>
+      </div>
+      <div class="header-date">May 1st, 2026</div>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar" aria-label="Section navigation">
+        <img class="sidebar-logo" src="assets/logos/news_brief.png" alt="Section logo">
+        <p class="sidebar-label">Sections</p>
+        <nav class="sidebar-nav">
+          
+          <a class="sidebar-link" href="#industry">
+            <img src="assets/logos/industry.png" alt="">
+            <span>Industry</span>
+          </a>
+          
+          <a class="sidebar-link" href="#legal_intelligence">
+            <img src="assets/logos/legal_intelligence.png" alt="">
+            <span>Legal Intelligence</span>
+          </a>
+          
+          <a class="sidebar-link" href="#tools_and_products">
+            <img src="assets/logos/tools.png" alt="">
+            <span>Tools &amp; Products</span>
+          </a>
+          
+          <a class="sidebar-link" href="#security">
+            <img src="assets/logos/security.png" alt="">
+            <span>Security</span>
+          </a>
+          
+          <a class="sidebar-link" href="#policy">
+            <img src="assets/logos/policy.png" alt="">
+            <span>Policy</span>
+          </a>
+          
+          <a class="sidebar-link" href="#research">
+            <img src="assets/logos/research.png" alt="">
+            <span>Research</span>
+          </a>
+          
+        </nav>
+      </aside>
+
+      <main class="main">
+        <section class="module">
+          <h2 class="module-title">This Week&#39;s Headlines</h2>
+          <div class="headline-list">
+            
+            <a class="headline-card" href="https://www.axios.com/2026/04/28/elon-openai-altman-trial" target="_blank" rel="noreferrer">
+              <img src="assets/generated/headline_1.png" alt="Elon gets his day in trial against Sam Altman and OpenAI">
+              <div>
+                <h3>Elon gets his day in trial against Sam Altman and OpenAI</h3>
+                <p>Elon Musk takes the stand in his billion-dollar lawsuit claiming OpenAI betrayed its nonprofit roots.</p>
+              </div>
+            </a>
+            
+            <a class="headline-card" href="https://go.theregister.com/feed/www.theregister.com/2026/04/30/microsoft_q3_2026/" target="_blank" rel="noreferrer">
+              <img src="assets/generated/headline_2.png" alt="Microsoft lifts 2026 AI spend by $25 billion to cover component price rises">
+              <div>
+                <h3>Microsoft lifts 2026 AI spend by $25 billion to cover component price rises</h3>
+                <p>Microsoft&#39;s $190 billion AI spending spree faces Wall Street skepticism as component costs triple and returns remain unclear.</p>
+              </div>
+            </a>
+            
+            <a class="headline-card" href="https://go.theregister.com/feed/www.theregister.com/2026/04/30/mozilla_pushes_back_against_googles/" target="_blank" rel="noreferrer">
+              <img src="assets/generated/headline_3.png" alt="Firefox maker torches Google for building Prompt API into browser">
+              <div>
+                <h3>Firefox maker torches Google for building Prompt API into browser</h3>
+                <p>Mozilla slams Google&#39;s browser AI feature as threat to open web standards and developer freedom.</p>
+              </div>
+            </a>
+            
+          </div>
+        </section>
+
+        <section class="module">
+          <h2 class="module-title">In This Issue</h2>
+          <ul class="toc-list">
+            
+            <li><a href="#industry">Industry</a></li>
+            
+            <li><a href="#legal_intelligence">Legal Intelligence</a></li>
+            
+            <li><a href="#tools_and_products">Tools &amp; Products</a></li>
+            
+            <li><a href="#security">Security</a></li>
+            
+            <li><a href="#policy">Policy</a></li>
+            
+            <li><a href="#research">Research</a></li>
+            
+          </ul>
+        </section>
+
+        
+        <section class="module section-block" id="industry">
+          <h2 class="section-heading">Industry</h2>
+          
+          <article class="article">
+            <h3 class="article-title">OpenAI jumps out of Microsoft&#39;s bed, into Amazon&#39;s Bedrock</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://go.theregister.com/feed/www.theregister.com/2026/04/28/openai_climbs_into_amazons_bedrock/" target="_blank" rel="noreferrer">The Register</a>
+            </p>
+            
+            <p>OpenAI&#39;s leading AI models are now available through Amazon Web Services&#39; Bedrock platform in limited preview, following an announcement at an AWS event in San Francisco. The partnership addresses enterprise concerns about data privacy and security by allowing companies to access OpenAI&#39;s GPT models through AWS infrastructure rather than directly through OpenAI&#39;s APIs. AWS CEO Matt Garman confirmed that GPT-5.4 is available now, with GPT-5.5 coming within weeks.</p>
+            
+            <p>The collaboration fulfills OpenAI&#39;s February commitment to make its models available on AWS in exchange for up to $35 billion in financing, contingent on OpenAI utilizing two gigawatts of Amazon&#39;s Trainium accelerators. The deal was enabled by Microsoft&#39;s revised agreement with OpenAI, which freed Microsoft from revenue-sharing commitments while allowing OpenAI to partner with other cloud providers.</p>
+            
+            <p>This arrangement provides a potential blueprint for future OpenAI partnerships beyond Amazon, as the company is no longer exclusively tied to Microsoft&#39;s infrastructure. For legal professionals and enterprises, the AWS integration offers enhanced data sovereignty and simplified procurement processes while maintaining access to cutting-edge AI capabilities.</p>
+            
+          </article>
+          
+          <article class="article">
+            <h3 class="article-title">Parag Agrawal’s startup raises $100M to build a parallel web for AI agents</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://siliconangle.com/2026/04/28/parag-agrawals-startup-raises-100m-build-parallel-web-ai-agents/" target="_blank" rel="noreferrer">SiliconANGLE News</a>
+            </p>
+            
+            <p>Former Twitter CEO Parag Agrawal has secured $100 million in Series B funding for his startup Parallel Web Systems, which is developing specialized infrastructure to help AI agents search and navigate the web more effectively. Sequoia Capital led the round, joined by Kleiner Perkins, Index Ventures and Khosla Ventures, valuing the company at $2 billion.</p>
+            
+            <p>Parallel&#39;s platform provides APIs optimized for &#34;machine retrieval&#34; that enable autonomous AI agents to perform deep research tasks like processing insurance claims and analyzing government contracts. The company&#39;s proprietary web index is designed specifically for AI agents rather than human users, addressing what Agrawal sees as agents&#39; need for different tools than traditional web browsers. Legal AI startup Harvey AI is among the early adopters, using Parallel&#39;s infrastructure to power research-heavy tasks for lawyers.</p>
+            
+            <p>Since launching in early 2024, Parallel has attracted over 100,000 developers from AI startups and large enterprises. The funding will support sales and marketing expansion as well as accelerated R&amp;D, as the company competes with rivals like Tavily and Exa Labs in the emerging market for AI agent web infrastructure.</p>
+            
+          </article>
+          
+          <article class="article">
+            <h3 class="article-title">AI clause in new SAP API policy has partners worried over lock-in</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://go.theregister.com/feed/www.theregister.com/2026/04/29/new_sap_api_policy_provokes/" target="_blank" rel="noreferrer">The Register</a>
+            </p>
+            
+            <p>SAP has updated its API policy to prohibit integration with AI systems outside its endorsed architectures, sparking concern among partners and consultants about potential vendor lock-in. The new policy, published this month, specifically bans API use for interaction with autonomous or generative AI systems and large-scale data extraction, except through SAP-approved pathways.</p>
+            
+            <p>Independent consultants worry the restrictions could force customers to rely on undocumented APIs, as SAP&#39;s documented API list is often outdated. German consultant Marian Zeis warned this would allow SAP to &#34;govern, monitor, throttle, and control&#34; future development of customers&#39; systems. The policy change has generated immediate controversy, with some suggesting the document was published accidentally.</p>
+            
+            <p>SAP defends the changes as necessary for security and system stability, with CEO Christian Klein stating customers won&#39;t pay for accessing their own data while emphasizing the need to protect against mass API requests that could cause performance issues. The company maintains it wants to keep its platform open while protecting its intellectual property.</p>
+            
+          </article>
+          
+          <article class="article">
+            <h3 class="article-title">OpenAI has effectively abandoned first-party Stargate data centers in favor of more flexible deals — company now prefers to lease compute and says Stargate is an umbrella term</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://www.tomshardware.com/tech-industry/artificial-intelligence/openai-has-effectively-abandoned-first-party-stargate-data-centers-in-favor-of-more-flexible-deals-company-now-prefers-to-lease-compute-and-says-stargate-is-an-umbrella-term" target="_blank" rel="noreferrer">Tom&#39;s Hardware UK</a>
+            </p>
+            
+            <p>OpenAI has effectively abandoned its original plan to build and own data centers through the Stargate joint venture with Oracle and SoftBank, instead opting to lease compute capacity from third-party providers. The company now describes Stargate as merely an &#34;umbrella for our compute strategy&#34; rather than a direct infrastructure investment initiative. This shift comes after months of disagreements among the three partners over control of planned data centers and OpenAI&#39;s reported cash burn and missed revenue targets.</p>
+            
+            <p>The change has disrupted multiple international projects and strained partner relationships. OpenAI put its UK data center project on hold citing &#34;restrictive regulations&#34; and &#34;high energy costs,&#34; though UK officials suggest financing concerns were the real driver. The company also withdrew from a Norway project, with Microsoft stepping in to take over the lease. Partners reportedly feel &#34;let down and misled&#34; by OpenAI&#39;s pivot, with some preferring Microsoft as a tenant due to its stronger creditworthiness.</p>
+            
+            <p>Despite securing $110 billion in its latest funding round, analysts estimate OpenAI could run out of cash by mid-2027 given its massive spending on compute resources. The startup&#39;s financial pressures highlight the fundamental difference between AI startups relying on external funding and established tech giants with steady revenue streams to support expensive infrastructure investments.</p>
+            
+          </article>
+          
+          <article class="article">
+            <h3 class="article-title">Google to sell its TPUs to some customers, who also fancy big-G GPUs</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://go.theregister.com/feed/www.theregister.com/2026/04/30/alphabet_google_q1_fy26/" target="_blank" rel="noreferrer">The Register</a>
+            </p>
+            
+            <p>Google will begin selling its custom tensor processing units (TPUs) to select customers in their own data centers, marking a significant shift from keeping the AI chips exclusively for internal use. CEO Sundar Pichai announced during Alphabet&#39;s Q1 2026 earnings call that the company has seen growing demand from AI labs, capital markets firms, and high-performance computing applications, with customers also showing interest in Google&#39;s GPU offerings.</p>
+            
+            <p>The TPU sales will generate some revenue this year, though CFO Anat Ashkenazi expects the balance sheet impact to be more pronounced in 2027. Revenue from hardware sales will fluctuate quarterly depending on shipping schedules. Google views the chip sales as a way to fund next-generation silicon research and create economies of scale for its own infrastructure needs.</p>
+            
+            <p>This move comes as Google Cloud reported strong Q1 2026 performance with $20 billion in revenue, representing 63% growth year-over-year. The cloud division now holds a $460 billion backlog of undelivered contracts, nearly doubling quarter-over-quarter. Google expects to recognize just over half of this backlog as revenue within 24 months, potentially pushing annual revenue above $130 billion.</p>
+            
+          </article>
+          
+        </section>
+        
+        <section class="module section-block" id="legal_intelligence">
+          <h2 class="section-heading">Legal Intelligence</h2>
+          
+          <article class="article">
+            <h3 class="article-title">Families sue OpenAI, alleging chatbot aided in Canadian school shooting</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://www.aljazeera.com/economy/2026/4/29/families-sue-openai-alleging-chatbot-aided-in-canadian-school-shooting" target="_blank" rel="noreferrer">Al Jazeera English</a>
+            </p>
+            
+            <p>Families of victims from a February school shooting in Tumbler Ridge, British Columbia, have filed multiple federal lawsuits against OpenAI in San Francisco, alleging the company failed to alert authorities about the shooter&#39;s concerning ChatGPT interactions. The suits represent victims of Canada&#39;s deadliest mass shooting in years, which killed five children aged 12-13 and an education assistant, and critically injured others including 12-year-old Maya Gebala.</p>
+            
+            <p>According to the complaints, OpenAI&#39;s safety systems flagged conversations in June 2025 where the 18-year-old shooter described gun violence scenarios. Safety team members reportedly recommended contacting police after determining she posed a credible threat, but company leadership allegedly overruled the recommendation. The shooter&#39;s account was deactivated, but she created a new account and continued planning the attack before carrying it out on February 10.</p>
+            
+            <p>These cases represent the first U.S. lawsuits alleging ChatGPT facilitated a mass shooting, joining a growing wave of litigation against AI companies over harmful user interactions. The families seek unspecified damages and court-ordered safety protocol overhauls, including mandatory law enforcement referrals. OpenAI CEO Sam Altman formally apologized to the community last week for not notifying authorities about the shooter&#39;s online behavior.</p>
+            
+          </article>
+          
+          <article class="article">
+            <h3 class="article-title">All the evidence unveiled so far in Musk v. Altman</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://www.theverge.com/ai-artificial-intelligence/920775/evidence-exhibits-elon-musk-sam-altman-openai-trial" target="_blank" rel="noreferrer">The Verge</a>
+            </p>
+            
+            <p>The ongoing jury trial in Musk v. Altman has unveiled extensive evidence from OpenAI&#39;s founding period, revealing early tensions and power dynamics within the AI company. Court exhibits include email exchanges dating back to 2015 between Elon Musk and Sam Altman, showing Musk&#39;s significant role in drafting OpenAI&#39;s mission and influencing its nonprofit structure. The evidence also reveals that Nvidia CEO Jensen Huang provided OpenAI with early access to a high-demand supercomputer, and that OpenAI executives Greg Brockman and Ilya Sutskever expressed concerns about Musk&#39;s level of control over the company.</p>
+            
+            <p>Musk&#39;s lawsuit alleges that OpenAI, Altman, Brockman, and Microsoft breached the company&#39;s founding charitable mission of ensuring artificial general intelligence benefits all humanity. The claims include breach of charitable trust, fraud, and unjust enrichment. The trial&#39;s outcome could significantly impact how OpenAI operates and controls its advancing technology, particularly as both OpenAI and Musk&#39;s SpaceX are reportedly preparing for public offerings this year.</p>
+            
+            <p>The evidence provides unprecedented insight into the AI industry&#39;s early development, including communications between major tech executives and internal company documents that detail OpenAI&#39;s transformation from its nonprofit origins.</p>
+            
+          </article>
+          
+          <article class="article">
+            <h3 class="article-title">Elon Musk Seemingly Admits xAI Has Used OpenAI’s Models to Train Its Own</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://www.wired.com/story/elon-musk-distill-openai-models-partly-xai/" target="_blank" rel="noreferrer">WIRED</a>
+            </p>
+            
+            <p>During federal court testimony Thursday, Elon Musk appeared to acknowledge that his AI company xAI has used OpenAI&#39;s models to train its own systems. When asked by OpenAI attorney William Savitt whether xAI had engaged in &#34;distillation&#34; — using one AI model to train another — with OpenAI&#39;s technology, Musk responded &#34;partly&#34; and noted that &#34;generally all the AI companies&#34; engage in such practices.</p>
+            
+            <p>The admission came during cross-examination in Musk&#39;s ongoing legal battle against OpenAI. When pressed further about whether OpenAI technology had been used to develop xAI, Musk stated it was &#34;standard practice to use other AIs to validate your AI.&#34; The testimony reveals the complex dynamics between competing AI companies, which sometimes use each other&#39;s models for testing and development while simultaneously protecting their own intellectual property.</p>
+            
+            <p>This disclosure occurs amid broader industry tensions over AI model distillation, particularly involving foreign competitors. OpenAI has actively worked to prevent distillation of its models and has cut off access to rival labs including Anthropic and xAI in recent months.</p>
+            
+          </article>
+          
+          <article class="article">
+            <h3 class="article-title">OpenAI Sued Over Failure to Warn Police Before Tumbler Ridge Mass Shooting</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://decrypt.co/365986/openai-sued-failure-warn-police-tumbler-ridge-mass-shooting" target="_blank" rel="noreferrer">Decrypt</a>
+            </p>
+            
+            <p>OpenAI faces a federal lawsuit filed by a 12-year-old shooting victim and her mother over the company&#39;s alleged failure to warn police before a mass shooting at Tumbler Ridge Secondary School in British Columbia. The February attack killed six people, including five children and one educator, after 18-year-old Jesse Van Rootselaar shot her family members at home before opening fire at the school.</p>
+            
+            <p>According to the complaint, OpenAI&#39;s automated systems flagged Van Rootselaar&#39;s ChatGPT account in June 2025 for conversations involving gun violence and planning. Twelve members of OpenAI&#39;s safety team reportedly recommended notifying the Royal Canadian Mounted Police after determining the user posed a credible threat, but company leaders allegedly overruled the recommendation. The lawsuit claims OpenAI deactivated the account without alerting authorities and allowed the shooter to return using a different email address.</p>
+            
+            <p>The case could establish whether AI companies have a legal duty to report violent threats to law enforcement. OpenAI CEO Sam Altman publicly apologized last week, acknowledging the company should have reported the account after banning it. The lawsuit adds to growing legal challenges against OpenAI, including another case linking ChatGPT to a Connecticut homicide.</p>
+            
+          </article>
+          
+        </section>
+        
+        <section class="module section-block" id="tools_and_products">
+          <h2 class="section-heading">Tools &amp; Products</h2>
+          
+          <article class="article">
+            <h3 class="article-title">Where the goblins came from</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://openai.com/index/where-the-goblins-came-from" target="_blank" rel="noreferrer">OpenAI Blog</a>
+            </p>
+            
+            <p>How goblin outputs spread in AI models: timeline, root cause, and fixes behind personality-driven quirks in GPT-5 behavior.</p>
+            
+          </article>
+          
+          <article class="article">
+            <h3 class="article-title">Your car with Google built-in is about to get smarter, thanks to Gemini</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://blog.google/products-and-platforms/platforms/android/cars-with-google-built-in-gemini-tips-2026/" target="_blank" rel="noreferrer">Google - The Keyword</a>
+            </p>
+            
+            <p>Google is rolling out its Gemini AI assistant to replace Google Assistant in cars with Google built-in, starting with English-speaking users in the United States. The upgrade enables natural conversation rather than rigid voice commands, allowing drivers to find restaurants with specific criteria, get real-time traffic updates, summarize text messages, and control music through conversational requests.</p>
+            
+            <p>Gemini Live introduces hands-free learning and brainstorming capabilities during drives, letting users ask about destinations or plan activities through flowing dialogue. The system integrates with vehicle-specific functions, drawing from manufacturer owner&#39;s manuals to answer car-related questions and providing electric vehicle battery insights through Google Maps integration.</p>
+            
+            <p>The rollout begins with existing cars receiving the upgrade through software updates, with expansion to additional languages and countries planned. Future updates will include integration with Gmail, Calendar, and Google Home apps for enhanced in-vehicle functionality.</p>
+            
+          </article>
+          
+          <article class="article">
+            <h3 class="article-title">We’re donating Agent Payments Protocol to the FIDO Alliance to support the future of secure, agentic payments.</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://blog.google/products-and-platforms/platforms/google-pay/agent-payments-protocol-fido-alliance/" target="_blank" rel="noreferrer">Google - The Keyword</a>
+            </p>
+            
+            <p>Google is donating its Agent Payments Protocol (AP2) to the FIDO Alliance, transferring ownership of the open standard designed to enable secure AI agent transactions. The donation aims to ensure the protocol remains platform-agnostic and community-led while accelerating industry adoption of autonomous payment systems.</p>
+            
+            <p>The company simultaneously released AP2 version 0.2 on GitHub, introducing &#34;Human Not Present&#34; payments that allow AI agents to execute transactions autonomously based on pre-authorized user instructions, such as purchasing limited-availability tickets when they become available. The protocol also supports Verifiable Intent, a tamper-proof logging standard co-developed with Mastercard that tracks user-authorized agent actions for accountability purposes.</p>
+            
+            <p>The move affects the broader AI and payments industry by establishing an open foundation for cross-platform agent transactions. Legal professionals should note the implications for transaction accountability, user authorization frameworks, and the regulatory challenges that may emerge as autonomous payment systems become more widespread across different platforms and services.</p>
+            
+          </article>
+          
+          <article class="article">
+            <h3 class="article-title">Deepgram expands Flux to 10 languages with mid-call switching for voice agents</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://siliconangle.com/2026/04/29/deepgram-expands-flux-10-languages-mid-call-switching-voice-agents/" target="_blank" rel="noreferrer">SiliconANGLE News</a>
+            </p>
+            
+            <p>Deepgram released Flux Multilingual, a conversational speech recognition model that supports 10 languages with real-time language detection and mid-call switching capabilities. The model handles English, Spanish, French, German, Hindi, Russian, Portuguese, Japanese, Italian and Dutch through a single API, eliminating the need for developers to combine separate transcription models and language detection systems when building voice agents for global markets.</p>
+            
+            <p>The technology addresses latency issues that arise when traditional voice systems require multiple components to handle different languages. Flux Multilingual can auto-detect languages or accept developer hints, supports native code-switching when speakers move between languages within conversations, and delivers end-of-turn decisions in under 400 milliseconds using model-based rather than silence-based detection.</p>
+            
+            <p>The release targets developers building voice AI agents for international enterprises, with Deepgram claiming monolingual-grade accuracy across all supported languages. The model is backward-compatible with existing Flux API integrations and available through cloud deployment or self-hosted options with EU endpoints. More than 200,000 developers and 1,300 organizations currently use Deepgram&#39;s platform.</p>
+            
+          </article>
+          
+          <article class="article">
+            <h3 class="article-title">OpenAI Really Wants Codex to Shut Up About Goblins</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://www.wired.com/story/openai-really-wants-codex-to-shut-up-about-goblins/" target="_blank" rel="noreferrer">WIRED</a>
+            </p>
+            
+            <p>OpenAI&#39;s latest coding model, GPT-5.5, contains specific instructions forbidding it from mentioning &#34;goblins, gremlins, raccoons, trolls, ogres, pigeons, or other animals or creatures&#34; unless directly relevant to user queries. The prohibition was discovered in Codex CLI, a command-line tool for AI code generation, though OpenAI has not explained why such restrictions were necessary.</p>
+            
+            <p>Users report that OpenAI&#39;s models become obsessed with goblins and other creatures when powering OpenClaw, an AI tool that controls computers and applications. One user noted their &#34;claw suddenly became a goblin with codex 5.5,&#34; while another said the system &#34;can&#39;t stop speaking of bugs as &#39;gremlins&#39; and &#39;goblins.&#39;&#34; OpenAI acquired OpenClaw in February after it gained popularity among AI enthusiasts for automating tasks like email responses and web purchases.</p>
+            
+            <p>The discovery sparked widespread memes and even prompted CEO Sam Altman to joke about &#34;extra goblins&#34; in GPT-6 training. An OpenAI staffer confirmed the goblin prohibition was implemented to address these behavioral quirks in the company&#39;s AI systems.</p>
+            
+          </article>
+          
+        </section>
+        
+        <section class="module section-block" id="security">
+          <h2 class="section-heading">Security</h2>
+          
+          <article class="article">
+            <h3 class="article-title">Google Fixes CVSS 10 Gemini CLI CI RCE and Cursor Flaws Enable Code Execution</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://thehackernews.com/2026/04/google-fixes-cvss-10-gemini-cli-ci-rce.html" target="_blank" rel="noreferrer">The Hacker News</a>
+            </p>
+            
+            <p>Google has patched a maximum severity vulnerability in Gemini CLI that earned a perfect 10.0 CVSS score. The flaw affected the &#34;@google/gemini-cli&#34; npm package and associated GitHub Actions workflow, allowing attackers to execute arbitrary commands on host systems by forcing malicious content to load as Gemini configuration. The vulnerability bypassed security measures before the agent&#39;s sandbox could initialize, potentially turning CI/CD pipelines into supply-chain attack vectors.</p>
+            
+            <p>The issue stemmed from Gemini CLI automatically trusting workspace folders in headless mode without requiring explicit user consent. Attackers could exploit this by planting specially crafted configurations in untrusted directories. Google&#39;s fix now requires folders to be explicitly trusted before configuration files can be accessed, and the company has hardened tool allowlisting in &#34;--yolo mode&#34; to prevent prompt injection attacks.</p>
+            
+            <p>Separately, researchers disclosed a high-severity vulnerability in the AI-powered development tool Cursor that enables arbitrary code execution through Git hook manipulation. The flaw allows malicious repositories to embed bare Git repositories with hooks that execute automatically when AI agents perform routine Git operations, creating a pathway for silent code execution on users&#39; machines.</p>
+            
+          </article>
+          
+          <article class="article">
+            <h3 class="article-title">30 ClawHub skills secretly turn AI agents into a crypto swarm</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://go.theregister.com/feed/www.theregister.com/2026/04/29/30_clawhub_skills_mine_crypto/" target="_blank" rel="noreferrer">The Register</a>
+            </p>
+            
+            <p>Thirty ClawHub skills published by user &#34;imaflytok&#34; are secretly recruiting AI agents into a cryptocurrency mining network without user knowledge or consent. Security researcher Ax Sharma from Manifold discovered the &#34;ClawSwarm&#34; campaign, which has generated approximately 9,800 downloads across skills masquerading as legitimate tools like cron helpers and security utilities.</p>
+            
+            <p>The malicious skills instruct AI agents to register with &#34;onlyflies.buzz,&#34; report their capabilities to third-party servers, generate Hedera crypto wallets, and store private keys externally—all occurring invisibly to human users. Agents check in every four hours and can accept remote tasks. Unlike traditional malware campaigns, ClawSwarm exploits the agentic AI framework itself rather than targeting humans directly.</p>
+            
+            <p>The campaign highlights a significant governance challenge for AI agent platforms. Since the skills contain no technically malicious code and operate through legitimate APIs, traditional security scanners cannot detect the unauthorized behavior. ClawHub maintainers face difficulty addressing what Sharma describes as a policy issue rather than a technical vulnerability, as agents autonomously perform actions their users never authorized.</p>
+            
+          </article>
+          
+          <article class="article">
+            <h3 class="article-title">LMDeploy CVE-2026-33626 Flaw Exploited Within 13 Hours of Disclosure</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://thehackernews.com/2026/04/lmdeploy-cve-2026-33626-flaw-exploited.html" target="_blank" rel="noreferrer">The Hacker News</a>
+            </p>
+            
+            <p>A critical security vulnerability in LMDeploy, an open-source toolkit for deploying large language models, was exploited by attackers within 13 hours of its public disclosure. The Server-Side Request Forgery (SSRF) flaw, designated CVE-2026-33626 with a CVSS score of 7.5, allows attackers to access sensitive data through the toolkit&#39;s vision-language module by exploiting an unvalidated URL fetching function.</p>
+            
+            <p>Cloud security firm Sysdig detected the first exploitation attempt against its honeypot systems just 12 hours and 31 minutes after the vulnerability was published on GitHub. The attacker conducted a sophisticated eight-minute session that included port scanning internal networks, targeting AWS metadata services, and testing various database connections. The exploitation involved 10 distinct requests across three phases, with the attacker switching between different vision language models to avoid detection.</p>
+            
+            <p>Security researchers note this incident exemplifies a troubling trend in AI infrastructure, where critical vulnerabilities in inference servers and model deployment tools are being weaponized within hours of disclosure. The detailed nature of modern vulnerability advisories, combined with generative AI capabilities, effectively provides threat actors with exploit development assistance, accelerating the timeline from disclosure to active exploitation.</p>
+            
+          </article>
+          
+          <article class="article">
+            <h3 class="article-title">Federal CIO cautious on Anthropic’s Mythos despite planned rollout</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://cyberscoop.com/anthropic-mythos-federal-cybersecurity-evaluation-greg-barbaccia/" target="_blank" rel="noreferrer">CyberScoop</a>
+            </p>
+            
+            <p>Federal Chief Information Officer Greg Barbaccia expressed cautious optimism about Anthropic&#39;s Mythos AI model, which the government plans to deploy in a controlled rollout to federal agencies. While Anthropic reports that Mythos identified thousands of previously unknown vulnerabilities across major operating systems and browsers during testing, Barbaccia emphasized the gap between laboratory performance and real-world effectiveness against defended networks with human operators and active monitoring systems.</p>
+            
+            <p>The Office of Management and Budget has begun preparing for the rollout, with the Office of the National Cyber Director coordinating the government&#39;s approach. Barbaccia sees potential for the model to accelerate vulnerability analysis, particularly in processing the government&#39;s CVE catalog of known software flaws, but stressed that speed alone doesn&#39;t determine actual threat levels. He noted the difference between theoretical exploitability and practical risk in operational environments.</p>
+            
+            <p>Several agencies have independently sought access to Mythos, including the Treasury Department, while CISA has reportedly not yet been granted access. The CIO Council continues evaluating what the model could mean for enterprise security across civilian agencies.</p>
+            
+          </article>
+          
+          <article class="article">
+            <h3 class="article-title">Google&#39;s fix for critical Gemini CLI bug might break your CI/CD pipelines</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://go.theregister.com/feed/www.theregister.com/2026/04/30/googles_fix_for_critical_gemini/" target="_blank" rel="noreferrer">The Register</a>
+            </p>
+            
+            <p>Google patched a critical CVSS 10.0 vulnerability in its Gemini CLI tool that could allow remote code execution through malicious configuration files. The flaw, discovered independently by researchers from Novee and Pillar Security, stems from overly permissive workspace trust settings in headless mode, where the CLI automatically trusted any workspace folders for loading configuration files and environment variables without user approval.</p>
+            
+            <p>The fix, released in Gemini CLI versions 0.39.1 and 0.40.0-preview.3, brings headless mode in line with interactive mode by requiring explicit folder trust. However, the update may break existing CI/CD workflows that relied on the previous automatic trust behavior. Google warns that GitHub Actions and automated pipelines using the run-gemini-cli action without version pinning have been automatically updated and may fail until reconfigured.</p>
+            
+            <p>The vulnerability particularly affects organizations running Gemini CLI in CI/CD environments and AI agent deployments. According to the researchers, successful exploitation provided attackers access to secrets, credentials, and source code accessible to affected workflows, enabling token theft and supply chain attacks across all tested environments.</p>
+            
+          </article>
+          
+          <article class="article">
+            <h3 class="article-title">Yet another experiment proves it&#39;s too damn simple to poison large language models</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://go.theregister.com/feed/www.theregister.com/2026/04/29/poisoning_large_language_models_6nimmt/" target="_blank" rel="noreferrer">The Register</a>
+            </p>
+            
+            <p>Security engineer Ron Stoner demonstrated how easily large language models can be manipulated by creating a fictional world championship for the German card game 6 Nimmt!. Using only a $12 domain registration and a single Wikipedia edit, Stoner convinced multiple AI chatbots that he was the 2025 world champion of a tournament that doesn&#39;t exist. The fabricated information remained on Wikipedia from February 2025 until late April 2026, when Stoner published his findings.</p>
+            
+            <p>The experiment exposes three critical vulnerabilities in AI systems. First, retrieval-augmented generation layers trust whatever sources rank highest in web searches, regardless of credibility. Second, the false information could become permanently embedded in AI training data if models scraped Wikipedia during the months the edit remained live. Third, AI agents with tool access could be manipulated to take specific actions based on poisoned sources, creating security rather than just reputational risks.</p>
+            
+            <p>Stoner emphasizes that his technique required no technical expertise and could easily be scaled by malicious actors across multiple domains and Wikipedia articles. He advocates for AI companies to implement data provenance tracking and filtering systems to detect suspicious patterns, such as newly registered domains cited as sole sources for Wikipedia claims.</p>
+            
+          </article>
+          
+        </section>
+        
+        <section class="module section-block" id="policy">
+          <h2 class="section-heading">Policy</h2>
+          
+          <article class="article">
+            <h3 class="article-title">OpenAI available at FedRAMP Moderate</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://openai.com/index/openai-available-at-fedramp-moderate" target="_blank" rel="noreferrer">OpenAI Blog</a>
+            </p>
+            
+            <p>OpenAI has received FedRAMP 20x Moderate authorization for ChatGPT Enterprise and API Platform, enabling U.S. government agencies to access advanced AI capabilities with required federal security and privacy standards. The authorization covers OpenAI&#39;s most powerful models, including GPT-5.5, and allows agencies to use these tools for internal operations, mission support, research, drafting, translation, and citizen service workflows.</p>
+            
+            <p>The FedRAMP 20x process, launched by GSA in March 2025, accelerated authorization through cloud-native security evidence and automated validation rather than traditional lengthy review cycles. This streamlined approach allowed OpenAI to demonstrate secure configurations without sacrificing security rigor for speed.</p>
+            
+            <p>Federal agencies can now procure ChatGPT Enterprise and API Platform through the FedRAMP Marketplace, working directly with OpenAI or through authorized reseller Carahsoft. The authorization provides reusable security documentation for agency review and eliminates the need for agencies to choose between cutting-edge AI capabilities and trusted deployment environments that meet federal requirements.</p>
+            
+          </article>
+          
+          <article class="article">
+            <h3 class="article-title">Trump&#39;s missed AI deadlines</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://www.axios.com/2026/04/24/trump-missed-ai-deadlines" target="_blank" rel="noreferrer">Axios</a>
+            </p>
+            
+            <p>The Trump administration has missed key deadlines outlined in its December executive order targeting state AI laws, with three major provisions due March 11 remaining incomplete. The Federal Trade Commission was supposed to issue guidance on how consumer protection law applies to AI models and when it could override state laws. The Commerce Department failed to deliver its review of state AI laws and rules tying broadband funding to state regulations, while also missing its deadline to identify &#34;onerous&#34; state laws for the Justice Department&#39;s AI Litigation Task Force.</p>
+            
+            <p>The missed deadlines raise questions about the administration&#39;s ability to execute its strategy of reining in state-level AI regulation. Tech companies and state legislators have been closely watching to see which state laws the DOJ task force will challenge, particularly as dozens of states continue considering AI legislation. While the White House released a legislative recommendation for federal AI policy last month, it offered more priorities than concrete plans.</p>
+            
+            <p>The delays leave the administration relying on ad hoc calls to state legislators rather than comprehensive federal policy, making one of Trump&#39;s biggest AI priorities—dismantling state AI laws—a more distant goal.</p>
+            
+          </article>
+          
+          <article class="article">
+            <h3 class="article-title">South Africa’s AI policy cited fake research, created by AI: what lessons need to be learned</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://theconversation.com/south-africas-ai-policy-cited-fake-research-created-by-ai-what-lessons-need-to-be-learned-281671" target="_blank" rel="noreferrer">The Conversation Africa</a>
+            </p>
+            
+            <p>South Africa&#39;s Department of Communications and Digital Technologies withdrew its draft National Artificial Intelligence Policy just 16 days after publication when journalists discovered the document contained fabricated research citations. The fake references included non-existent academic journals and real journals that never published the cited articles—hallucinations typical of generative AI systems like ChatGPT.</p>
+            
+            <p>The communications minister acknowledged the problem stemmed from using generative AI without proper human verification, compromising the document&#39;s credibility. The fabricated citations not only invented sources but falsely attributed research to respected African scholars and authoritative academic institutions. This incident exemplifies broader challenges with AI hallucinations that have affected universities, courts, and other institutions worldwide.</p>
+            
+            <p>The policy failure highlights critical gaps in accountability, transparency, and explainability—the very principles the document was meant to establish for AI governance. Legal experts argue this reveals the need for specific regulatory frameworks addressing synthetic media and information integrity, requiring designated mandate holders and cross-sectoral cooperation rather than treating these issues as subcategories of innovation policy.</p>
+            
+          </article>
+          
+          <article class="article">
+            <h3 class="article-title">&#39;The storm is here&#39;: Why you and your neighbors may be paying multibillion-dollar bill for AI data centers right now — but that may not last long as more US states join revolt against unjust &#39;socialist&#39; approach to electricity bills</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://www.techradar.com/pro/the-storm-is-here-why-you-and-your-neighbors-may-be-paying-multibillion-dollar-bill-for-ai-data-centers-right-now-but-that-may-not-last-long-as-more-us-states-join-revolt-against-unjust-socialist-approach-to-electricity-bills" target="_blank" rel="noreferrer">TechRadar</a>
+            </p>
+            
+            <p>AI data centers are driving up electricity costs for residential customers across the United States as utilities spread the infrastructure upgrade costs across their entire customer base. Pennsylvania saw residential electricity rates rise 21.7% in 2025, while West Virginia utility bills now exceed average monthly mortgage payments in some households. The structural issue stems from data centers requiring massive grid upgrades—new transmission lines, transformer upgrades, and substation expansions—but these costs get &#34;socialized&#34; to all ratepayers rather than the companies creating the demand.</p>
+            
+            <p>Several states are now implementing &#34;beneficiary-pays&#34; policies to address this cost-shifting. Wisconsin&#39;s Public Service Commission ruled in April that data centers must cover the full cost of required power infrastructure without shifting costs to other customers. Florida and Pennsylvania passed similar legislation during their current sessions, requiring data centers to fund the capital costs of transmission and distribution upgrades they necessitate.</p>
+            
+            <p>The policy shift comes as grid capacity constraints are already limiting data center development in major markets like Northern Virginia, where developers face years-long interconnection queues. Some companies are responding by building on-site generation to bypass grid limitations, while regulators question whether projected data center demand will materialize at the scale utilities have forecast.</p>
+            
+          </article>
+          
+          <article class="article">
+            <h3 class="article-title">Behind the Curtain: We&#39;ve been warned</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://www.axios.com/2026/04/29/ai-models-speed-warning" target="_blank" rel="noreferrer">Axios</a>
+            </p>
+            
+            <p>Anthropic has achieved unprecedented growth, scaling from $1 billion to $30 billion in annualized revenue in just four months, making it the fastest-growing company in American business history. The AI firm built a model so powerful—capable of cracking critical security vulnerabilities in operating systems and browsers—that it chose not to release it publicly, instead limiting access to 40+ organizations to give cyberdefenders an advantage.</p>
+            
+            <p>Meanwhile, both Anthropic and OpenAI report their most advanced coding models are now building themselves, with Anthropic stating it &#34;builds Claude with Claude&#34; and OpenAI researchers no longer writing code by hand. This rapid advancement coincides with decreasing transparency, as Stanford&#39;s AI Index shows the Foundation Model Transparency Index dropped from 58 to 40 out of 100 in the past year.</p>
+            
+            <p>The growing concerns materialized violently when OpenAI CEO Sam Altman&#39;s home was firebombed and shot at within the same week by individuals targeting AI executives. Following these attacks, Altman publicly acknowledged that &#34;the fear and anxiety about AI is justified&#34; and warned that &#34;power cannot be too concentrated.&#34; These developments occurred as AI capabilities triggered a $2 trillion market rout in software companies over 10 weeks.</p>
+            
+          </article>
+          
+        </section>
+        
+        <section class="module section-block" id="research">
+          <h2 class="section-heading">Research</h2>
+          
+          <article class="article">
+            <h3 class="article-title">Dead Internet Theory Is 17% of the Way to Becoming Reality, Study Finds</h3>
+            <p class="article-source">
+              Read the article:
+              <a href="https://gizmodo.com/dead-internet-theory-is-17-of-the-way-to-becoming-reality-study-finds-2000751718" target="_blank" rel="noreferrer">Gizmodo.com</a>
+            </p>
+            
+            <p>Researchers from Imperial College London, Stanford University, and the Internet Archive found that 35.3% of all newly published websites were created with AI assistance as of May 2025, with 17.6% being completely AI-generated. The study analyzed data from the Internet Archive&#39;s Wayback Machine spanning late 2022 to mid-2025, tracking the rise of AI-generated content since ChatGPT&#39;s launch.</p>
+            
+            <p>The findings align with previous reports showing bots driving roughly one-third of internet traffic and automated activity surpassing human web activity for the first time in 2024. AI tools are being used to rapidly generate fake websites for scams, plagiarize news organizations, and create SEO-farming sites. The researchers also identified a website linked to an OpenAI-backed super PAC publishing mostly AI-generated news articles attacking AI critics.</p>
+            
+            <p>While the study debunked some fears about AI content being factually incorrect or poorly sourced, researchers confirmed that AI-generated material reduces the range of unique ideas and diverse viewpoints while creating writing that &#34;feels increasingly sanitized and artificially cheerful.&#34; The team plans to develop a continuous monitoring tool to track this phenomenon across different website categories and languages.</p>
+            
+          </article>
+          
+        </section>
+        
+      </main>
+    </div>
+  </div>
+</body>
+</html>

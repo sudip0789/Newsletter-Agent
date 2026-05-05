@@ -59,7 +59,7 @@ class TemplateAssembler:
 
         logo_path = self._to_relative_asset_path(
             output_file,
-            self.project_root / "assets" / "logos" / "logo.png",
+            self.project_root / "assets" / "logos" / "newsletter_logo.png",
         )
         headlines = [
             {
@@ -142,7 +142,7 @@ class TemplateAssembler:
             return self._to_relative_asset_path(output_file, self.project_root / raw_path)
         return self._to_relative_asset_path(
             output_file,
-            self.project_root / "assets" / "logos" / "logo.png",
+            self.project_root / "assets" / "logos" / "newsletter_logo.png",
         )
 
     def _to_relative_asset_path(self, output_file: Path, asset_path: Path) -> str:

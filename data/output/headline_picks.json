@@ -1,0 +1,29 @@
+[
+  {
+    "title": "Elon gets his day in trial against Sam Altman and OpenAI",
+    "source_name": "Axios",
+    "url": "https://www.axios.com/2026/04/28/elon-openai-altman-trial",
+    "section": "legal_intelligence",
+    "composite_score": 0.8820999999999999,
+    "blurb": "Elon Musk takes the stand in his billion-dollar lawsuit claiming OpenAI betrayed its nonprofit roots.",
+    "image_path": "assets/generated/headline_1.png"
+  },
+  {
+    "title": "Microsoft lifts 2026 AI spend by $25 billion to cover component price rises",
+    "source_name": "The Register",
+    "url": "https://go.theregister.com/feed/www.theregister.com/2026/04/30/microsoft_q3_2026/",
+    "section": "industry",
+    "composite_score": 0.7817999999999998,
+    "blurb": "Microsoft's $190 billion AI spending spree faces Wall Street skepticism as component costs triple and returns remain unclear.",
+    "image_path": "assets/generated/headline_2.png"
+  },
+  {
+    "title": "Firefox maker torches Google for building Prompt API into browser",
+    "source_name": "The Register",
+    "url": "https://go.theregister.com/feed/www.theregister.com/2026/04/30/mozilla_pushes_back_against_googles/",
+    "section": "tools_and_products",
+    "composite_score": 0.7052,
+    "blurb": "Mozilla slams Google's browser AI feature as threat to open web standards and developer freedom.",
+    "image_path": "assets/generated/headline_3.png"
+  }
+]

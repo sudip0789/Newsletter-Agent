@@ -237,4 +237,4 @@ class TestTemplateAssembler(unittest.TestCase):
             self.assertIn("<p>Paragraph one.</p>", html)
             self.assertIn("<p>Paragraph two.</p>", html)
             self.assertIn("../../assets/generated/headline_1.png", html)
-            self.assertIn("../../assets/logos/logo.png", html)
+            self.assertIn("../../assets/logos/newsletter_logo.png", html)
