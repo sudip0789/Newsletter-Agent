@@ -1,33 +1,59 @@
-# AI Newsletter Pipeline - Stage 1
+# AI Newsletter Agent
 
-This project implements Stage 1 of an AI newsletter pipeline: source ingestion. It collects AI and tech news articles from configured RSS feeds, NewsAPI keyword queries, and Google News RSS, attempts full-text retrieval for snippet-only entries, deduplicates results by normalized URL, and writes a flat JSON output ready for downstream processing.
+An automated agent that discovers, filters, ranks, reviews and summarizes AI news into a ready-to-publish weekly newsletter. It replaces a manual workflow that took 4–6 hours per issue with a pipeline that runs in minutes.
 
-## Setup
+## What It Does
 
-1. Clone or copy this project.
-2. Create a `.env` file from the template:
-   - `cp .env.example .env`
-3. Install dependencies:
-   - `pip install -r requirements.txt`
+The pipeline collects 500+ articles per week from RSS feeds and news APIs, filters them for AI relevance, removes duplicates, clusters overlapping coverage, scores and ranks stories based on set conditions, generates editorial summaries, selects headline features, creates infographic, and assembles everything into a website style formatted newsletter.
 
 ## Quick Start
 
-Run RSS-only mode for immediate testing (no API key required):
+### Prerequisites
+
+- Python 3.11+
+- API keys: OpenAI, Anthropic, NewsAPI (free tier)
+
+
+### Setup
 
 ```bash
-python run_stage1.py --rss-only
+git clone https://github.com/sudip0789/newsletter-agent.git
+cd newsletter-agent
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
 ```
 
-## Full Run
+Create a `.env` file:
 
-Add your NewsAPI key to `.env` and run:
+```
+OPENAI_API_KEY=your_key
+NEWS_API_KEY=your_key
+ANTHROPIC_API_KEY=your_key
+```
+### Run the Full Pipeline
 
 ```bash
-python run_stage1.py
+python run_pipeline.py
 ```
+### Run Individual Stages
 
-## Output
+All src files have their own runner and can be run separately
 
-Results are saved to:
+# Tech Stack
 
-`data/output/stage1_articles.json`
+| Component | Tool |
+|---|---|
+| Language | Python 3.11+ & HTML |
+| Scoring | OpenAI GPT-5.4 |
+| Summaries, Headlines | Anthropic Claude Sonnet 4.6 |
+| Embeddings | OpenAI text-embedding-3 |
+| Image generation | OpenAI GPT Image 1.5 |
+| Article extraction | Trafilatura |
+| RSS parsing | Feedparser |
+| News search | NewsAPI.org |
+| Clustering | scikit-learn (agglomerative clustering) |
+| Templating | Jinja2 |
+| Review UI | Streamlit |
+| Data models | Pydantic v2 |
+| Deployment | Vercel |
