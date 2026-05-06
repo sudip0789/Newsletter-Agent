@@ -8,6 +8,8 @@ from typing import Any
 
 from jinja2 import Environment, select_autoescape
 
+from src.text_utils import normalize_markdown_escaped_text
+
 
 class TemplateAssembler:
     ALL_SECTIONS = [
@@ -144,7 +146,7 @@ class TemplateAssembler:
         scored_story = story.get("scored_story", {})
         cluster = scored_story.get("cluster", {})
         primary_article = cluster.get("primary_article", {})
-        summary = story.get("summary", "") or ""
+        summary = normalize_markdown_escaped_text(story.get("summary", "") or "")
         return {
             "title": primary_article.get("title", ""),
             "url": primary_article.get("url", ""),

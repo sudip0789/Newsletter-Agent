@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 from openai import OpenAI
 
 from src.models import ScoredStory, StoryCluster, SummarizedStory
-from src.text_utils import escape_dollar_signs_for_markdown
+from src.text_utils import normalize_markdown_escaped_text
 
 LOGGER = logging.getLogger(__name__)
 
@@ -220,7 +220,7 @@ class Summarizer:
                 "section": scored_story.section,
                 "tier": scored_story.tier,
             },
-            "summary": escape_dollar_signs_for_markdown(story.summary),
+            "summary": normalize_markdown_escaped_text(story.summary),
             "needs_manual_review": story.needs_manual_review,
         }
 
