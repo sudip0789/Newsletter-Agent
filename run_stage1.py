@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import logging
 
+from src.stats_report import append_stage_report, format_count_line
 from src.stage1_ingest import SourceIngestion
 from src.utils import setup_logging
 
@@ -49,6 +50,10 @@ def main() -> None:
     )
     ingestion.save_results(articles, path="data/output/stage1_articles.json")
     ingestion.print_summary(articles)
+    report_text = format_count_line("Total Number of articles scanned", len(articles))
+    print(report_text)
+    report_path = append_stage_report("run_stage1.py", report_text, reset=True)
+    print(f"Stats report updated: {report_path}")
 
 
 if __name__ == "__main__":

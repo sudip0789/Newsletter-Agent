@@ -69,7 +69,6 @@
     "summary": "Families of victims of the February school shooting in Tumbler Ridge, British Columbia, have sued OpenAI in US federal court, alleging the company failed to alert law enforcement after its systems flagged the shooter’s alarming ChatGPT conversations. The cases include wrongful death claims for five children and an educational assistant killed in the attack, as well as a suit on behalf of 12-year-old Maya Gebala, who was critically injured. Lawyers say more than two dozen additional cases are planned.\n\nAccording to the complaints, OpenAI’s automated systems flagged conversations in June 2025 in which the attacker described gun violence scenarios, and safety team members recommended contacting police after concluding she posed a credible and imminent threat. The lawsuits allege OpenAI leadership overruled that recommendation, deactivated the account, but did not stop the shooter from creating a new account and continuing to plan the attack.\n\nOpenAI called the shooting “a tragedy” and said it has a zero-tolerance policy on using its tools to assist violence. The company said it has since strengthened safeguards, threat escalation, and responses to signs of distress. The lawsuits seek damages and a court order requiring changes to OpenAI’s safety practices, including mandatory law enforcement referral protocols.",
     "needs_manual_review": false
   },
-
   {
     "scored_story": {
       "cluster": {

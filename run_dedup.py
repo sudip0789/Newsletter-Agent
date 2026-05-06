@@ -14,6 +14,7 @@ from __future__ import annotations
 import argparse
 
 from src.dedup_cluster import Deduplicator
+from src.stats_report import append_stage_report, format_count_line
 
 
 def parse_args() -> argparse.Namespace:
@@ -55,7 +56,11 @@ def main() -> None:
         recompute_embeddings=args.recompute_embeddings,
         show_clusters=args.show_clusters,
     )
-    deduplicator.run()
+    clusters = deduplicator.run()
+    report_text = format_count_line("Total Unique articles found", len(clusters))
+    print(report_text)
+    report_path = append_stage_report("run_dedup.py", report_text)
+    print(f"Stats report updated: {report_path}")
 
 
 if __name__ == "__main__":

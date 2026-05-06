@@ -30,7 +30,7 @@ SHORT_TITLE_SYSTEM_PROMPT = (
 class HeadlineSelector:
     HEADLINE_CATEGORIES = ["industry", "legal_intelligence", "creative_ai"]
     BLURB_MODEL = "claude-sonnet-4-20250514"
-    IMAGE_MODEL = "gpt-image-1-mini"
+    IMAGE_MODEL = "gpt-image-1.5"
 
     def __init__(self, input_path: str = "data/output/summarized_stories.json"):
         """Load summarized stories."""

@@ -34,7 +34,7 @@ ANTHROPIC_API_KEY=your_key
 ### Run the Full Pipeline
 
 ```bash
-python run_pipeline.py
+python3 run_pipeline.py
 ```
 ### Run Individual Stages
 
@@ -45,7 +45,7 @@ All src files have their own runner and can be run separately
 To regenerate the static site bundle locally:
 
 ```bash
-python build_public_site.py
+python3 build_public_site.py
 ```
 
 This command syncs `assets/` into `public/assets/` and renders `public/index.html`.

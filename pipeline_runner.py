@@ -2,10 +2,10 @@
 Run the full newsletter pipeline in serial using the existing stage runners.
 
 Usage:
-    python pipeline_runner.py
-    python pipeline_runner.py --rss-only --skip-fulltext --limit 5
-    python pipeline_runner.py --threshold 0.7 --show-clusters
-    python pipeline_runner.py --top 10 --model sonnet-4.6
+    python3 pipeline_runner.py
+    python3 pipeline_runner.py --rss-only --skip-fulltext --limit 5
+    python3 pipeline_runner.py --threshold 0.7 --show-clusters
+    python3 pipeline_runner.py --top 10 --model sonnet-4.6
 """
 
 from __future__ import annotations

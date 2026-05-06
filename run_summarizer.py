@@ -14,6 +14,7 @@ from __future__ import annotations
 import argparse
 import logging
 
+from src.stats_report import append_stage_report, format_manual_review_summary
 from src.summarizer import Summarizer
 from src.utils import setup_logging
 
@@ -53,6 +54,10 @@ def main() -> None:
     )
     stories = summarizer.run()
     summarizer.save_results(stories)
+    report_text = format_manual_review_summary(stories)
+    print(report_text)
+    report_path = append_stage_report("run_summarizer.py", report_text)
+    print(f"Stats report updated: {report_path}")
     print(
         f"Saved {len(stories)} summarized stories using {args.model} "
         f"to {summarizer.output_path}"

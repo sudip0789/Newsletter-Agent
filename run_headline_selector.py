@@ -15,6 +15,7 @@ import logging
 import time
 
 from src.headline_selector import HeadlineSelector
+from src.stats_report import append_stage_report, format_headline_selection
 from src.utils import setup_logging
 
 IMAGE_REQUEST_DELAY_SECONDS = 10
@@ -63,6 +64,10 @@ def main() -> None:
                 time.sleep(IMAGE_REQUEST_DELAY_SECONDS)
 
     selector.save_picks(headlines)
+    report_text = format_headline_selection(headlines)
+    print(report_text)
+    report_path = append_stage_report("run_headline_selector.py", report_text)
+    print(f"Stats report updated: {report_path}")
     print(f"Saved {len(headlines)} headline picks to {selector.output_path}")
 
 
