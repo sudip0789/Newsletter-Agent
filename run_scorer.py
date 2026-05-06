@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import logging
 
+from src.stats_report import append_stage_report, format_selected_stories_by_section
 from src.scorer import Scorer
 from src.utils import setup_logging
 
@@ -47,6 +48,13 @@ def main() -> None:
     scorer = Scorer(input_path=args.input)
     scorer.selection_total = args.top
     selected = scorer.run()
+    report_text = format_selected_stories_by_section(
+        selected,
+        requested_total=args.top,
+    )
+    print(report_text)
+    report_path = append_stage_report("run_scorer.py", report_text)
+    print(f"Stats report updated: {report_path}")
 
     if args.show_all_scores:
         print("\n=== All Scored Stories ===")
