@@ -40,6 +40,25 @@ python run_pipeline.py
 
 All src files have their own runner and can be run separately
 
+### Build the Deployable Site
+
+To regenerate the static site bundle locally:
+
+```bash
+python build_public_site.py
+```
+
+This command syncs `assets/` into `public/assets/` and renders `public/index.html`.
+
+### Vercel Deploys
+
+Vercel is configured to rebuild the deployable static site on each deployment:
+
+- `vercel.json` runs `python3 build_public_site.py` as the build command
+- the deploy output stays `public/`
+
+That means you can push source changes and data/template changes without manually updating `public/index.html` first.
+
 # Tech Stack
 
 | Component | Tool |

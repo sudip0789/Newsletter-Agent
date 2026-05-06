@@ -1,5 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "python3 -m pip install Jinja2",
+  "buildCommand": "python3 build_public_site.py",
   "framework": null,
   "cleanUrls": true,
   "outputDirectory": "public"

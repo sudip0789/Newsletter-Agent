@@ -33,7 +33,7 @@ Article text:
 
 class Summarizer:
     DEFAULT_TOP_N = 30
-    DEFAULT_MODEL = "gpt-5.4"
+    DEFAULT_MODEL = "sonnet-4.6"
     MAX_WORKERS = 6
     MAX_TEXT_CHARS = 10000
     MIN_TEXT_CHARS = 100
