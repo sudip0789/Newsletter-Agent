@@ -138,6 +138,32 @@
       align-items: start;
     }
 
+    .utility-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .utility-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 140px;
+      padding: 11px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(139, 0, 0, 0.18);
+      background: var(--paper);
+      color: var(--brand-red);
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: var(--shadow);
+    }
+
+    .utility-link:hover {
+      background: #fff7f3;
+    }
+
     .sidebar {
       position: sticky;
       top: 20px;
@@ -453,6 +479,17 @@
       </div>
       <div class="header-date">{{ publish_date }}</div>
     </header>
+
+    {% if latest_issue_url or archive_url %}
+    <nav class="utility-nav" aria-label="Issue navigation">
+      {% if latest_issue_url %}
+      <a class="utility-link" href="{{ latest_issue_url }}">Latest Issue</a>
+      {% endif %}
+      {% if archive_url %}
+      <a class="utility-link" href="{{ archive_url }}">Archive</a>
+      {% endif %}
+    </nav>
+    {% endif %}
 
     <div class="layout">
       <aside class="sidebar" aria-label="Section navigation">

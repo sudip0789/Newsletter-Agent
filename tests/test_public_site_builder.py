@@ -41,6 +41,67 @@ class TestPublicSiteBuilder(unittest.TestCase):
     def _write_json(self, path: Path, payload: list[dict]) -> None:
         path.write_text(json.dumps(payload), encoding="utf-8")
 
+    def _write_shared_template(self, project_root: Path) -> None:
+        templates_root = Path(__file__).resolve().parent.parent / "templates"
+        (project_root / "templates" / "newsletter.html").write_text(
+            (templates_root / "newsletter.html").read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
+        (project_root / "templates" / "archive_index.html").write_text(
+            (templates_root / "archive_index.html").read_text(encoding="utf-8"),
+            encoding="utf-8",
+        )
+
+    def _write_shared_logos(self, project_root: Path) -> None:
+        for name in [
+            "newsletter_logo.png",
+            "news_brief.png",
+            "security.png",
+        ]:
+            (project_root / "assets" / "logos" / name).write_bytes(b"png")
+
+    def _write_issue_snapshot(
+        self,
+        project_root: Path,
+        issue_date: str,
+        story_title: str,
+        headline_title: str,
+    ) -> None:
+        issue_root = project_root / "issue_snapshots" / issue_date
+        (issue_root / "assets" / "generated").mkdir(parents=True)
+        self._write_json(
+            issue_root / "summarized_stories.json",
+            [
+                {
+                    **self._story_payload(),
+                    "scored_story": {
+                        **self._story_payload()["scored_story"],
+                        "cluster": {
+                            **self._story_payload()["scored_story"]["cluster"],
+                            "primary_article": {
+                                **self._story_payload()["scored_story"]["cluster"][
+                                    "primary_article"
+                                ],
+                                "title": story_title,
+                                "url": f"https://example.com/{issue_date}",
+                            },
+                        },
+                    },
+                }
+            ],
+        )
+        self._write_json(
+            issue_root / "headline_picks.json",
+            [
+                {
+                    **self._headline_payload(),
+                    "title": headline_title,
+                    "url": f"https://example.com/headline-{issue_date}",
+                }
+            ],
+        )
+        (issue_root / "assets" / "generated" / "headline_1.png").write_bytes(b"png")
+
     def test_build_public_site_syncs_assets_and_renders_index(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir_name:
             tmpdir = Path(tmpdir_name)
@@ -51,13 +112,7 @@ class TestPublicSiteBuilder(unittest.TestCase):
             (project_root / "templates").mkdir(parents=True)
             (project_root / "public").mkdir(parents=True)
 
-            repo_template_path = (
-                Path(__file__).resolve().parent.parent / "templates" / "newsletter.html"
-            )
-            (project_root / "templates" / "newsletter.html").write_text(
-                repo_template_path.read_text(encoding="utf-8"),
-                encoding="utf-8",
-            )
+            self._write_shared_template(project_root)
 
             self._write_json(
                 project_root / "data" / "output" / "summarized_stories.json",
@@ -69,12 +124,7 @@ class TestPublicSiteBuilder(unittest.TestCase):
             )
 
             (project_root / "assets" / "generated" / "headline_1.png").write_bytes(b"png")
-            for name in [
-                "newsletter_logo.png",
-                "news_brief.png",
-                "security.png",
-            ]:
-                (project_root / "assets" / "logos" / name).write_bytes(b"png")
+            self._write_shared_logos(project_root)
 
             html = build_public_site(project_root=project_root, publish_date="2026-05-01")
 
@@ -87,6 +137,83 @@ class TestPublicSiteBuilder(unittest.TestCase):
             self.assertTrue((project_root / "public" / "assets" / "logos" / "newsletter_logo.png").exists())
             self.assertIn("src=\"assets/generated/headline_1.png\"", html)
             self.assertIn("src=\"assets/logos/security.png\"", html)
+
+    def test_build_public_site_renders_archive_index_and_issue_pages(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir_name:
+            tmpdir = Path(tmpdir_name)
+            project_root = tmpdir / "project"
+            (project_root / "assets" / "generated").mkdir(parents=True)
+            (project_root / "assets" / "logos").mkdir(parents=True)
+            (project_root / "data" / "output").mkdir(parents=True)
+            (project_root / "templates").mkdir(parents=True)
+            (project_root / "public").mkdir(parents=True)
+
+            self._write_shared_template(project_root)
+            self._write_shared_logos(project_root)
+            (project_root / "assets" / "generated" / "headline_1.png").write_bytes(b"png")
+
+            self._write_json(
+                project_root / "data" / "output" / "summarized_stories.json",
+                [self._story_payload()],
+            )
+            self._write_json(
+                project_root / "data" / "output" / "headline_picks.json",
+                [self._headline_payload()],
+            )
+
+            self._write_issue_snapshot(
+                project_root=project_root,
+                issue_date="2026-04-24",
+                story_title="Archived issue story",
+                headline_title="Archived issue headline",
+            )
+            self._write_issue_snapshot(
+                project_root=project_root,
+                issue_date="2026-05-01",
+                story_title="More recent archived story",
+                headline_title="More recent archived headline",
+            )
+
+            build_public_site(project_root=project_root, publish_date="2026-05-06")
+
+            archive_index = project_root / "public" / "issues" / "index.html"
+            archived_issue = project_root / "public" / "issues" / "2026-04-24" / "index.html"
+            latest_issue = project_root / "public" / "index.html"
+
+            self.assertTrue(archive_index.exists())
+            self.assertTrue(archived_issue.exists())
+            self.assertTrue(
+                (
+                    project_root
+                    / "public"
+                    / "issues"
+                    / "2026-04-24"
+                    / "assets"
+                    / "generated"
+                    / "headline_1.png"
+                ).exists()
+            )
+
+            archive_html = archive_index.read_text(encoding="utf-8")
+            archived_html = archived_issue.read_text(encoding="utf-8")
+            latest_html = latest_issue.read_text(encoding="utf-8")
+
+            self.assertIn("Archive", latest_html)
+            self.assertIn("href=\"issues/\"", latest_html)
+            self.assertIn("The AI Newsletter for May 1st, 2026", archive_html)
+            self.assertIn("The AI Newsletter for April 24th, 2026", archive_html)
+            self.assertLess(
+                archive_html.index("The AI Newsletter for May 1st, 2026"),
+                archive_html.index("The AI Newsletter for April 24th, 2026"),
+            )
+            self.assertIn("Open the full newsletter archive for this week.", archive_html)
+            self.assertNotIn("More recent archived headline", archive_html)
+            self.assertNotIn("Archived issue headline", archive_html)
+            self.assertNotIn("More recent archived story", archive_html)
+            self.assertIn("Archived issue story", archived_html)
+            self.assertIn("src=\"assets/generated/headline_1.png\"", archived_html)
+            self.assertIn("href=\"../../\"", archived_html)
+            self.assertIn("href=\"../\"", archived_html)
 
 
 if __name__ == "__main__":
