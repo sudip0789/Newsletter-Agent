@@ -38,7 +38,7 @@ python3 run_pipeline.py
 ```
 ### Run Individual Stages
 
-All src files have their own runner and can be run separately
+All `src` files have their own runner and can be run separately.
 
 ### Build the Deployable Site
 
@@ -74,7 +74,8 @@ After that, commit the snapshot and rebuilt static files, then trigger a manual 
 |---|---|
 | Language | Python 3.11+ & HTML |
 | Scoring | OpenAI GPT-5.4 |
-| Summaries, Headlines | Anthropic Claude Sonnet 4.6 |
+| Summaries, Headline blurbs | Anthropic Claude Sonnet 4.6 |
+| Headline selection | OpenAI GPT-5.4 |
 | Embeddings | OpenAI text-embedding-3 |
 | Image generation | OpenAI GPT Image 1.5 |
 | Article extraction | Trafilatura |

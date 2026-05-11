@@ -308,6 +308,15 @@
       font-size: 1rem;
     }
 
+    .headline-source {
+      margin: 0 0 8px;
+      color: var(--brand-red);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
     .toc-list {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -486,7 +495,7 @@
       <a class="utility-link" href="{{ latest_issue_url }}">Latest Issue</a>
       {% endif %}
       {% if archive_url %}
-      <a class="utility-link" href="{{ archive_url }}">Archive</a>
+      <a class="utility-link" href="{{ archive_url }}">Past Issues</a>
       {% endif %}
     </nav>
     {% endif %}
@@ -514,6 +523,7 @@
               <img src="{{ headline.image_path }}" alt="{{ headline.title }}">
               <div>
                 <h3>{{ headline.title }}</h3>
+                <p class="headline-source">{{ headline.source_name }}</p>
                 <p>{{ headline.blurb }}</p>
               </div>
             </a>

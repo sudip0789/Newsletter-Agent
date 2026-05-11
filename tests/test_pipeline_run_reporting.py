@@ -196,24 +196,39 @@ class TestPipelineRunReporting(unittest.TestCase):
         self.assertIn(f"Stats report updated: {report_path}", output)
         mock_append.assert_called_once()
 
-    @patch("run_headline_selector.setup_logging")
-    @patch("run_headline_selector.time.sleep")
-    @patch("run_headline_selector.HeadlineSelector")
-    def test_run_headline_selector_prints_selected_headlines(
+    @patch("run_headline_agent.setup_logging")
+    @patch("run_headline_agent.time.sleep")
+    @patch("run_headline_agent.HeadlineAgent")
+    def test_run_headline_agent_prints_selected_headlines(
         self,
-        mock_selector_cls: MagicMock,
+        mock_agent_cls: MagicMock,
         _mock_sleep: MagicMock,
         _mock_setup_logging: MagicMock,
     ) -> None:
-        from run_headline_selector import main
+        from run_headline_agent import main
 
-        selector = mock_selector_cls.return_value
-        selector.run.return_value = [
-            {"title": "Short rewritten title", "summary": "Summary 1", "blurb": "Blurb 1"},
-            {"title": "Second headline", "summary": "Summary 2", "blurb": "Blurb 2"},
-            {"title": "Third headline", "summary": "Summary 3", "blurb": "Blurb 3"},
+        agent = mock_agent_cls.return_value
+        agent.run.return_value = [
+            {
+                "title": "Short rewritten title",
+                "summary": "Summary 1",
+                "blurb": "Blurb 1",
+                "source_name": "TechCrunch",
+            },
+            {
+                "title": "Second headline",
+                "summary": "Summary 2",
+                "blurb": "Blurb 2",
+                "source_name": "Reuters",
+            },
+            {
+                "title": "Third headline",
+                "summary": "Summary 3",
+                "blurb": "Blurb 3",
+                "source_name": "Bloomberg",
+            },
         ]
-        selector.generate_headline_image.side_effect = [
+        agent.generate_headline_image.side_effect = [
             "assets/generated/headline_1.png",
             None,
             "assets/generated/headline_3.png",
@@ -221,14 +236,15 @@ class TestPipelineRunReporting(unittest.TestCase):
         stdout = io.StringIO()
         report_path = "data/output/stats_report.txt"
 
-        with patch("run_headline_selector.append_stage_report", return_value=report_path) as mock_append:
-            with patch.object(sys, "argv", ["run_headline_selector.py"]):
+        with patch("run_headline_agent.append_stage_report", return_value=report_path) as mock_append:
+            with patch.object(sys, "argv", ["run_headline_agent.py"]):
                 with patch("sys.stdout", stdout):
                     main()
 
         output = stdout.getvalue()
         self.assertIn("3 selected headline articles:", output)
         self.assertIn("1. Short rewritten title", output)
+        self.assertIn("Publisher: TechCrunch", output)
         self.assertIn("Blurb: Blurb 1", output)
         self.assertIn(
             "Headline image generated: assets/generated/headline_1.png",
