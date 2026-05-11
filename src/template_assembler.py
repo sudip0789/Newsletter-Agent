@@ -38,11 +38,15 @@ class TemplateAssembler:
         stories_path: str = "data/output/summarized_stories.json",
         headlines_path: str = "data/output/headline_picks.json",
         template_path: str = "templates/newsletter.html",
+        headline_asset_root: str | Path | None = None,
     ):
         self.stories_path = Path(stories_path)
         self.headlines_path = Path(headlines_path)
         self.template_path = Path(template_path)
         self.project_root = self.template_path.parent.parent.resolve()
+        self.headline_asset_root = (
+            None if headline_asset_root is None else Path(headline_asset_root).resolve()
+        )
         self.stories = self._load_json(self.stories_path)
         self.headlines = self._load_json(self.headlines_path)
         self.jinja = Environment(
@@ -53,6 +57,8 @@ class TemplateAssembler:
         self,
         publish_date: date | datetime | str | None = None,
         output_path: str | None = None,
+        archive_url: str | None = None,
+        latest_issue_url: str | None = None,
     ) -> str:
         output_file = (
             self.project_root / "public" / "index.html"
@@ -105,6 +111,8 @@ class TemplateAssembler:
             headlines=headlines,
             active_sections=section_navigation,
             sections=sections,
+            archive_url=archive_url,
+            latest_issue_url=latest_issue_url,
         )
         output_file.write_text(html, encoding="utf-8")
         return html
@@ -167,6 +175,11 @@ class TemplateAssembler:
     def _resolve_headline_image_path(self, output_file: Path, headline: dict[str, Any]) -> str:
         raw_path = headline.get("image_path")
         if raw_path:
+            if self.headline_asset_root is not None:
+                return self._to_relative_asset_path(
+                    output_file,
+                    self.headline_asset_root / Path(raw_path),
+                )
             return self._resolve_project_asset_path(output_file, Path(raw_path))
         return self._resolve_project_asset_path(
             output_file,

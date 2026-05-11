@@ -38,7 +38,7 @@ python3 run_pipeline.py
 ```
 ### Run Individual Stages
 
-All src files have their own runner and can be run separately
+All `src` files have their own runner and can be run separately.
 
 ### Build the Deployable Site
 
@@ -50,14 +50,23 @@ python3 build_public_site.py
 
 This command syncs `assets/` into `public/assets/` and renders `public/index.html`.
 
-### Vercel Deploys
 
-Vercel is configured to rebuild the deployable static site on each deployment:
+### Publish an Issue and Update the Archive
 
-- `vercel.json` runs `python3 build_public_site.py` as the build command
-- the deploy output stays `public/`
+When an issue is approved and ready to go live:
 
-That means you can push source changes and data/template changes without manually updating `public/index.html` first.
+```bash
+python3 publish_issue.py --date 2026-05-06
+```
+
+This workflow:
+
+- snapshots the current issue into `issue_snapshots/YYYY-MM-DD/`
+- copies generated headline images into that dated snapshot
+- rebuilds `public/index.html` for the latest issue
+- rebuilds `public/issues/index.html` plus dated archive pages for older issues
+
+After that, commit the snapshot and rebuilt static files, then trigger a manual production deployment on Vercel.
 
 # Tech Stack
 
@@ -65,7 +74,8 @@ That means you can push source changes and data/template changes without manuall
 |---|---|
 | Language | Python 3.11+ & HTML |
 | Scoring | OpenAI GPT-5.4 |
-| Summaries, Headlines | Anthropic Claude Sonnet 4.6 |
+| Summaries, Headline blurbs | Anthropic Claude Sonnet 4.6 |
+| Headline selection | OpenAI GPT-5.4 |
 | Embeddings | OpenAI text-embedding-3 |
 | Image generation | OpenAI GPT Image 1.5 |
 | Article extraction | Trafilatura |

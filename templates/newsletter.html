@@ -138,6 +138,32 @@
       align-items: start;
     }
 
+    .utility-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .utility-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 140px;
+      padding: 11px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(139, 0, 0, 0.18);
+      background: var(--paper);
+      color: var(--brand-red);
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: var(--shadow);
+    }
+
+    .utility-link:hover {
+      background: #fff7f3;
+    }
+
     .sidebar {
       position: sticky;
       top: 20px;
@@ -280,6 +306,15 @@
       margin: 0;
       color: var(--muted);
       font-size: 1rem;
+    }
+
+    .headline-source {
+      margin: 0 0 8px;
+      color: var(--brand-red);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
     }
 
     .toc-list {
@@ -454,6 +489,17 @@
       <div class="header-date">{{ publish_date }}</div>
     </header>
 
+    {% if latest_issue_url or archive_url %}
+    <nav class="utility-nav" aria-label="Issue navigation">
+      {% if latest_issue_url %}
+      <a class="utility-link" href="{{ latest_issue_url }}">Latest Issue</a>
+      {% endif %}
+      {% if archive_url %}
+      <a class="utility-link" href="{{ archive_url }}">Past Issues</a>
+      {% endif %}
+    </nav>
+    {% endif %}
+
     <div class="layout">
       <aside class="sidebar" aria-label="Section navigation">
         <img class="sidebar-logo" src="{{ sidebar_logo_path }}" alt="Section logo">
@@ -477,6 +523,7 @@
               <img src="{{ headline.image_path }}" alt="{{ headline.title }}">
               <div>
                 <h3>{{ headline.title }}</h3>
+                <p class="headline-source">{{ headline.source_name }}</p>
                 <p>{{ headline.blurb }}</p>
               </div>
             </a>

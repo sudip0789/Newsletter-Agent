@@ -52,6 +52,7 @@ def format_headline_selection(headlines: Sequence[dict[str, Any]]) -> str:
     lines = [f"{len(headlines)} selected headline articles:"]
     for index, headline in enumerate(headlines, start=1):
         lines.append(f"{index}. {headline.get('title', '')}")
+        lines.append(f"Publisher: {headline.get('source_name', '')}")
         lines.append(f"Blurb: {headline.get('blurb', '')}")
         lines.append(
             "Headline image generated: "
