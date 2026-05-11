@@ -127,12 +127,15 @@ class TestPipelineReporting(unittest.TestCase):
                 [
                     "3 selected headline articles:",
                     "1. Short rewritten title",
+                    "Publisher: ",
                     "Blurb: A concise teaser.",
                     "Headline image generated: assets/generated/headline_1.png",
                     "2. Second headline",
+                    "Publisher: ",
                     "Blurb: Another teaser.",
                     "Headline image generated: None",
                     "3. Third headline",
+                    "Publisher: ",
                     "Blurb: Final teaser.",
                     "Headline image generated: assets/generated/headline_3.png",
                 ]

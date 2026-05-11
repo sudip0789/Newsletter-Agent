@@ -34,18 +34,18 @@ ANTHROPIC_API_KEY=your_key
 ### Run the Full Pipeline
 
 ```bash
-python3 run_pipeline.py
+python3 scripts/pipeline_runner.py
 ```
 ### Run Individual Stages
 
-All `src` files have their own runner and can be run separately.
+All stage entrypoints live in `scripts/` and can be run separately.
 
 ### Build the Deployable Site
 
 To regenerate the static site bundle locally:
 
 ```bash
-python3 build_public_site.py
+python3 scripts/build_public_site.py
 ```
 
 This command syncs `assets/` into `public/assets/` and renders `public/index.html`.
@@ -56,7 +56,7 @@ This command syncs `assets/` into `public/assets/` and renders `public/index.htm
 When an issue is approved and ready to go live:
 
 ```bash
-python3 publish_issue.py --date 2026-05-06
+python3 scripts/publish_issue.py --date 2026-05-06
 ```
 
 This workflow:

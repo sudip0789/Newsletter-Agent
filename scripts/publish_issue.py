@@ -3,6 +3,16 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
+if __package__ in (None, ""):
+    import sys
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from scripts._bootstrap import configure_script_environment
+else:
+    from ._bootstrap import configure_script_environment
+
+PROJECT_ROOT = configure_script_environment()
+
 from src.issue_publisher import publish_issue
 
 
@@ -20,8 +30,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
-    project_root = Path(__file__).resolve().parent
-    issue_root = publish_issue(project_root=project_root, publish_date=args.date)
+    issue_root = publish_issue(project_root=PROJECT_ROOT, publish_date=args.date)
     print(f"Published issue snapshot at {issue_root}")
 
 

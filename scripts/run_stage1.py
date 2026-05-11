@@ -2,15 +2,26 @@
 Run source ingestion and display results.
 
 Usage:
-    python run_stage1.py                    # Run all fetchers
-    python run_stage1.py --rss-only         # Run only RSS feeds (no API key needed)
-    python run_stage1.py --skip-fulltext    # Skip the full text retrieval step (faster testing)
+    python scripts/run_stage1.py                    # Run all fetchers
+    python scripts/run_stage1.py --rss-only         # Run only RSS feeds (no API key needed)
+    python scripts/run_stage1.py --skip-fulltext    # Skip the full text retrieval step (faster testing)
 """
 
 from __future__ import annotations
 
 import argparse
 import logging
+
+if __package__ in (None, ""):
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from scripts._bootstrap import configure_script_environment
+else:
+    from ._bootstrap import configure_script_environment
+
+configure_script_environment()
 
 from src.stats_report import append_stage_report, format_count_line
 from src.stage1_ingest import SourceIngestion

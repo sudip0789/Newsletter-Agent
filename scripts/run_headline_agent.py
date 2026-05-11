@@ -2,10 +2,10 @@
 Select newsletter headlines, generate teaser blurbs, and optionally create images.
 
 Usage:
-    python3 run_headline_agent.py
-    python3 run_headline_agent.py --blurbs-only
-    python3 run_headline_agent.py --images-only
-    python3 run_headline_agent.py --input data/output/summarized_stories.json
+    python3 scripts/run_headline_agent.py
+    python3 scripts/run_headline_agent.py --blurbs-only
+    python3 scripts/run_headline_agent.py --images-only
+    python3 scripts/run_headline_agent.py --input data/output/summarized_stories.json
 """
 
 from __future__ import annotations
@@ -13,6 +13,17 @@ from __future__ import annotations
 import argparse
 import logging
 import time
+
+if __package__ in (None, ""):
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from scripts._bootstrap import configure_script_environment
+else:
+    from ._bootstrap import configure_script_environment
+
+configure_script_environment()
 
 from src.headline_agent import HeadlineAgent
 from src.stats_report import append_stage_report, format_headline_selection

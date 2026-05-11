@@ -8,7 +8,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import MagicMock, call, patch
 
-from run_headline_agent import main, parse_args
+from scripts.run_headline_agent import main, parse_args
 from src.headline_agent import HeadlineAgent
 
 
@@ -348,9 +348,9 @@ class TestRunHeadlineAgent(unittest.TestCase):
             with self.assertRaises(SystemExit):
                 parse_args()
 
-    @patch("run_headline_agent.setup_logging")
-    @patch("run_headline_agent.time.sleep")
-    @patch("run_headline_agent.HeadlineAgent")
+    @patch("scripts.run_headline_agent.setup_logging")
+    @patch("scripts.run_headline_agent.time.sleep")
+    @patch("scripts.run_headline_agent.HeadlineAgent")
     def test_main_full_run_generates_images_and_saves(
         self,
         mock_agent_cls: MagicMock,
@@ -397,9 +397,9 @@ class TestRunHeadlineAgent(unittest.TestCase):
             ]
         )
 
-    @patch("run_headline_agent.setup_logging")
-    @patch("run_headline_agent.time.sleep")
-    @patch("run_headline_agent.HeadlineAgent")
+    @patch("scripts.run_headline_agent.setup_logging")
+    @patch("scripts.run_headline_agent.time.sleep")
+    @patch("scripts.run_headline_agent.HeadlineAgent")
     def test_main_blurbs_only_saves_null_image_paths(
         self,
         mock_agent_cls: MagicMock,
@@ -441,9 +441,9 @@ class TestRunHeadlineAgent(unittest.TestCase):
             ]
         )
 
-    @patch("run_headline_agent.setup_logging")
-    @patch("run_headline_agent.time.sleep")
-    @patch("run_headline_agent.HeadlineAgent")
+    @patch("scripts.run_headline_agent.setup_logging")
+    @patch("scripts.run_headline_agent.time.sleep")
+    @patch("scripts.run_headline_agent.HeadlineAgent")
     def test_main_images_only_refreshes_saved_picks(
         self,
         mock_agent_cls: MagicMock,
