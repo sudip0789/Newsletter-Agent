@@ -107,8 +107,7 @@ class TestScorer(unittest.TestCase):
         stories[2].scores["buzz_momentum"] = 0.29
         qualifying_sections = [
             "industry",
-            "policy",
-            "security",
+            "legal_intelligence",
             "research",
             "creative_ai",
             "tools_and_products",
@@ -150,10 +149,9 @@ class TestScorer(unittest.TestCase):
             "creative_ai",
             "tools_and_products",
             "higher_education",
-            "security",
             "research",
             "industry",
-            "policy",
+            "legal_intelligence",
         ]
         for idx in range(21):
             section = qualifying_sections[idx % len(qualifying_sections)]
@@ -204,7 +202,7 @@ class TestScorer(unittest.TestCase):
     def test_select_top_30_disables_buzz_filter_when_fewer_than_twenty_pass(self) -> None:
         scorer = self._make_scorer()
         scorer.selection_total = 25
-        passing_sections = ["industry", "policy", "security"]
+        passing_sections = ["industry", "creative_ai", "higher_education"]
         failing_sections = ["research", "legal_intelligence"]
         passing: list[ScoredStory] = []
         failing: list[ScoredStory] = []
@@ -254,10 +252,126 @@ class TestScorer(unittest.TestCase):
 
         selected = scorer.select_top_30(industry + policy + security)
 
-        self.assertEqual(len(selected), 14)
+        self.assertEqual(len(selected), 12)
         self.assertEqual(sum(1 for story in selected if story.section == "industry"), 6)
-        self.assertEqual(sum(1 for story in selected if story.section == "policy"), 6)
+        self.assertEqual(sum(1 for story in selected if story.section == "policy"), 4)
         self.assertEqual(sum(1 for story in selected if story.section == "security"), 2)
+
+    def test_select_top_30_caps_policy_and_security_at_four(self) -> None:
+        scorer = self._make_scorer()
+        scorer.selection_total = 12
+        stories = [
+            self._make_story(f"policy_{idx}", "policy", 0.99 - idx * 0.01)
+            for idx in range(5)
+        ] + [
+            self._make_story(f"security_{idx}", "security", 0.89 - idx * 0.01)
+            for idx in range(5)
+        ] + [
+            self._make_story(f"industry_{idx}", "industry", 0.79 - idx * 0.01)
+            for idx in range(5)
+        ]
+
+        selected = scorer.select_top_30(stories)
+
+        self.assertEqual(sum(1 for story in selected if story.section == "policy"), 4)
+        self.assertEqual(sum(1 for story in selected if story.section == "security"), 4)
+        self.assertEqual(sum(1 for story in selected if story.section == "industry"), 4)
+
+    def test_select_top_30_guarantees_environment_and_ethics_sections(self) -> None:
+        scorer = self._make_scorer()
+        scorer.selection_total = 25
+        stories = [
+            self._make_story("impact_story", "impact_on_environment", 0.97),
+            self._make_story("ethics_story", "ethics_and_bias", 0.96),
+        ]
+        stories[0].scores["buzz_momentum"] = 0.39
+        stories[1].scores["buzz_momentum"] = 0.39
+
+        qualifying_sections = [
+            "industry",
+            "legal_intelligence",
+            "creative_ai",
+            "tools_and_products",
+            "higher_education",
+            "research",
+        ]
+        for idx in range(25):
+            section = qualifying_sections[idx % len(qualifying_sections)]
+            story = self._make_story(f"qualifying_{idx}", section, 0.95 - idx * 0.01)
+            story.scores["buzz_momentum"] = 0.75 if section not in {
+                "creative_ai",
+                "tools_and_products",
+                "higher_education",
+            } else 0.30
+            stories.append(story)
+
+        selected = scorer.select_top_30(stories)
+        selected_ids = [story.cluster.cluster_id for story in selected]
+
+        self.assertEqual(len(selected), 25)
+        self.assertIn("impact_story", selected_ids)
+        self.assertIn("ethics_story", selected_ids)
+
+    def test_select_top_30_does_not_replace_existing_guaranteed_story(self) -> None:
+        scorer = self._make_scorer()
+        scorer.selection_total = 25
+        stories = [
+            self._make_story("impact_story", "impact_on_environment", 0.99),
+            self._make_story("ethics_story", "ethics_and_bias", 0.96),
+        ]
+        stories[0].scores["buzz_momentum"] = 0.70
+        stories[1].scores["buzz_momentum"] = 0.39
+
+        qualifying_sections = [
+            "industry",
+            "legal_intelligence",
+            "creative_ai",
+            "tools_and_products",
+            "higher_education",
+            "research",
+        ]
+        for idx in range(24):
+            section = qualifying_sections[idx % len(qualifying_sections)]
+            story = self._make_story(f"qualifying_{idx}", section, 0.95 - idx * 0.01)
+            story.scores["buzz_momentum"] = 0.75 if section not in {
+                "creative_ai",
+                "tools_and_products",
+                "higher_education",
+            } else 0.30
+            stories.append(story)
+
+        selected = scorer.select_top_30(stories)
+        selected_ids = [story.cluster.cluster_id for story in selected]
+
+        self.assertIn("impact_story", selected_ids)
+        self.assertIn("ethics_story", selected_ids)
+        self.assertEqual(len(selected), 25)
+
+    def test_select_top_30_keeps_natural_environment_and_ethics_selections(self) -> None:
+        scorer = self._make_scorer()
+        scorer.selection_total = 6
+        stories = [
+            self._make_story("impact_story", "impact_on_environment", 0.99),
+            self._make_story("ethics_story", "ethics_and_bias", 0.98),
+            self._make_story("industry_1", "industry", 0.97),
+            self._make_story("industry_2", "industry", 0.96),
+            self._make_story("research_1", "research", 0.95),
+            self._make_story("legal_1", "legal_intelligence", 0.94),
+        ]
+
+        selected = scorer.select_top_30(stories)
+
+        self.assertEqual(
+            [story.cluster.cluster_id for story in selected],
+            [
+                "impact_story",
+                "ethics_story",
+                "industry_1",
+                "industry_2",
+                "research_1",
+                "legal_1",
+            ],
+        )
 
     def test_assign_tiers_sets_headline_body_and_honorable(self) -> None:
         scorer = self._make_scorer()
@@ -291,6 +405,17 @@ class TestScorer(unittest.TestCase):
         scorer = self._make_scorer()
         normalized = scorer._normalize_section("unknown_section", "Test story")  # pylint: disable=protected-access
         self.assertEqual(normalized, "industry")
+
+    def test_normalize_section_accepts_new_sections(self) -> None:
+        scorer = self._make_scorer()
+        self.assertEqual(
+            scorer._normalize_section("impact_on_environment", "Environment story"),  # pylint: disable=protected-access
+            "impact_on_environment",
+        )
+        self.assertEqual(
+            scorer._normalize_section("ethics_and_bias", "Ethics story"),  # pylint: disable=protected-access
+            "ethics_and_bias",
+        )
 
     def test_coerce_score_clamps_out_of_range_values(self) -> None:
         scorer = self._make_scorer()

@@ -18,6 +18,8 @@ class TemplateAssembler:
         ("tools_and_products", "Tools & Products"),
         ("security", "Security"),
         ("policy", "Policy"),
+        ("ethics_and_bias", "Ethics & Bias"),
+        ("impact_on_environment", "Impact on Environment"),
         ("creative_ai", "Creative AI"),
         ("higher_education", "Higher Education"),
         ("research", "Research"),

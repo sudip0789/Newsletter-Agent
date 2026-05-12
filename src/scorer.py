@@ -42,6 +42,8 @@ Also assign the article to exactly one newsletter section:
 - "creative_ai" — AI music, video, image, design tools and platforms
 - "industry" — AI company funding, acquisitions, strategy, leadership, partnerships
 - "policy" — government AI regulation, executive orders, international AI policy, legislative action
+- "impact_on_environment" — AI's environmental footprint, energy use, water use, emissions, sustainability impact, resource consumption
+- "ethics_and_bias" — fairness, discrimination, harmful outputs, labor/rights concerns, accountability, ethical AI debates
 - "tools_and_products" — new AI tool launches, AI product updates, developer AI tools
 - "research" — academic papers, benchmarks, technical breakthroughs, AI index reports
 
@@ -64,6 +66,8 @@ VALID_SECTIONS = {
     "creative_ai",
     "industry",
     "policy",
+    "impact_on_environment",
+    "ethics_and_bias",
     "tools_and_products",
     "research",
 }
@@ -82,6 +86,16 @@ LOWER_BUZZ_THRESHOLD_SECTIONS = {
     "tools_and_products",
     "higher_education",
 }
+
+DEFAULT_SECTION_CAP = 6
+SECTION_CAPS = {
+    "policy": 4,
+    "security": 4,
+}
+GUARANTEED_SECTIONS = (
+    "impact_on_environment",
+    "ethics_and_bias",
+)
 
 
 class Scorer:
@@ -222,9 +236,9 @@ class Scorer:
     def select_top_30(self, stories: list[ScoredStory]) -> list[ScoredStory]:
         """
         1. Sort all stories by composite_score descending.
-        2. Apply section diversity: no more than 6 stories from any single section.
+        2. Apply per-section caps, including stricter caps for policy and security.
         3. Apply buzz threshold gating unless fewer than 20 stories qualify.
-        4. Select top 30 that satisfy constraints.
+        4. Guarantee one environment and one ethics story when available.
         5. Return the 30 stories.
         """
         sorted_stories = sorted(
@@ -236,10 +250,16 @@ class Scorer:
         selected = self._select_stories(sorted_stories, apply_buzz_filter=True)
         if len(selected) < 20:
             selected = self._select_stories(sorted_stories, apply_buzz_filter=False)
+        selected = self._ensure_guaranteed_sections(selected, sorted_stories)
+        selected = sorted(
+            selected,
+            key=lambda story: story.composite_score,
+            reverse=True,
+        )
 
         if len(selected) < min(self.selection_total, len(sorted_stories)):
             LOGGER.warning(
-                "Selected %s stories out of requested %s because section diversity caps were reached.",
+                "Selected %s stories out of requested %s because section caps were reached.",
                 len(selected),
                 self.selection_total,
             )
@@ -259,7 +279,7 @@ class Scorer:
         for story in sorted_stories:
             if len(selected) >= self.selection_total:
                 break
-            if section_counts[story.section] >= 6:
+            if section_counts[story.section] >= self._section_cap(story.section):
                 continue
             if apply_buzz_filter and not self._meets_buzz_threshold(story):
                 continue
@@ -268,9 +288,110 @@ class Scorer:
 
         return selected
 
+    def _ensure_guaranteed_sections(
+        self,
+        selected: list[ScoredStory],
+        sorted_stories: list[ScoredStory],
+    ) -> list[ScoredStory]:
+        guaranteed_candidates = self._find_guaranteed_candidates(sorted_stories)
+        if not guaranteed_candidates:
+            return selected
+
+        ensured = list(selected)
+        max_total = min(self.selection_total, len(sorted_stories))
+
+        for section in GUARANTEED_SECTIONS:
+            story = guaranteed_candidates.get(section)
+            if story is None or self._contains_story(ensured, story):
+                continue
+
+            if len(ensured) < max_total:
+                ensured.append(story)
+                continue
+
+            replacement_index = self._find_guarantee_replacement_index(
+                ensured,
+                story,
+                guaranteed_candidates,
+            )
+            if replacement_index is None:
+                LOGGER.warning(
+                    "Unable to guarantee section '%s' in final selection.",
+                    section,
+                )
+                continue
+
+            ensured[replacement_index] = story
+
+        return ensured
+
+    def _find_guaranteed_candidates(
+        self,
+        sorted_stories: list[ScoredStory],
+    ) -> dict[str, ScoredStory]:
+        candidates: dict[str, ScoredStory] = {}
+        for section in GUARANTEED_SECTIONS:
+            for story in sorted_stories:
+                if story.section == section:
+                    candidates[section] = story
+                    break
+        return candidates
+
+    def _find_guarantee_replacement_index(
+        self,
+        selected: list[ScoredStory],
+        guaranteed_story: ScoredStory,
+        guaranteed_candidates: dict[str, ScoredStory],
+    ) -> int | None:
+        protected_ids = {
+            story.cluster.cluster_id
+            for story in guaranteed_candidates.values()
+            if self._contains_story(selected, story)
+        }
+
+        for index in range(len(selected) - 1, -1, -1):
+            candidate = selected[index]
+            candidate_id = candidate.cluster.cluster_id
+            if candidate_id in protected_ids:
+                continue
+            if candidate_id == guaranteed_story.cluster.cluster_id:
+                continue
+            if self._replacement_respects_caps(selected, index, guaranteed_story):
+                return index
+
+        return None
+
+    def _replacement_respects_caps(
+        self,
+        selected: list[ScoredStory],
+        replacement_index: int,
+        incoming_story: ScoredStory,
+    ) -> bool:
+        section_counts = Counter(
+            story.section
+            for index, story in enumerate(selected)
+            if index != replacement_index
+        )
+        section_counts[incoming_story.section] += 1
+        return all(
+            count <= self._section_cap(section)
+            for section, count in section_counts.items()
+        )
+
+    def _contains_story(
+        self,
+        stories: list[ScoredStory],
+        target_story: ScoredStory,
+    ) -> bool:
+        target_id = target_story.cluster.cluster_id
+        return any(story.cluster.cluster_id == target_id for story in stories)
+
     def _meets_buzz_threshold(self, story: ScoredStory) -> bool:
         threshold = 0.3 if story.section in LOWER_BUZZ_THRESHOLD_SECTIONS else 0.4
         return story.scores.get("buzz_momentum", 0.0) >= threshold
+
+    def _section_cap(self, section: str) -> int:
+        return SECTION_CAPS.get(section, DEFAULT_SECTION_CAP)
 
     def print_summary(self, stories: list[ScoredStory]) -> None:
         """Print scoring summary."""
