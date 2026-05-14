@@ -84,11 +84,13 @@ class TestPipelineReporting(unittest.TestCase):
     def test_format_manual_review_summary_lists_titles_or_none(self) -> None:
         kept_story = SummarizedStory(
             scored_story=self._scored_story("Clear summary", "industry", 0.9),
+            newsletter_title="Clear newsletter title",
             summary="Looks good.",
             needs_manual_review=False,
         )
         flagged_story = SummarizedStory(
             scored_story=self._scored_story("Needs editor eyes", "industry", 0.8),
+            newsletter_title="Needs editor eyes",
             summary="Manual review required.",
             needs_manual_review=True,
         )
@@ -127,12 +129,15 @@ class TestPipelineReporting(unittest.TestCase):
                 [
                     "3 selected headline articles:",
                     "1. Short rewritten title",
+                    "Publisher: ",
                     "Blurb: A concise teaser.",
                     "Headline image generated: assets/generated/headline_1.png",
                     "2. Second headline",
+                    "Publisher: ",
                     "Blurb: Another teaser.",
                     "Headline image generated: None",
                     "3. Third headline",
+                    "Publisher: ",
                     "Blurb: Final teaser.",
                     "Headline image generated: assets/generated/headline_3.png",
                 ]

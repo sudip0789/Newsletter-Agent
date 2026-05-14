@@ -2,10 +2,10 @@
 Run the full newsletter pipeline in serial using the existing stage runners.
 
 Usage:
-    python3 pipeline_runner.py
-    python3 pipeline_runner.py --rss-only --skip-fulltext --limit 5
-    python3 pipeline_runner.py --threshold 0.7 --show-clusters
-    python3 pipeline_runner.py --top 10 --model sonnet-4.6
+    python3 scripts/pipeline_runner.py
+    python3 scripts/pipeline_runner.py --rss-only --skip-fulltext --limit 5
+    python3 scripts/pipeline_runner.py --threshold 0.7 --show-clusters
+    python3 scripts/pipeline_runner.py --top 10 --model sonnet-4.6
 """
 
 from __future__ import annotations
@@ -15,8 +15,14 @@ import subprocess
 import sys
 from pathlib import Path
 
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from scripts._bootstrap import configure_script_environment
+else:
+    from ._bootstrap import configure_script_environment
 
-RUNNER_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = configure_script_environment()
+SCRIPT_DIR = Path(__file__).resolve().parent
 
 
 def parse_args() -> argparse.Namespace:
@@ -89,7 +95,7 @@ def parse_args() -> argparse.Namespace:
 def build_stage_commands(args: argparse.Namespace) -> list[tuple[str, list[str]]]:
     commands: list[tuple[str, list[str]]] = []
 
-    stage1_cmd = [sys.executable, "run_stage1.py"]
+    stage1_cmd = [sys.executable, str(SCRIPT_DIR / "run_stage1.py")]
     if args.rss_only:
         stage1_cmd.append("--rss-only")
     if args.skip_fulltext:
@@ -98,14 +104,14 @@ def build_stage_commands(args: argparse.Namespace) -> list[tuple[str, list[str]]
         stage1_cmd.extend(["--limit", str(args.limit)])
     commands.append(("stage1_ingest", stage1_cmd))
 
-    relevance_cmd = [sys.executable, "run_ai_relevance_checker.py"]
+    relevance_cmd = [sys.executable, str(SCRIPT_DIR / "run_ai_relevance_checker.py")]
     if args.show_removed:
         relevance_cmd.append("--show-removed")
     if args.show_matched_keywords:
         relevance_cmd.append("--show-matched-keywords")
     commands.append(("AI_relevance_checker", relevance_cmd))
 
-    dedup_cmd = [sys.executable, "run_dedup.py"]
+    dedup_cmd = [sys.executable, str(SCRIPT_DIR / "run_dedup.py")]
     if args.threshold is not None:
         dedup_cmd.extend(["--threshold", str(args.threshold)])
     if args.recompute_embeddings:
@@ -114,19 +120,26 @@ def build_stage_commands(args: argparse.Namespace) -> list[tuple[str, list[str]]
         dedup_cmd.append("--show-clusters")
     commands.append(("dedup_cluster", dedup_cmd))
 
-    scorer_cmd = [sys.executable, "run_scorer.py"]
+    scorer_cmd = [sys.executable, str(SCRIPT_DIR / "run_scorer.py")]
     if args.top is not None:
         scorer_cmd.extend(["--top", str(args.top)])
     if args.show_all_scores:
         scorer_cmd.append("--show-all-scores")
     commands.append(("scorer", scorer_cmd))
 
-    summarizer_cmd = [sys.executable, "run_summarizer.py"]
+    summarizer_cmd = [sys.executable, str(SCRIPT_DIR / "run_summarizer.py")]
     if args.top is not None:
         summarizer_cmd.extend(["--top", str(args.top)])
     if args.model is not None:
         summarizer_cmd.extend(["--model", args.model])
     commands.append(("summarizer", summarizer_cmd))
+
+    title_rewriter_cmd = [sys.executable, str(SCRIPT_DIR / "run_title_rewriter.py")]
+    if args.top is not None:
+        title_rewriter_cmd.extend(["--top", str(args.top)])
+    if args.model is not None:
+        title_rewriter_cmd.extend(["--model", args.model])
+    commands.append(("title_rewriter", title_rewriter_cmd))
 
     return commands
 
@@ -135,7 +148,7 @@ def run_stage(stage_name: str, command: list[str]) -> None:
     print(f"\n=== Running {stage_name} ===", flush=True)
     print("Command:", " ".join(command), flush=True)
     try:
-        subprocess.run(command, cwd=RUNNER_DIR, check=True)
+        subprocess.run(command, cwd=PROJECT_ROOT, check=True)
     except subprocess.CalledProcessError as exc:
         raise SystemExit(
             f"Pipeline failed during '{stage_name}' with exit code "

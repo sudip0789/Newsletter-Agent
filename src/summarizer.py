@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 from openai import OpenAI
 
 from src.models import ScoredStory, StoryCluster, SummarizedStory
-from src.text_utils import normalize_markdown_escaped_text
+from src.text_utils import escape_dollar_signs_for_markdown
 
 LOGGER = logging.getLogger(__name__)
 
@@ -47,7 +47,7 @@ class Summarizer:
         },
         "sonnet-4.6": {
             "provider": "anthropic",
-            "api_model": "claude-sonnet-4-20250514",
+            "api_model": "claude-sonnet-4-6",
             "env_var": "ANTHROPIC_API_KEY",
             "output_label": "anthropic_sonnet_4_6",
         },
@@ -210,7 +210,10 @@ class Summarizer:
             "scored_story": {
                 "cluster": {
                     "cluster_id": cluster.cluster_id,
-                    "primary_article": cluster.primary_article.model_dump(mode="json"),
+                    "primary_article": cluster.primary_article.model_dump(
+                        mode="json",
+                        exclude={"text"},
+                    ),
                     "coverage_count": cluster.coverage_count,
                     "sources_involved": cluster.sources_involved,
                 },
@@ -220,7 +223,7 @@ class Summarizer:
                 "section": scored_story.section,
                 "tier": scored_story.tier,
             },
-            "summary": normalize_markdown_escaped_text(story.summary),
+            "summary": escape_dollar_signs_for_markdown(story.summary),
             "needs_manual_review": story.needs_manual_review,
         }
 

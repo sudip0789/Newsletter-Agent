@@ -59,9 +59,9 @@ class TestPipelineRunReporting(unittest.TestCase):
         stdout = io.StringIO()
         report_path = "data/output/stats_report.txt"
 
-        sys.modules.pop("run_stage1", None)
+        sys.modules.pop("scripts.run_stage1", None)
         with patch.dict(sys.modules, {"src.stage1_ingest": fake_stage1_ingest}):
-            run_stage1 = import_module("run_stage1")
+            run_stage1 = import_module("scripts.run_stage1")
             with patch.object(run_stage1, "setup_logging"):
                 with patch.object(run_stage1, "append_stage_report", return_value=report_path) as mock_append:
                     with patch.object(sys, "argv", ["run_stage1.py"]):
@@ -79,7 +79,7 @@ class TestPipelineRunReporting(unittest.TestCase):
     def test_run_ai_relevance_checker_prints_document_count(
         self,
     ) -> None:
-        from run_ai_relevance_checker import main
+        from scripts.run_ai_relevance_checker import main
 
         mock_checker_cls = MagicMock()
         checker = mock_checker_cls.return_value
@@ -87,8 +87,8 @@ class TestPipelineRunReporting(unittest.TestCase):
         stdout = io.StringIO()
         report_path = "data/output/stats_report.txt"
 
-        with patch("run_ai_relevance_checker.AIRelevanceChecker", mock_checker_cls):
-            with patch("run_ai_relevance_checker.append_stage_report", return_value=report_path) as mock_append:
+        with patch("scripts.run_ai_relevance_checker.AIRelevanceChecker", mock_checker_cls):
+            with patch("scripts.run_ai_relevance_checker.append_stage_report", return_value=report_path) as mock_append:
                 with patch.object(sys, "argv", ["run_ai_relevance_checker.py"]):
                     with patch("sys.stdout", stdout):
                         main()
@@ -113,9 +113,9 @@ class TestPipelineRunReporting(unittest.TestCase):
         stdout = io.StringIO()
         report_path = "data/output/stats_report.txt"
 
-        sys.modules.pop("run_dedup", None)
+        sys.modules.pop("scripts.run_dedup", None)
         with patch.dict(sys.modules, {"src.dedup_cluster": fake_dedup_cluster}):
-            run_dedup = import_module("run_dedup")
+            run_dedup = import_module("scripts.run_dedup")
             with patch.object(run_dedup, "append_stage_report", return_value=report_path) as mock_append:
                 with patch.object(sys, "argv", ["run_dedup.py"]):
                     with patch("sys.stdout", stdout):
@@ -128,14 +128,14 @@ class TestPipelineRunReporting(unittest.TestCase):
             "Total Unique articles found: 4",
         )
 
-    @patch("run_scorer.setup_logging")
-    @patch("run_scorer.Scorer")
+    @patch("scripts.run_scorer.setup_logging")
+    @patch("scripts.run_scorer.Scorer")
     def test_run_scorer_prints_grouped_selection_summary(
         self,
         mock_scorer_cls: MagicMock,
         _mock_setup_logging: MagicMock,
     ) -> None:
-        from run_scorer import main
+        from scripts.run_scorer import main
 
         scorer = mock_scorer_cls.return_value
         scorer.run.return_value = [
@@ -146,7 +146,7 @@ class TestPipelineRunReporting(unittest.TestCase):
         stdout = io.StringIO()
         report_path = "data/output/stats_report.txt"
 
-        with patch("run_scorer.append_stage_report", return_value=report_path) as mock_append:
+        with patch("scripts.run_scorer.append_stage_report", return_value=report_path) as mock_append:
             with patch.object(sys, "argv", ["run_scorer.py"]):
                 with patch("sys.stdout", stdout):
                     main()
@@ -159,24 +159,26 @@ class TestPipelineRunReporting(unittest.TestCase):
         self.assertIn(f"Stats report updated: {report_path}", output)
         mock_append.assert_called_once()
 
-    @patch("run_summarizer.setup_logging")
-    @patch("run_summarizer.Summarizer")
+    @patch("scripts.run_summarizer.setup_logging")
+    @patch("scripts.run_summarizer.Summarizer")
     def test_run_summarizer_prints_manual_review_titles(
         self,
         mock_summarizer_cls: MagicMock,
         _mock_setup_logging: MagicMock,
     ) -> None:
-        from run_summarizer import main
+        from scripts.run_summarizer import main
 
         summarizer = mock_summarizer_cls.return_value
         summarizer.run.return_value = [
             SummarizedStory(
                 scored_story=self._scored_story("Reviewed story", "industry", 0.9),
+                newsletter_title="Reviewed newsletter title",
                 summary="Looks good.",
                 needs_manual_review=False,
             ),
             SummarizedStory(
                 scored_story=self._scored_story("Needs review", "policy", 0.8),
+                newsletter_title="Needs review",
                 summary="Manual review required.",
                 needs_manual_review=True,
             ),
@@ -185,7 +187,7 @@ class TestPipelineRunReporting(unittest.TestCase):
         stdout = io.StringIO()
         report_path = "data/output/stats_report.txt"
 
-        with patch("run_summarizer.append_stage_report", return_value=report_path) as mock_append:
+        with patch("scripts.run_summarizer.append_stage_report", return_value=report_path) as mock_append:
             with patch.object(sys, "argv", ["run_summarizer.py"]):
                 with patch("sys.stdout", stdout):
                     main()
@@ -196,16 +198,16 @@ class TestPipelineRunReporting(unittest.TestCase):
         self.assertIn(f"Stats report updated: {report_path}", output)
         mock_append.assert_called_once()
 
-    @patch("run_headline_agent.setup_logging")
-    @patch("run_headline_agent.time.sleep")
-    @patch("run_headline_agent.HeadlineAgent")
+    @patch("scripts.run_headline_agent.setup_logging")
+    @patch("scripts.run_headline_agent.time.sleep")
+    @patch("scripts.run_headline_agent.HeadlineAgent")
     def test_run_headline_agent_prints_selected_headlines(
         self,
         mock_agent_cls: MagicMock,
         _mock_sleep: MagicMock,
         _mock_setup_logging: MagicMock,
     ) -> None:
-        from run_headline_agent import main
+        from scripts.run_headline_agent import main
 
         agent = mock_agent_cls.return_value
         agent.run.return_value = [
@@ -236,7 +238,7 @@ class TestPipelineRunReporting(unittest.TestCase):
         stdout = io.StringIO()
         report_path = "data/output/stats_report.txt"
 
-        with patch("run_headline_agent.append_stage_report", return_value=report_path) as mock_append:
+        with patch("scripts.run_headline_agent.append_stage_report", return_value=report_path) as mock_append:
             with patch.object(sys, "argv", ["run_headline_agent.py"]):
                 with patch("sys.stdout", stdout):
                     main()

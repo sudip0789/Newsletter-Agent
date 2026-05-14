@@ -2,10 +2,10 @@
 Print scored stories with only title, scores, composite score, and section.
 
 Usage:
-    python3 run_scored_story_viewer.py
-    python3 run_scored_story_viewer.py data/output/scored_stories.json
-    python3 run_scored_story_viewer.py --output data/output/scored_story_view.json
-    python3 run_scored_story_viewer.py --print
+    python3 scripts/run_scored_story_viewer.py
+    python3 scripts/run_scored_story_viewer.py data/output/scored_stories.json
+    python3 scripts/run_scored_story_viewer.py --output data/output/scored_story_view.json
+    python3 scripts/run_scored_story_viewer.py --print
 """
 
 from __future__ import annotations
@@ -14,6 +14,16 @@ import argparse
 import json
 from pathlib import Path
 from typing import Any
+
+if __package__ in (None, ""):
+    import sys
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from scripts._bootstrap import configure_script_environment
+else:
+    from ._bootstrap import configure_script_environment
+
+configure_script_environment()
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:

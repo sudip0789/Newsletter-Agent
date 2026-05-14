@@ -8,7 +8,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import MagicMock, call, patch
 
-from run_headline_agent import main, parse_args
+from scripts.run_headline_agent import main, parse_args
 from src.headline_agent import HeadlineAgent
 
 
@@ -54,6 +54,7 @@ class TestHeadlineAgent(unittest.TestCase):
                 "section": section,
                 "tier": "body",
             },
+            "newsletter_title": story_title,
             "summary": summary,
             "needs_manual_review": needs_manual_review,
         }
@@ -198,6 +199,19 @@ class TestHeadlineAgent(unittest.TestCase):
 
         with self.assertRaisesRegex(ValueError, "Fewer than 3 eligible headline stories"):
             agent.run()
+
+    def test_init_accepts_summarized_stories_without_article_text(self) -> None:
+        payload = self._story_payload("industry", "industry", 0.91, "Industry summary")
+        del payload["scored_story"]["cluster"]["primary_article"]["text"]
+        input_path = self._write_input([payload])
+
+        agent = HeadlineAgent(input_path=str(input_path))
+
+        self.assertEqual(len(agent.summarized_stories), 1)
+        self.assertEqual(
+            agent.summarized_stories[0].scored_story.cluster.primary_article.text,
+            "",
+        )
 
     def test_generate_blurb_uses_anthropic_and_returns_trimmed_sentence(self) -> None:
         input_path = self._write_input([])
@@ -348,9 +362,9 @@ class TestRunHeadlineAgent(unittest.TestCase):
             with self.assertRaises(SystemExit):
                 parse_args()
 
-    @patch("run_headline_agent.setup_logging")
-    @patch("run_headline_agent.time.sleep")
-    @patch("run_headline_agent.HeadlineAgent")
+    @patch("scripts.run_headline_agent.setup_logging")
+    @patch("scripts.run_headline_agent.time.sleep")
+    @patch("scripts.run_headline_agent.HeadlineAgent")
     def test_main_full_run_generates_images_and_saves(
         self,
         mock_agent_cls: MagicMock,
@@ -397,9 +411,9 @@ class TestRunHeadlineAgent(unittest.TestCase):
             ]
         )
 
-    @patch("run_headline_agent.setup_logging")
-    @patch("run_headline_agent.time.sleep")
-    @patch("run_headline_agent.HeadlineAgent")
+    @patch("scripts.run_headline_agent.setup_logging")
+    @patch("scripts.run_headline_agent.time.sleep")
+    @patch("scripts.run_headline_agent.HeadlineAgent")
     def test_main_blurbs_only_saves_null_image_paths(
         self,
         mock_agent_cls: MagicMock,
@@ -441,9 +455,9 @@ class TestRunHeadlineAgent(unittest.TestCase):
             ]
         )
 
-    @patch("run_headline_agent.setup_logging")
-    @patch("run_headline_agent.time.sleep")
-    @patch("run_headline_agent.HeadlineAgent")
+    @patch("scripts.run_headline_agent.setup_logging")
+    @patch("scripts.run_headline_agent.time.sleep")
+    @patch("scripts.run_headline_agent.HeadlineAgent")
     def test_main_images_only_refreshes_saved_picks(
         self,
         mock_agent_cls: MagicMock,

@@ -2,17 +2,28 @@
 Generate editorial summaries for top scored stories.
 
 Usage:
-    python3 run_summarizer.py
-    python3 run_summarizer.py --top 30
-    python3 run_summarizer.py --input data/output/scored_stories.json
-    python3 run_summarizer.py --model sonnet-4.6
-    python3 run_summarizer.py --model gpt-5.4
+    python3 scripts/run_summarizer.py
+    python3 scripts/run_summarizer.py --top 30
+    python3 scripts/run_summarizer.py --input data/output/scored_stories.json
+    python3 scripts/run_summarizer.py --model sonnet-4.6
+    python3 scripts/run_summarizer.py --model gpt-5.4
 """
 
 from __future__ import annotations
 
 import argparse
 import logging
+
+if __package__ in (None, ""):
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from scripts._bootstrap import configure_script_environment
+else:
+    from ._bootstrap import configure_script_environment
+
+configure_script_environment()
 
 from src.stats_report import append_stage_report, format_manual_review_summary
 from src.summarizer import Summarizer

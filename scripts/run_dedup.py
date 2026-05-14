@@ -2,16 +2,27 @@
 Deduplicate and cluster articles into story groups.
 
 Usage:
-    python run_dedup.py
-    python run_dedup.py --input data/output/relevant_articles.json
-    python run_dedup.py --threshold 0.60
-    python run_dedup.py --recompute-embeddings
-    python run_dedup.py --show-clusters
+    python scripts/run_dedup.py
+    python scripts/run_dedup.py --input data/output/relevant_articles.json
+    python scripts/run_dedup.py --threshold 0.60
+    python scripts/run_dedup.py --recompute-embeddings
+    python scripts/run_dedup.py --show-clusters
 """
 
 from __future__ import annotations
 
 import argparse
+
+if __package__ in (None, ""):
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from scripts._bootstrap import configure_script_environment
+else:
+    from ._bootstrap import configure_script_environment
+
+configure_script_environment()
 
 from src.dedup_cluster import Deduplicator
 from src.stats_report import append_stage_report, format_count_line

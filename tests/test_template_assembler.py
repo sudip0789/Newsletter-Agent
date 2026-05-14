@@ -16,6 +16,7 @@ class TestTemplateAssembler(unittest.TestCase):
         score: float,
         summary: str,
         title: str | None = None,
+        newsletter_title: str | None = None,
     ) -> dict:
         story_title = title or f"Story {cluster_id}"
         return {
@@ -48,6 +49,7 @@ class TestTemplateAssembler(unittest.TestCase):
                 "section": section,
                 "tier": "body",
             },
+            "newsletter_title": newsletter_title or story_title,
             "summary": summary,
             "needs_manual_review": False,
         }
@@ -160,6 +162,7 @@ class TestTemplateAssembler(unittest.TestCase):
                         0.94,
                         "Paragraph one.\n\nParagraph two.",
                         title="Security story",
+                        newsletter_title="Rewritten security story",
                     ),
                     self._story_payload(
                         "research_story",
@@ -233,12 +236,22 @@ class TestTemplateAssembler(unittest.TestCase):
             self.assertIn("href=\"#security\"", html)
             self.assertNotIn("href=\"#policy\"", html)
             self.assertIn("id=\"security\"", html)
-            self.assertIn(">Security story<", html)
+            self.assertIn(">Rewritten security story<", html)
+            self.assertNotIn(">Security story<", html)
             self.assertIn("<p>Paragraph one.</p>", html)
             self.assertIn("<p>Paragraph two.</p>", html)
             self.assertIn(">Headline Source<", html)
             self.assertIn("../../assets/generated/headline_1.png", html)
             self.assertIn("../../assets/logos/newsletter_logo.png", html)
+            self.assertIn(
+                "This newsletter contains AI-generated content that may contain inaccuracies.",
+                html,
+            )
+            self.assertIn(
+                "For research or citation purposes, please read and cite the original source article, not this newsletter.",
+                html,
+            )
+            self.assertIn('class="newsletter-disclaimer"', html)
 
     def test_run_defaults_to_public_index_html(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir_name:
@@ -268,6 +281,7 @@ class TestTemplateAssembler(unittest.TestCase):
                         0.94,
                         "Paragraph one.\n\nParagraph two.",
                         title="Security story",
+                        newsletter_title="Rewritten security story",
                     ),
                 ],
             )
@@ -299,3 +313,98 @@ class TestTemplateAssembler(unittest.TestCase):
             self.assertIn("src=\"assets/logos/news_brief.png\"", html)
             self.assertIn("src=\"assets/logos/security.png\"", html)
             self.assertIn("src=\"assets/generated/headline_1.png\"", html)
+
+    def test_story_to_article_prefers_newsletter_title(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir_name:
+            tmpdir = Path(tmpdir_name)
+            stories_path = tmpdir / "summarized_stories.json"
+            headlines_path = tmpdir / "headline_picks.json"
+            template_path = tmpdir / "newsletter.html"
+            self._write_json(
+                stories_path,
+                [
+                    self._story_payload(
+                        "security_story",
+                        "security",
+                        0.94,
+                        "Paragraph one.\n\nParagraph two.",
+                        title="Original security title",
+                        newsletter_title="Rewritten security title",
+                    ),
+                ],
+            )
+            self._write_json(headlines_path, [])
+            template_path.write_text("{{ sections|length }}", encoding="utf-8")
+
+            assembler = TemplateAssembler(
+                stories_path=str(stories_path),
+                headlines_path=str(headlines_path),
+                template_path=str(template_path),
+            )
+
+            article = assembler._story_to_article(assembler.stories[0])
+
+            self.assertEqual(article["title"], "Rewritten security title")
+            self.assertEqual(article["original_title"], "Original security title")
+
+    def test_new_sections_appear_in_active_navigation_and_rendered_output(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir_name:
+            tmpdir = Path(tmpdir_name)
+            project_root = tmpdir / "project"
+            project_root.mkdir()
+            (project_root / "assets" / "logos").mkdir(parents=True)
+            (project_root / "templates").mkdir()
+            (project_root / "data" / "output").mkdir(parents=True)
+
+            stories_path = project_root / "data" / "output" / "summarized_stories.json"
+            headlines_path = project_root / "data" / "output" / "headline_picks.json"
+            template_path = project_root / "templates" / "newsletter.html"
+            output_path = project_root / "data" / "output" / "newsletter.html"
+            repo_template_path = (
+                Path(__file__).resolve().parent.parent / "templates" / "newsletter.html"
+            )
+
+            self._write_json(
+                stories_path,
+                [
+                    self._story_payload(
+                        "ethics_story",
+                        "ethics_and_bias",
+                        0.93,
+                        "Ethics summary.",
+                        title="Ethics story",
+                    ),
+                    self._story_payload(
+                        "environment_story",
+                        "impact_on_environment",
+                        0.92,
+                        "Environment summary.",
+                        title="Environment story",
+                    ),
+                ],
+            )
+            self._write_json(headlines_path, [])
+            template_path.write_text(repo_template_path.read_text(encoding="utf-8"))
+
+            assembler = TemplateAssembler(
+                stories_path=str(stories_path),
+                headlines_path=str(headlines_path),
+                template_path=str(template_path),
+            )
+            grouped = assembler.group_by_section(assembler.stories, exclude_urls=[])
+            self.assertEqual(
+                assembler.get_active_sections(grouped),
+                [
+                    ("ethics_and_bias", "Ethics & Bias"),
+                    ("impact_on_environment", "Impact on Environment"),
+                ],
+            )
+
+            html = assembler.run(publish_date="2026-05-01", output_path=str(output_path))
+
+            self.assertIn("href=\"#ethics_and_bias\"", html)
+            self.assertIn("href=\"#impact_on_environment\"", html)
+            self.assertIn("id=\"ethics_and_bias\"", html)
+            self.assertIn("id=\"impact_on_environment\"", html)
+            self.assertIn(">Ethics &amp; Bias<", html)
+            self.assertIn(">Impact on Environment<", html)

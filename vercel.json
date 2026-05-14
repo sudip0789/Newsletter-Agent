@@ -4,7 +4,7 @@
     "deploymentEnabled": false
   },
   "installCommand": "python3 -m pip install --break-system-packages Jinja2",
-  "buildCommand": "python3 build_public_site.py",
+  "buildCommand": "python3 scripts/build_public_site.py",
   "framework": null,
   "cleanUrls": true,
   "outputDirectory": "public"

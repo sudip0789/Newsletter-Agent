@@ -2,15 +2,26 @@
 Render the newsletter HTML from summarized stories and headline picks.
 
 Usage:
-    python3 run_template_assembler.py
-    python3 run_template_assembler.py --date 2026-05-01
-    python3 run_template_assembler.py --output public/index.html
+    python3 scripts/run_template_assembler.py
+    python3 scripts/run_template_assembler.py --date 2026-05-01
+    python3 scripts/run_template_assembler.py --output public/index.html
 """
 
 from __future__ import annotations
 
 import argparse
 import logging
+
+if __package__ in (None, ""):
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from scripts._bootstrap import configure_script_environment
+else:
+    from ._bootstrap import configure_script_environment
+
+configure_script_environment()
 
 from src.template_assembler import TemplateAssembler
 from src.utils import setup_logging

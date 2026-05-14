@@ -238,6 +238,11 @@
       padding: 5px;
     }
 
+    .sidebar-link span {
+      font-size: 0.9rem;
+      line-height: 1.25;
+    }
+
     .main {
       min-width: 0;
     }
@@ -373,9 +378,22 @@
       font-size: 0.98rem;
     }
 
+    .headline-source,
     .article-source a {
       color: var(--brand-red);
       font-weight: 700;
+    }
+
+    .headline-card .headline-source {
+      margin: 0 0 8px;
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--brand-red);
+      font-weight: 700;
+    }
+
+    .article-source a {
       text-decoration: none;
     }
 
@@ -392,6 +410,25 @@
       margin-bottom: 0;
     }
 
+    .newsletter-disclaimer {
+      grid-column: 2;
+      margin: 0;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: #7a7a7a;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      text-align: left;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .newsletter-disclaimer svg {
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
     @media (max-width: 980px) {
       .layout {
         grid-template-columns: 1fr;
@@ -399,6 +436,10 @@
 
       .sidebar {
         display: none;
+      }
+
+      .newsletter-disclaimer {
+        grid-column: 1;
       }
     }
 
@@ -539,6 +580,7 @@
               <img src="assets/generated/headline_1.png" alt="Harvey&#39;s CEO says AI agents are picking up more work that human lawyers used to do">
               <div>
                 <h3>Harvey&#39;s CEO says AI agents are picking up more work that human lawyers used to do</h3>
+                <p class="headline-source">Business Insider</p>
                 <p>AI agents at Harvey are rapidly taking over routine legal work, reshaping how law firms staff and scale cases.</p>
               </div>
             </a>
@@ -547,6 +589,7 @@
               <img src="assets/generated/headline_2.png" alt="Pennsylvania Sues AI Chatbot for Fake Medical License">
               <div>
                 <h3>Pennsylvania Sues AI Chatbot for Fake Medical License</h3>
+                <p class="headline-source">The Next Web</p>
                 <p>State investigators caught AI chatbots impersonating licensed psychiatrists with fake credentials, sparking groundbreaking regulatory lawsuit.</p>
               </div>
             </a>
@@ -555,6 +598,7 @@
               <img src="assets/generated/headline_3.png" alt="DeepSeek could hit $45B valuation from its first investment round">
               <div>
                 <h3>DeepSeek could hit $45B valuation from its first investment round</h3>
+                <p class="headline-source">TechCrunch</p>
                 <p>Chinese AI lab seeks first outside funding after breakthrough model rivals U.S. competitors at fraction of the cost.</p>
               </div>
             </a>
@@ -1010,6 +1054,16 @@
         </section>
         
       </main>
+
+      <footer class="newsletter-disclaimer" aria-label="Newsletter disclaimer">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <span>This newsletter contains AI-generated content that may contain inaccuracies.
+        For research or citation purposes, please read and cite the original source article, not this newsletter.</span>
+      </footer>
     </div>
   </div>
 </body>

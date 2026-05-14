@@ -21,11 +21,6 @@ BLURB_SYSTEM_PROMPT = (
     "Just the core hook that makes someone want to read more."
 )
 
-SHORT_TITLE_SYSTEM_PROMPT = (
-    "Rewrite long newsletter headlines into a catchy 5-8 word title. "
-    "Preserve the core news angle, avoid clickbait, and return only the rewritten title."
-)
-
 HEADLINE_SELECTION_SYSTEM_PROMPT = """You are the lead editor for an AI news newsletter.
 
 Your job is to choose exactly 3 headline stories from the candidate list. Think like a human editor, not a deterministic ranking script.
@@ -51,10 +46,9 @@ Respond with ONLY a JSON object in this shape:
 
 class HeadlineAgent:
     HEADLINE_SELECTION_MODEL = "gpt-5.4"
-    BLURB_MODEL = "claude-sonnet-4-20250514"
+    BLURB_MODEL = "claude-sonnet-4-6"
     IMAGE_MODEL = "gpt-image-1.5"
     HEADLINE_COUNT = 3
-    TITLE_REWRITE_WORD_THRESHOLD = 16
     SELECTION_TEMPERATURE = 0.65
 
     def __init__(self, input_path: str = "data/output/summarized_stories.json"):
@@ -80,16 +74,9 @@ class HeadlineAgent:
         headlines: list[dict[str, Any]] = []
         for story in selected_stories:
             blurb = self.generate_blurb(story)
-            title = story["title"]
-            if self._title_word_count(title) >= self.TITLE_REWRITE_WORD_THRESHOLD:
-                title = self.generate_short_title(
-                    {"title": story["title"], "summary": story["summary"]}
-                )
-
             headlines.append(
                 {
                     **story,
-                    "title": title,
                     "blurb": blurb,
                     "image_path": None,
                 }
@@ -119,35 +106,25 @@ class HeadlineAgent:
         if not blurb:
             raise ValueError("Blurb generation returned empty content.")
         if len(blurb.split()) >= 20:
-            raise ValueError("Blurb must be under 20 words.")
+            LOGGER.warning("Blurb too long (%d words), retrying: %s", len(blurb.split()), blurb)
+            response = client.messages.create(
+                model=self.BLURB_MODEL,
+                max_tokens=60,
+                temperature=0.4,
+                system=BLURB_SYSTEM_PROMPT + " You MUST stay under 20 words.",
+                messages=[{"role": "user", "content": user_message}],
+            )
+            text_parts = [
+                block.text
+                for block in response.content
+                if getattr(block, "type", None) == "text"
+            ]
+            blurb = self._normalize_text("".join(text_parts))
+        if not blurb:
+            raise ValueError("Blurb generation returned empty content on retry.")
+        if len(blurb.split()) >= 20:
+            LOGGER.warning("Blurb still over 20 words after retry, using as-is: %s", blurb)
         return blurb
-
-    def generate_short_title(self, story: dict[str, Any]) -> str:
-        """
-        Rewrite long headline titles into a concise 5-8 word version.
-        """
-        client = self._get_blurb_client()
-        user_message = (
-            f"Original title: {story['title']}\n"
-            f"Summary: {story['summary']}"
-        )
-        response = client.messages.create(
-            model=self.BLURB_MODEL,
-            max_tokens=50,
-            temperature=0.5,
-            system=SHORT_TITLE_SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": user_message}],
-        )
-        text_parts = [
-            block.text
-            for block in response.content
-            if getattr(block, "type", None) == "text"
-        ]
-        short_title = self._normalize_text("".join(text_parts))
-        word_count = self._title_word_count(short_title)
-        if word_count < 5 or word_count > 8:
-            raise ValueError("Short headline titles must be 5-8 words.")
-        return short_title
 
     def generate_headline_image(self, story: dict[str, Any], index: int) -> str | None:
         """
@@ -375,7 +352,7 @@ class HeadlineAgent:
         article = story.scored_story.cluster.primary_article
         cluster = story.scored_story.cluster
         return {
-            "title": article.title,
+            "title": story.newsletter_title or article.title,
             "source_name": article.source_name,
             "url": article.url,
             "section": story.scored_story.section,
@@ -417,5 +394,3 @@ class HeadlineAgent:
         normalized["scored_story"] = normalized_scored_story
         return normalized
 
-    def _title_word_count(self, title: str) -> int:
-        return len(self._normalize_text(title).split())
