@@ -134,6 +134,13 @@ def build_stage_commands(args: argparse.Namespace) -> list[tuple[str, list[str]]
         summarizer_cmd.extend(["--model", args.model])
     commands.append(("summarizer", summarizer_cmd))
 
+    title_rewriter_cmd = [sys.executable, str(SCRIPT_DIR / "run_title_rewriter.py")]
+    if args.top is not None:
+        title_rewriter_cmd.extend(["--top", str(args.top)])
+    if args.model is not None:
+        title_rewriter_cmd.extend(["--model", args.model])
+    commands.append(("title_rewriter", title_rewriter_cmd))
+
     return commands
 
 

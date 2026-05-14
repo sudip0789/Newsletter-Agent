@@ -23,6 +23,7 @@ class TestPublicSiteBuilder(unittest.TestCase):
                 "composite_score": 0.94,
                 "section": "security",
             },
+            "newsletter_title": "Rewritten security story",
             "summary": "Paragraph one.\n\nParagraph two.",
             "needs_manual_review": False,
         }
@@ -74,6 +75,7 @@ class TestPublicSiteBuilder(unittest.TestCase):
             [
                 {
                     **self._story_payload(),
+                    "newsletter_title": story_title,
                     "scored_story": {
                         **self._story_payload()["scored_story"],
                         "cluster": {
@@ -198,7 +200,7 @@ class TestPublicSiteBuilder(unittest.TestCase):
             archived_html = archived_issue.read_text(encoding="utf-8")
             latest_html = latest_issue.read_text(encoding="utf-8")
 
-            self.assertIn("Archive", latest_html)
+            self.assertIn("Past Issues", latest_html)
             self.assertIn("href=\"issues/\"", latest_html)
             self.assertIn("The AI Newsletter for May 1st, 2026", archive_html)
             self.assertIn("The AI Newsletter for April 24th, 2026", archive_html)

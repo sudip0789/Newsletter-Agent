@@ -157,8 +157,10 @@ class TemplateAssembler:
         cluster = scored_story.get("cluster", {})
         primary_article = cluster.get("primary_article", {})
         summary = normalize_markdown_escaped_text(story.get("summary", "") or "")
+        newsletter_title = story.get("newsletter_title") or primary_article.get("title", "")
         return {
-            "title": primary_article.get("title", ""),
+            "title": newsletter_title,
+            "original_title": primary_article.get("title", ""),
             "url": primary_article.get("url", ""),
             "source_name": primary_article.get("source_name", ""),
             "section": scored_story.get("section", ""),

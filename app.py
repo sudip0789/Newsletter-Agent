@@ -103,6 +103,11 @@ def inject_styles() -> None:
             font-weight: 700;
             font-size: 1.15rem;
         }
+        .newsletter-title {
+            color: #475569;
+            font-size: 0.92rem;
+            margin-top: 0.25rem;
+        }
         .article-title a:hover {
             text-decoration: underline;
         }
@@ -316,11 +321,17 @@ def build_article_records(
         sources = story.get("cluster", {}).get("sources_involved", [])
         coverage_count = story.get("cluster", {}).get("coverage_count", len(sources))
         source_name = primary.get("source_name") or (sources[0] if sources else "Unknown source")
+        newsletter_title = (
+            gpt_item.get("newsletter_title")
+            or sonnet_item.get("newsletter_title")
+            or primary.get("title", "Untitled article")
+        )
 
         article = {
             "rank": rank,
             "score": float(story.get("composite_score", 0.0) or 0.0),
             "title": primary.get("title", "Untitled article"),
+            "newsletter_title": newsletter_title,
             "url": url,
             "source": source_name,
             "published_date": parse_date(primary.get("published_date")),
@@ -421,6 +432,12 @@ def render_article_card(article: dict[str, Any]) -> None:
                 )
             else:
                 st.markdown(f"**{article['title']}**")
+            newsletter_title = article.get("newsletter_title", "").strip()
+            if newsletter_title and newsletter_title != article["title"]:
+                st.markdown(
+                    f'<div class="newsletter-title">Newsletter title: {escape(newsletter_title)}</div>',
+                    unsafe_allow_html=True,
+                )
             st.caption(f"{article['source']} · {article['published_date']}")
         with meta_col:
             st.markdown(
@@ -443,7 +460,7 @@ def render_article_card(article: dict[str, Any]) -> None:
                 f"**Coverage** — Covered by {article['coverage_count']} outlets: {coverage_sources}"
             )
             if article.get("needs_manual_review"):
-                st.warning("⚠️ Snippet only — needs manual review")
+                st.warning("⚠️ Needs manual review before publication")
 
             st.markdown("**Summary**")
             render_summary("gpt", article.get("gpt_summary"))

@@ -54,6 +54,7 @@ class TestHeadlineAgent(unittest.TestCase):
                 "section": section,
                 "tier": "body",
             },
+            "newsletter_title": story_title,
             "summary": summary,
             "needs_manual_review": needs_manual_review,
         }
@@ -198,6 +199,19 @@ class TestHeadlineAgent(unittest.TestCase):
 
         with self.assertRaisesRegex(ValueError, "Fewer than 3 eligible headline stories"):
             agent.run()
+
+    def test_init_accepts_summarized_stories_without_article_text(self) -> None:
+        payload = self._story_payload("industry", "industry", 0.91, "Industry summary")
+        del payload["scored_story"]["cluster"]["primary_article"]["text"]
+        input_path = self._write_input([payload])
+
+        agent = HeadlineAgent(input_path=str(input_path))
+
+        self.assertEqual(len(agent.summarized_stories), 1)
+        self.assertEqual(
+            agent.summarized_stories[0].scored_story.cluster.primary_article.text,
+            "",
+        )
 
     def test_generate_blurb_uses_anthropic_and_returns_trimmed_sentence(self) -> None:
         input_path = self._write_input([])

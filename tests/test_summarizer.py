@@ -184,6 +184,8 @@ class TestSummarizer(unittest.TestCase):
         self.assertEqual(payload[0]["summary"], "Résumé summary.")
         self.assertIn("scored_story", payload[0])
         self.assertNotIn("all_articles", payload[0]["scored_story"]["cluster"])
+        self.assertNotIn("text", payload[0]["scored_story"]["cluster"]["primary_article"])
+        self.assertNotIn("newsletter_title", payload[0])
 
     def test_save_results_escapes_dollar_signs_in_summary(self) -> None:
         story = self._scored_story("currency", 0.8, "A" * 200, "full")
@@ -203,6 +205,8 @@ class TestSummarizer(unittest.TestCase):
             payload[0]["summary"],
             r"\$97 billion on infrastructure to win \$37 billion",
         )
+        self.assertNotIn("text", payload[0]["scored_story"]["cluster"]["primary_article"])
+        self.assertNotIn("newsletter_title", payload[0])
 
     def test_save_results_escapes_dollar_signs_for_snippet_summaries(self) -> None:
         story = self._scored_story("snippet-currency", 0.8, "$12 million saved", "snippet")
@@ -215,6 +219,8 @@ class TestSummarizer(unittest.TestCase):
             payload = json.loads(summarizer.output_path.read_text(encoding="utf-8"))
 
         self.assertEqual(payload[0]["summary"], r"\$12 million saved")
+        self.assertNotIn("newsletter_title", payload[0])
+        self.assertNotIn("text", payload[0]["scored_story"]["cluster"]["primary_article"])
         self.assertTrue(payload[0]["needs_manual_review"])
 
     @patch("src.summarizer.load_dotenv")
@@ -230,7 +236,7 @@ class TestSummarizer(unittest.TestCase):
         with self.assertRaisesRegex(
             ValueError, "OPENAI_API_KEY is required for summarization."
         ):
-            Summarizer()
+            Summarizer(model="gpt-5.4")
 
     @patch("src.summarizer.load_dotenv")
     @patch.object(Summarizer, "_build_client")
@@ -278,7 +284,7 @@ class TestSummarizer(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir:
             input_path = Path(tmpdir) / "scored_stories.json"
             input_path.write_text(json.dumps(payload), encoding="utf-8")
-            summarizer = Summarizer(input_path=str(input_path))
+            summarizer = Summarizer(input_path=str(input_path), model="gpt-5.4")
 
         self.assertEqual(len(summarizer.scored_stories), 1)
         self.assertEqual(

@@ -172,11 +172,13 @@ class TestPipelineRunReporting(unittest.TestCase):
         summarizer.run.return_value = [
             SummarizedStory(
                 scored_story=self._scored_story("Reviewed story", "industry", 0.9),
+                newsletter_title="Reviewed newsletter title",
                 summary="Looks good.",
                 needs_manual_review=False,
             ),
             SummarizedStory(
                 scored_story=self._scored_story("Needs review", "policy", 0.8),
+                newsletter_title="Needs review",
                 summary="Manual review required.",
                 needs_manual_review=True,
             ),

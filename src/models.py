@@ -12,7 +12,7 @@ class Article(BaseModel):
     source_name: str
     source_type: str
     published_date: Optional[datetime]
-    text: str
+    text: str = ""
     text_completeness: str
     fetch_method: str
 
@@ -40,5 +40,6 @@ class ScoredStory(BaseModel):
 
 class SummarizedStory(BaseModel):
     scored_story: ScoredStory
+    newsletter_title: str = ""
     summary: str
     needs_manual_review: bool = False
