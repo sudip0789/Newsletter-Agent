@@ -393,6 +393,55 @@
       font-weight: 700;
     }
 
+    .media-section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 20px;
+      color: var(--brand-red);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.55rem;
+    }
+
+    .media-section-title svg {
+      flex-shrink: 0;
+      color: var(--brand-red);
+    }
+
+    .media-embeds {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .media-embed-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .media-embed-label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .media-embed-label svg {
+      flex-shrink: 0;
+    }
+
+    .media-embeds iframe {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      background: var(--soft);
+    }
+
     .article-source a {
       text-decoration: none;
     }
@@ -562,6 +611,35 @@
             {% endfor %}
           </div>
         </section>
+
+        {% if podcast_embed_url or video_embed_url %}
+        <section class="module media-section">
+          <h2 class="media-section-title">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+            Listen &amp; Watch
+          </h2>
+          <div class="media-embeds">
+            {% if video_embed_url %}
+            <div class="media-embed-block">
+              <span class="media-embed-label">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                Video
+              </span>
+              <iframe src="{{ video_embed_url }}" height="315" allow="autoplay" allowfullscreen></iframe>
+            </div>
+            {% endif %}
+            {% if podcast_embed_url %}
+            <div class="media-embed-block">
+              <span class="media-embed-label">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg>
+                Podcast
+              </span>
+              <iframe src="{{ podcast_embed_url }}" height="80" allow="autoplay"></iframe>
+            </div>
+            {% endif %}
+          </div>
+        </section>
+        {% endif %}
 
         <section class="module">
           <h2 class="module-title">In This Issue</h2>

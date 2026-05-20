@@ -41,6 +41,7 @@ class TemplateAssembler:
         headlines_path: str = "data/output/headline_picks.json",
         template_path: str = "templates/newsletter.html",
         headline_asset_root: str | Path | None = None,
+        media: dict | None = None,
     ):
         self.stories_path = Path(stories_path)
         self.headlines_path = Path(headlines_path)
@@ -49,6 +50,7 @@ class TemplateAssembler:
         self.headline_asset_root = (
             None if headline_asset_root is None else Path(headline_asset_root).resolve()
         )
+        self.media = media or {}
         self.stories = self._load_json(self.stories_path)
         self.headlines = self._load_json(self.headlines_path)
         self.jinja = Environment(
@@ -97,13 +99,13 @@ class TemplateAssembler:
             output_file,
             Path("assets/logos/news_brief.png"),
         )
-        headlines = [
-            {
-                **headline,
-                "image_path": self._resolve_headline_image_path(output_file, headline),
-            }
-            for headline in self.headlines
-        ]
+
+        drive_images = self.media.get("headline_images", [])
+        headlines = []
+        for i, headline in enumerate(self.headlines):
+            drive_url = drive_images[i] if i < len(drive_images) and drive_images[i] else None
+            image_path = drive_url or self._resolve_headline_image_path(output_file, headline)
+            headlines.append({**headline, "image_path": image_path})
 
         template = self.jinja.from_string(self.template_path.read_text(encoding="utf-8"))
         html = template.render(
@@ -115,6 +117,8 @@ class TemplateAssembler:
             sections=sections,
             archive_url=archive_url,
             latest_issue_url=latest_issue_url,
+            podcast_embed_url=self.media.get("podcast_embed_url"),
+            video_embed_url=self.media.get("video_embed_url"),
         )
         output_file.write_text(html, encoding="utf-8")
         return html
