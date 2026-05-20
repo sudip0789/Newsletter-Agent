@@ -16,7 +16,7 @@ from src.models import SummarizedStory
 LOGGER = logging.getLogger(__name__)
 
 BLURB_SYSTEM_PROMPT = (
-    "Write a single sentence teaser (under 20 words) for a newsletter headline card. "
+    "Write a small teaser (under 30 words) for a newsletter headline card. "
     "Make it catchy and informative. No hype language. Do not restate or closely echo the title."
     "Just the core hook that makes someone want to read more."
 )
@@ -190,6 +190,37 @@ class HeadlineAgent:
 
     def load_saved_picks(self) -> list[dict[str, Any]]:
         return json.loads(self.output_path.read_text(encoding="utf-8"))
+
+    def preserve_existing_image_paths(
+        self,
+        headlines: list[dict[str, Any]],
+    ) -> list[dict[str, Any]]:
+        try:
+            saved_picks = self.load_saved_picks()
+        except FileNotFoundError:
+            return [{**headline, "image_path": headline.get("image_path")} for headline in headlines]
+
+        saved_paths_by_url = {
+            pick.get("url", ""): pick.get("image_path")
+            for pick in saved_picks
+            if pick.get("url") and pick.get("image_path")
+        }
+        same_order = len(saved_picks) == len(headlines) and all(
+            saved_picks[index].get("url") == headlines[index].get("url")
+            for index in range(len(headlines))
+        )
+
+        refreshed: list[dict[str, Any]] = []
+        for index, headline in enumerate(headlines, start=1):
+            image_path = headline.get("image_path") or saved_paths_by_url.get(
+                headline.get("url", "")
+            )
+            if image_path is None and same_order:
+                conventional_path = self.assets_dir / f"headline_{index}.png"
+                if conventional_path.exists():
+                    image_path = str(conventional_path)
+            refreshed.append({**headline, "image_path": image_path})
+        return refreshed
 
     def attach_summaries(self, picks: list[dict[str, Any]]) -> list[dict[str, Any]]:
         summaries_by_url = {
@@ -393,4 +424,3 @@ class HeadlineAgent:
         normalized = dict(payload)
         normalized["scored_story"] = normalized_scored_story
         return normalized
-

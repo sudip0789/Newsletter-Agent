@@ -321,9 +321,11 @@ class TestTemplateAssembler(unittest.TestCase):
             self.assertIn("May 1st, 2026", html)
             self.assertNotIn("{{ publish_date }}", html)
             self.assertIn("src=\"assets/logos/newsletter_logo.png\"", html)
-            self.assertIn("src=\"assets/logos/news_brief.png\"", html)
             self.assertIn("src=\"assets/logos/security.png\"", html)
             self.assertIn("src=\"assets/generated/headline_1.png\"", html)
+            self.assertNotIn("news_brief.png", html)
+            self.assertIn(">In This Issue<", html)
+            self.assertIn('class="module toc-module"', html)
 
     def test_story_to_article_prefers_newsletter_title(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir_name:
@@ -419,3 +421,7 @@ class TestTemplateAssembler(unittest.TestCase):
             self.assertIn("id=\"ai_sustainability\"", html)
             self.assertIn(">Responsible AI<", html)
             self.assertIn(">AI Sustainability<", html)
+            self.assertIn("assets/logos/responsible_ai.png", html)
+            self.assertIn("assets/logos/ai_sustainability.png", html)
+            self.assertIn(".toc-module {\n      display: none;", html)
+            self.assertIn(".sidebar {\n        display: none;", html)

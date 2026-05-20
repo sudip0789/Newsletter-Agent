@@ -30,6 +30,8 @@ class TemplateAssembler:
         "ai_products": "ai_products.png",
         "security": "security.png",
         "policy": "policy.png",
+        "responsible_ai": "responsible_ai.png",
+        "ai_sustainability": "ai_sustainability.png",
         "creative_ai": "creative_ai.png",
         "higher_education": "higher_education.png",
         "research": "research.png",
@@ -95,23 +97,21 @@ class TemplateAssembler:
             output_file,
             Path("assets/logos/newsletter_logo.png"),
         )
-        sidebar_logo_path = self._resolve_project_asset_path(
-            output_file,
-            Path("assets/logos/news_brief.png"),
-        )
-
         drive_images = self.media.get("headline_images", [])
         headlines = []
         for i, headline in enumerate(self.headlines):
             drive_url = drive_images[i] if i < len(drive_images) and drive_images[i] else None
-            image_path = drive_url or self._resolve_headline_image_path(output_file, headline)
+            image_path = drive_url or self._resolve_headline_image_path(
+                output_file,
+                headline,
+                index=i + 1,
+            )
             headlines.append({**headline, "image_path": image_path})
 
         template = self.jinja.from_string(self.template_path.read_text(encoding="utf-8"))
         html = template.render(
             publish_date=self._format_publish_date(publish_date),
             logo_path=logo_path,
-            sidebar_logo_path=sidebar_logo_path,
             headlines=headlines,
             active_sections=section_navigation,
             sections=sections,
@@ -180,7 +180,12 @@ class TemplateAssembler:
     def _load_json(self, path: Path) -> list[dict[str, Any]]:
         return json.loads(path.read_text(encoding="utf-8"))
 
-    def _resolve_headline_image_path(self, output_file: Path, headline: dict[str, Any]) -> str:
+    def _resolve_headline_image_path(
+        self,
+        output_file: Path,
+        headline: dict[str, Any],
+        index: int | None = None,
+    ) -> str:
         raw_path = headline.get("image_path")
         if raw_path:
             if self.headline_asset_root is not None:
@@ -189,6 +194,16 @@ class TemplateAssembler:
                     self.headline_asset_root / Path(raw_path),
                 )
             return self._resolve_project_asset_path(output_file, Path(raw_path))
+        if index is not None:
+            conventional_path = Path("assets/generated") / f"headline_{index}.png"
+            candidate_root = (
+                self.headline_asset_root if self.headline_asset_root is not None else self.project_root
+            )
+            candidate_path = candidate_root / conventional_path
+            if candidate_path.exists():
+                if self.headline_asset_root is not None:
+                    return self._to_relative_asset_path(output_file, candidate_path)
+                return self._resolve_project_asset_path(output_file, conventional_path)
         return self._resolve_project_asset_path(
             output_file,
             Path("assets/logos/newsletter_logo.png"),

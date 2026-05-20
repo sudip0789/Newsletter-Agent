@@ -182,23 +182,12 @@
       flex-direction: column;
     }
 
-    .sidebar-logo {
-      width: 100%;
-      max-width: 126px;
-      display: block;
-      margin: 0 auto 20px;
-      border-radius: 20px;
-      background: #ffffff;
-      padding: 10px;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
-    }
-
     .sidebar-label {
       margin: 0 0 16px;
-      color: rgba(255, 255, 255, 0.74);
-      font-size: 0.78rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
+      color: #ffffff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.35rem;
+      line-height: 1.2;
     }
 
     .sidebar-nav {
@@ -336,6 +325,10 @@
     .toc-list a:hover {
       border-color: rgba(139, 0, 0, 0.18);
       color: var(--brand-red);
+    }
+
+    .toc-module {
+      display: none;
     }
 
     .section-block + .section-block {
@@ -499,6 +492,10 @@
       .newsletter-disclaimer {
         grid-column: 1;
       }
+
+      .toc-module {
+        display: block;
+      }
     }
 
     @media (max-width: 720px) {
@@ -592,8 +589,7 @@
 
     <div class="layout">
       <aside class="sidebar" aria-label="Section navigation">
-        <img class="sidebar-logo" src="../../assets/logos/news_brief.png" alt="Section logo">
-        <p class="sidebar-label">Sections</p>
+        <p class="sidebar-label">In This Issue</p>
         <nav class="sidebar-nav">
           
           <a class="sidebar-link" href="#legal_intelligence">
@@ -617,12 +613,12 @@
           </a>
           
           <a class="sidebar-link" href="#responsible_ai">
-            <img src="../../assets/logos/newsletter_logo.png" alt="">
+            <img src="../../assets/logos/responsible_ai.png" alt="">
             <span>Responsible AI</span>
           </a>
           
           <a class="sidebar-link" href="#ai_sustainability">
-            <img src="../../assets/logos/newsletter_logo.png" alt="">
+            <img src="../../assets/logos/ai_sustainability.png" alt="">
             <span>AI Sustainability</span>
           </a>
           
@@ -681,7 +677,7 @@
 
         
 
-        <section class="module">
+        <section class="module toc-module">
           <h2 class="module-title">In This Issue</h2>
           <ul class="toc-list">
             

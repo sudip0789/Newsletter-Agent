@@ -351,6 +351,90 @@ class TestHeadlineAgent(unittest.TestCase):
             ],
         )
 
+    def test_preserve_existing_image_paths_recovers_conventional_paths_when_saved_metadata_is_null(
+        self,
+    ) -> None:
+        input_path = self._write_input([])
+        agent = HeadlineAgent(input_path=str(input_path))
+        agent.output_path = input_path.parent / "headline_picks.json"
+        agent.assets_dir = input_path.parent / "assets" / "generated"
+        agent.assets_dir.mkdir(parents=True, exist_ok=True)
+        for index in range(1, 4):
+            (agent.assets_dir / f"headline_{index}.png").write_bytes(b"png")
+
+        agent.output_path.write_text(
+            json.dumps(
+                [
+                    {
+                        "title": "Story 1",
+                        "source_name": "Example Source",
+                        "url": "https://example.com/story1",
+                        "section": "enterprise_ai",
+                        "composite_score": 0.91,
+                        "blurb": "Old blurb 1",
+                        "image_path": None,
+                    },
+                    {
+                        "title": "Story 2",
+                        "source_name": "Example Source",
+                        "url": "https://example.com/story2",
+                        "section": "security",
+                        "composite_score": 0.9,
+                        "blurb": "Old blurb 2",
+                        "image_path": None,
+                    },
+                    {
+                        "title": "Story 3",
+                        "source_name": "Example Source",
+                        "url": "https://example.com/story3",
+                        "section": "policy",
+                        "composite_score": 0.89,
+                        "blurb": "Old blurb 3",
+                        "image_path": None,
+                    },
+                ]
+            ),
+            encoding="utf-8",
+        )
+
+        refreshed = agent.preserve_existing_image_paths(
+            [
+                {
+                    "title": "Story 1",
+                    "source_name": "Example Source",
+                    "url": "https://example.com/story1",
+                    "section": "enterprise_ai",
+                    "composite_score": 0.91,
+                    "blurb": "New blurb 1",
+                },
+                {
+                    "title": "Story 2",
+                    "source_name": "Example Source",
+                    "url": "https://example.com/story2",
+                    "section": "security",
+                    "composite_score": 0.9,
+                    "blurb": "New blurb 2",
+                },
+                {
+                    "title": "Story 3",
+                    "source_name": "Example Source",
+                    "url": "https://example.com/story3",
+                    "section": "policy",
+                    "composite_score": 0.89,
+                    "blurb": "New blurb 3",
+                },
+            ]
+        )
+
+        self.assertEqual(
+            [headline["image_path"] for headline in refreshed],
+            [
+                str(agent.assets_dir / "headline_1.png"),
+                str(agent.assets_dir / "headline_2.png"),
+                str(agent.assets_dir / "headline_3.png"),
+            ],
+        )
+
 
 class TestRunHeadlineAgent(unittest.TestCase):
     def test_parse_args_rejects_conflicting_mode_flags(self) -> None:
@@ -414,46 +498,48 @@ class TestRunHeadlineAgent(unittest.TestCase):
     @patch("scripts.run_headline_agent.setup_logging")
     @patch("scripts.run_headline_agent.time.sleep")
     @patch("scripts.run_headline_agent.HeadlineAgent")
-    def test_main_blurbs_only_saves_null_image_paths(
+    def test_main_blurbs_only_preserves_existing_image_paths(
         self,
         mock_agent_cls: MagicMock,
         mock_sleep: MagicMock,
         _mock_setup_logging: MagicMock,
     ) -> None:
         agent = mock_agent_cls.return_value
-        agent.run.return_value = [
+        generated_headlines = [
             {"title": "Story 1", "summary": "Summary 1", "blurb": "Blurb 1"},
             {"title": "Story 2", "summary": "Summary 2", "blurb": "Blurb 2"},
             {"title": "Story 3", "summary": "Summary 3", "blurb": "Blurb 3"},
         ]
+        preserved_headlines = [
+            {
+                "title": "Story 1",
+                "summary": "Summary 1",
+                "blurb": "Blurb 1",
+                "image_path": "assets/generated/headline_1.png",
+            },
+            {
+                "title": "Story 2",
+                "summary": "Summary 2",
+                "blurb": "Blurb 2",
+                "image_path": "assets/generated/headline_2.png",
+            },
+            {
+                "title": "Story 3",
+                "summary": "Summary 3",
+                "blurb": "Blurb 3",
+                "image_path": "assets/generated/headline_3.png",
+            },
+        ]
+        agent.run.return_value = generated_headlines
+        agent.preserve_existing_image_paths.return_value = preserved_headlines
 
         with patch.object(sys, "argv", ["run_headline_agent.py", "--blurbs-only"]):
             main()
 
         agent.generate_headline_image.assert_not_called()
         mock_sleep.assert_not_called()
-        agent.save_picks.assert_called_once_with(
-            [
-                {
-                    "title": "Story 1",
-                    "summary": "Summary 1",
-                    "blurb": "Blurb 1",
-                    "image_path": None,
-                },
-                {
-                    "title": "Story 2",
-                    "summary": "Summary 2",
-                    "blurb": "Blurb 2",
-                    "image_path": None,
-                },
-                {
-                    "title": "Story 3",
-                    "summary": "Summary 3",
-                    "blurb": "Blurb 3",
-                    "image_path": None,
-                },
-            ]
-        )
+        agent.preserve_existing_image_paths.assert_called_once_with(generated_headlines)
+        agent.save_picks.assert_called_once_with(preserved_headlines)
 
     @patch("scripts.run_headline_agent.setup_logging")
     @patch("scripts.run_headline_agent.time.sleep")
