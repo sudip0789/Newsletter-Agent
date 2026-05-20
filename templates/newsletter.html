@@ -372,6 +372,15 @@
       line-height: 1.22;
     }
 
+    .article-title a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .article-title a:hover {
+      text-decoration: underline;
+    }
+
     .article-source {
       margin: 0 0 14px;
       color: var(--muted);
@@ -655,7 +664,13 @@
           <h2 class="section-heading">{{ section.name }}</h2>
           {% for article in section.articles %}
           <article class="article">
-            <h3 class="article-title">{{ article.title }}</h3>
+            <h3 class="article-title">
+              {% if article.url %}
+              <a href="{{ article.url }}" target="_blank" rel="noreferrer">{{ article.title }}</a>
+              {% else %}
+              {{ article.title }}
+              {% endif %}
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="{{ article.url }}" target="_blank" rel="noreferrer">{{ article.source_name }}</a>

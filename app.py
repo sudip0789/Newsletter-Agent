@@ -20,9 +20,11 @@ SECTION_ORDER = [
     "higher_education",
     "security",
     "creative_ai",
-    "industry",
+    "enterprise_ai",
     "policy",
-    "tools_and_products",
+    "ai_sustainability",
+    "responsible_ai",
+    "ai_products",
     "research",
 ]
 
@@ -31,9 +33,11 @@ SECTION_COLORS = {
     "higher_education": "#16a34a",
     "security": "#dc2626",
     "creative_ai": "#9333ea",
-    "industry": "#ea580c",
+    "enterprise_ai": "#ea580c",
     "policy": "#0f766e",
-    "tools_and_products": "#6b7280",
+    "ai_sustainability": "#15803d",
+    "responsible_ai": "#be185d",
+    "ai_products": "#6b7280",
     "research": "#4338ca",
 }
 

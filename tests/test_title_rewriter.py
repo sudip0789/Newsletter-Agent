@@ -43,7 +43,7 @@ class TestTitleRewriter(unittest.TestCase):
             },
             composite_score=0.77,
             rationale="Example rationale.",
-            section="industry",
+            section="enterprise_ai",
             tier="body",
         )
         return SummarizedStory(
@@ -210,7 +210,7 @@ class TestTitleRewriter(unittest.TestCase):
                     },
                     "composite_score": 0.77,
                     "rationale": "Example rationale.",
-                    "section": "industry",
+                    "section": "enterprise_ai",
                     "tier": "body",
                 },
                 "summary": "Existing summary",

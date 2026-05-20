@@ -13,21 +13,21 @@ from src.text_utils import normalize_markdown_escaped_text
 
 class TemplateAssembler:
     ALL_SECTIONS = [
-        ("industry", "Industry"),
+        ("enterprise_ai", "Enterprise AI"),
         ("legal_intelligence", "Legal Intelligence"),
-        ("tools_and_products", "Tools & Products"),
+        ("ai_products", "AI Products"),
         ("security", "Security"),
         ("policy", "Policy"),
-        ("ethics_and_bias", "Ethics & Bias"),
-        ("impact_on_environment", "Impact on Environment"),
+        ("responsible_ai", "Responsible AI"),
+        ("ai_sustainability", "AI Sustainability"),
         ("creative_ai", "Creative AI"),
         ("higher_education", "Higher Education"),
         ("research", "Research"),
     ]
     SECTION_ICON_FILENAMES = {
-        "industry": "industry.png",
+        "enterprise_ai": "enterprise_ai.png",
         "legal_intelligence": "legal_intelligence.png",
-        "tools_and_products": "tools.png",
+        "ai_products": "ai_products.png",
         "security": "security.png",
         "policy": "policy.png",
         "creative_ai": "creative_ai.png",

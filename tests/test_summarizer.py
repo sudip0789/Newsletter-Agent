@@ -58,7 +58,7 @@ class TestSummarizer(unittest.TestCase):
             },
             composite_score=score,
             rationale="Example rationale.",
-            section="industry",
+            section="enterprise_ai",
             tier="body",
         )
 
@@ -276,7 +276,7 @@ class TestSummarizer(unittest.TestCase):
                 },
                 "composite_score": 0.77,
                 "rationale": "Example rationale.",
-                "section": "industry",
+                "section": "enterprise_ai",
                 "tier": "body",
             }
         ]
@@ -291,10 +291,7 @@ class TestSummarizer(unittest.TestCase):
             len(summarizer.scored_stories[0].cluster.all_articles),
             1,
         )
-        self.assertEqual(
-            summarizer.output_path.name,
-            "summarized_stories_openai_gpt_5_4.json",
-        )
+        self.assertEqual(summarizer.output_path.name, "summarized_stories.json")
 
     @patch("src.summarizer.load_dotenv")
     @patch.object(Summarizer, "_build_client")
@@ -314,7 +311,7 @@ class TestSummarizer(unittest.TestCase):
     @patch("src.summarizer.load_dotenv")
     @patch.object(Summarizer, "_build_client")
     @patch("src.summarizer.os.getenv")
-    def test_init_labels_sonnet_output_file(
+    def test_init_sets_summarized_stories_output_path(
         self,
         mock_getenv: MagicMock,
         mock_build_client: MagicMock,
@@ -330,11 +327,8 @@ class TestSummarizer(unittest.TestCase):
             summarizer = Summarizer(input_path=str(input_path), model="sonnet-4.6")
 
         self.assertEqual(summarizer.provider, "anthropic")
-        self.assertEqual(summarizer.api_model, "claude-sonnet-4-20250514")
-        self.assertEqual(
-            summarizer.output_path.name,
-            "summarized_stories_anthropic_sonnet_4_6.json",
-        )
+        self.assertEqual(summarizer.api_model, "claude-sonnet-4-6")
+        self.assertEqual(summarizer.output_path.name, "summarized_stories.json")
 
 
 if __name__ == "__main__":

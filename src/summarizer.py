@@ -70,10 +70,7 @@ class Summarizer:
         self.provider = self.model_config["provider"]
         self.api_model = self.model_config["api_model"]
         self.input_path = Path(input_path)
-        self.output_path = (
-            self.input_path.parent
-            / f"summarized_stories_{self.model_config['output_label']}.json"
-        )
+        self.output_path = self.input_path.parent / "summarized_stories.json"
         self.top_n = top_n
 
         raw_stories = json.loads(self.input_path.read_text(encoding="utf-8"))

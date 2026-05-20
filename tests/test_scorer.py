@@ -79,7 +79,7 @@ class TestScorer(unittest.TestCase):
     def test_select_top_30_enforces_six_per_section(self) -> None:
         scorer = self._make_scorer()
         stories = [
-            self._make_story(f"industry_{idx}", "industry", 0.95 - idx * 0.01)
+            self._make_story(f"industry_{idx}", "enterprise_ai", 0.95 - idx * 0.01)
             for idx in range(7)
         ] + [
             self._make_story("policy_1", "policy", 0.88),
@@ -89,8 +89,8 @@ class TestScorer(unittest.TestCase):
         selected = scorer.select_top_30(stories)
 
         self.assertEqual(len(selected), 6)
-        self.assertEqual(sum(1 for story in selected if story.section == "industry"), 6)
-        self.assertEqual(selected[-1].section, "industry")
+        self.assertEqual(sum(1 for story in selected if story.section == "enterprise_ai"), 6)
+        self.assertEqual(selected[-1].section, "enterprise_ai")
 
     def test_select_top_30_skips_low_buzz_special_sections_when_enough_stories_exist(
         self,
@@ -99,18 +99,18 @@ class TestScorer(unittest.TestCase):
         scorer.selection_total = 25
         stories = [
             self._make_story("creative_low", "creative_ai", 0.95),
-            self._make_story("tools_low", "tools_and_products", 0.94),
+            self._make_story("tools_low", "ai_products", 0.94),
             self._make_story("higher_ed_low", "higher_education", 0.93),
         ]
         stories[0].scores["buzz_momentum"] = 0.29
         stories[1].scores["buzz_momentum"] = 0.29
         stories[2].scores["buzz_momentum"] = 0.29
         qualifying_sections = [
-            "industry",
+            "enterprise_ai",
             "legal_intelligence",
             "research",
             "creative_ai",
-            "tools_and_products",
+            "ai_products",
             "higher_education",
         ]
         for idx in range(21):
@@ -122,7 +122,7 @@ class TestScorer(unittest.TestCase):
             )
             story.scores["buzz_momentum"] = 0.75 if section not in {
                 "creative_ai",
-                "tools_and_products",
+                "ai_products",
                 "higher_education",
             } else 0.30
             stories.append(story)
@@ -140,17 +140,17 @@ class TestScorer(unittest.TestCase):
         scorer = self._make_scorer()
         scorer.selection_total = 25
         stories = [
-            self._make_story("industry_low", "industry", 0.96),
+            self._make_story("industry_low", "enterprise_ai", 0.96),
             self._make_story("policy_low", "policy", 0.95),
         ]
         stories[0].scores["buzz_momentum"] = 0.39
         stories[1].scores["buzz_momentum"] = 0.39
         qualifying_sections = [
             "creative_ai",
-            "tools_and_products",
+            "ai_products",
             "higher_education",
             "research",
-            "industry",
+            "enterprise_ai",
             "legal_intelligence",
         ]
         for idx in range(21):
@@ -162,7 +162,7 @@ class TestScorer(unittest.TestCase):
             )
             story.scores["buzz_momentum"] = 0.30 if section in {
                 "creative_ai",
-                "tools_and_products",
+                "ai_products",
                 "higher_education",
             } else 0.70
             stories.append(story)
@@ -178,8 +178,8 @@ class TestScorer(unittest.TestCase):
         scorer.selection_total = 4
         stories = [
             self._make_story("creative_boundary", "creative_ai", 0.96),
-            self._make_story("tools_boundary", "tools_and_products", 0.95),
-            self._make_story("industry_boundary", "industry", 0.94),
+            self._make_story("tools_boundary", "ai_products", 0.95),
+            self._make_story("industry_boundary", "enterprise_ai", 0.94),
             self._make_story("policy_boundary", "policy", 0.93),
         ]
         stories[0].scores["buzz_momentum"] = 0.30
@@ -202,7 +202,7 @@ class TestScorer(unittest.TestCase):
     def test_select_top_30_disables_buzz_filter_when_fewer_than_twenty_pass(self) -> None:
         scorer = self._make_scorer()
         scorer.selection_total = 25
-        passing_sections = ["industry", "creative_ai", "higher_education"]
+        passing_sections = ["enterprise_ai", "creative_ai", "higher_education"]
         failing_sections = ["research", "legal_intelligence"]
         passing: list[ScoredStory] = []
         failing: list[ScoredStory] = []
@@ -230,7 +230,7 @@ class TestScorer(unittest.TestCase):
         scorer = self._make_scorer()
         scorer.selection_total = 25
         industry = [
-            self._make_story(f"industry_{idx}", "industry", 1.0 - idx * 0.01)
+            self._make_story(f"industry_{idx}", "enterprise_ai", 1.0 - idx * 0.01)
             for idx in range(10)
         ]
         policy = [
@@ -253,7 +253,7 @@ class TestScorer(unittest.TestCase):
         selected = scorer.select_top_30(industry + policy + security)
 
         self.assertEqual(len(selected), 12)
-        self.assertEqual(sum(1 for story in selected if story.section == "industry"), 6)
+        self.assertEqual(sum(1 for story in selected if story.section == "enterprise_ai"), 6)
         self.assertEqual(sum(1 for story in selected if story.section == "policy"), 4)
         self.assertEqual(sum(1 for story in selected if story.section == "security"), 2)
 
@@ -267,7 +267,7 @@ class TestScorer(unittest.TestCase):
             self._make_story(f"security_{idx}", "security", 0.89 - idx * 0.01)
             for idx in range(5)
         ] + [
-            self._make_story(f"industry_{idx}", "industry", 0.79 - idx * 0.01)
+            self._make_story(f"industry_{idx}", "enterprise_ai", 0.79 - idx * 0.01)
             for idx in range(5)
         ]
 
@@ -275,23 +275,23 @@ class TestScorer(unittest.TestCase):
 
         self.assertEqual(sum(1 for story in selected if story.section == "policy"), 4)
         self.assertEqual(sum(1 for story in selected if story.section == "security"), 4)
-        self.assertEqual(sum(1 for story in selected if story.section == "industry"), 4)
+        self.assertEqual(sum(1 for story in selected if story.section == "enterprise_ai"), 4)
 
     def test_select_top_30_guarantees_environment_and_ethics_sections(self) -> None:
         scorer = self._make_scorer()
         scorer.selection_total = 25
         stories = [
-            self._make_story("impact_story", "impact_on_environment", 0.97),
-            self._make_story("ethics_story", "ethics_and_bias", 0.96),
+            self._make_story("impact_story", "ai_sustainability", 0.97),
+            self._make_story("ethics_story", "responsible_ai", 0.96),
         ]
         stories[0].scores["buzz_momentum"] = 0.39
         stories[1].scores["buzz_momentum"] = 0.39
 
         qualifying_sections = [
-            "industry",
+            "enterprise_ai",
             "legal_intelligence",
             "creative_ai",
-            "tools_and_products",
+            "ai_products",
             "higher_education",
             "research",
         ]
@@ -300,7 +300,7 @@ class TestScorer(unittest.TestCase):
             story = self._make_story(f"qualifying_{idx}", section, 0.95 - idx * 0.01)
             story.scores["buzz_momentum"] = 0.75 if section not in {
                 "creative_ai",
-                "tools_and_products",
+                "ai_products",
                 "higher_education",
             } else 0.30
             stories.append(story)
@@ -316,17 +316,17 @@ class TestScorer(unittest.TestCase):
         scorer = self._make_scorer()
         scorer.selection_total = 25
         stories = [
-            self._make_story("impact_story", "impact_on_environment", 0.99),
-            self._make_story("ethics_story", "ethics_and_bias", 0.96),
+            self._make_story("impact_story", "ai_sustainability", 0.99),
+            self._make_story("ethics_story", "responsible_ai", 0.96),
         ]
         stories[0].scores["buzz_momentum"] = 0.70
         stories[1].scores["buzz_momentum"] = 0.39
 
         qualifying_sections = [
-            "industry",
+            "enterprise_ai",
             "legal_intelligence",
             "creative_ai",
-            "tools_and_products",
+            "ai_products",
             "higher_education",
             "research",
         ]
@@ -335,7 +335,7 @@ class TestScorer(unittest.TestCase):
             story = self._make_story(f"qualifying_{idx}", section, 0.95 - idx * 0.01)
             story.scores["buzz_momentum"] = 0.75 if section not in {
                 "creative_ai",
-                "tools_and_products",
+                "ai_products",
                 "higher_education",
             } else 0.30
             stories.append(story)
@@ -351,10 +351,10 @@ class TestScorer(unittest.TestCase):
         scorer = self._make_scorer()
         scorer.selection_total = 6
         stories = [
-            self._make_story("impact_story", "impact_on_environment", 0.99),
-            self._make_story("ethics_story", "ethics_and_bias", 0.98),
-            self._make_story("industry_1", "industry", 0.97),
-            self._make_story("industry_2", "industry", 0.96),
+            self._make_story("impact_story", "ai_sustainability", 0.99),
+            self._make_story("ethics_story", "responsible_ai", 0.98),
+            self._make_story("industry_1", "enterprise_ai", 0.97),
+            self._make_story("industry_2", "enterprise_ai", 0.96),
             self._make_story("research_1", "research", 0.95),
             self._make_story("legal_1", "legal_intelligence", 0.94),
         ]
@@ -376,7 +376,7 @@ class TestScorer(unittest.TestCase):
     def test_assign_tiers_sets_headline_body_and_honorable(self) -> None:
         scorer = self._make_scorer()
         stories = [
-            self._make_story(f"story_{idx}", "industry", 0.99 - idx * 0.01)
+            self._make_story(f"story_{idx}", "enterprise_ai", 0.99 - idx * 0.01)
             for idx in range(30)
         ]
 
@@ -404,17 +404,17 @@ class TestScorer(unittest.TestCase):
     def test_normalize_section_defaults_invalid_values(self) -> None:
         scorer = self._make_scorer()
         normalized = scorer._normalize_section("unknown_section", "Test story")  # pylint: disable=protected-access
-        self.assertEqual(normalized, "industry")
+        self.assertEqual(normalized, "enterprise_ai")
 
     def test_normalize_section_accepts_new_sections(self) -> None:
         scorer = self._make_scorer()
         self.assertEqual(
-            scorer._normalize_section("impact_on_environment", "Environment story"),  # pylint: disable=protected-access
-            "impact_on_environment",
+            scorer._normalize_section("ai_sustainability", "Environment story"),  # pylint: disable=protected-access
+            "ai_sustainability",
         )
         self.assertEqual(
-            scorer._normalize_section("ethics_and_bias", "Ethics story"),  # pylint: disable=protected-access
-            "ethics_and_bias",
+            scorer._normalize_section("responsible_ai", "Ethics story"),  # pylint: disable=protected-access
+            "responsible_ai",
         )
 
     def test_coerce_score_clamps_out_of_range_values(self) -> None:
@@ -438,7 +438,7 @@ class TestScorer(unittest.TestCase):
         scorer = self._make_scorer()
         scorer.selection_total = 10
         scorer.clusters = [
-            self._make_story("cluster_1", "industry", 0.91).cluster,
+            self._make_story("cluster_1", "enterprise_ai", 0.91).cluster,
             self._make_story("cluster_2", "policy", 0.73).cluster,
             self._make_story("cluster_3", "security", 0.84).cluster,
         ]
@@ -464,7 +464,7 @@ class TestScorer(unittest.TestCase):
             if cluster.cluster_id == "cluster_2":
                 raise RuntimeError("boom")
             score = 0.91 if cluster.cluster_id == "cluster_1" else 0.84
-            return self._make_story(cluster.cluster_id, "industry", score)
+            return self._make_story(cluster.cluster_id, "enterprise_ai", score)
 
         def fake_select_top(stories: list[ScoredStory]) -> list[ScoredStory]:
             selected_stories.extend(stories)

@@ -4,7 +4,7 @@ Rewrite newsletter titles for summarized stories in place.
 Usage:
     python3 scripts/run_title_rewriter.py
     python3 scripts/run_title_rewriter.py --top 30
-    python3 scripts/run_title_rewriter.py --input data/output/summarized_stories_anthropic_sonnet_4_6.json
+    python3 scripts/run_title_rewriter.py --input data/output/summarized_stories.json
     python3 scripts/run_title_rewriter.py --model gpt-5.4
 """
 

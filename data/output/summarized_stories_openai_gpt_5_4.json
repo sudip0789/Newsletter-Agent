@@ -342,7 +342,7 @@
       },
       "composite_score": 0.7817999999999998,
       "rationale": "This is clearly about Microsoft's AI infrastructure spending surge and demand constraints—a meaningful AI industry signal with moderate relevance to a law-school audience, based on credible earnings-related reporting but not a major policy or legal development.",
-      "section": "industry",
+      "section": "enterprise_ai",
       "tier": "body"
     },
     "summary": "Microsoft said it now expects 2026 capital expenditures to reach $190 billion, including $25 billion tied to rising component costs, as memory and storage prices have surged since last fall amid demand for AI infrastructure. The company spent about $32 billion last quarter to add compute capacity and plans to spend roughly $40 billion next quarter on hardware and the datacenters to house it. Even with that spending, CFO Amy Hood said Microsoft expects to remain capacity-constrained through 2026.\n\nThe scale of the build-out has raised investor concerns about returns, with Microsoft having spent about $97 billion on infrastructure and equipment over the last four quarters to generate $37 billion in annual recurring AI revenue. Hood said the company remains confident those investments will pay off, citing higher demand signals, growing product usage, and platform efficiencies. The update matters to anyone tracking the economics of AI infrastructure: Microsoft’s AI expansion is getting more expensive even as demand continues to outpace supply, while its broader cloud business remains a major revenue driver.",
@@ -478,7 +478,7 @@
       },
       "composite_score": 0.7653,
       "rationale": "This is clearly an AI industry story about OpenAI making its models available through AWS Bedrock, a meaningful distribution and cloud-partnership shift with enterprise and governance implications, though it is more strategic business news than law- or policy-centered and appears to have limited broader pickup so far.",
-      "section": "industry",
+      "section": "enterprise_ai",
       "tier": "body"
     },
     "summary": "OpenAI’s top models are now available in limited preview on Amazon Web Services’ Bedrock managed inference platform, giving enterprises a new way to use GPT models without sending data through OpenAI’s own APIs. AWS said the move addresses security policy, data privacy, and data sovereignty concerns that have slowed some enterprise adoption, while also making it easier for customers already using AWS services to integrate OpenAI models.\n\nThe models will also be offered through Bedrock Managed Agents and AgentCore, which are designed to help organizations build enterprise agents and connect them to internal data and services. AWS said enterprises will also be able to connect OpenAI’s Codex code agent to models running in AWS datacenters, offering added reassurance for customers concerned about protecting their codebases. For now, GPT-5.4 is available, with GPT-5.5 expected within weeks.\n\nThe announcement follows OpenAI’s February commitment to make its models available on AWS as part of a financing arrangement worth up to $35 billion. It also reflects revised terms with Microsoft, which remains OpenAI’s primary cloud provider while allowing OpenAI to pursue additional infrastructure and services deals.",
@@ -512,7 +512,7 @@
       },
       "composite_score": 0.7613000000000001,
       "rationale": "This is clearly an AI-industry funding story about infrastructure for autonomous agents, with some legal-tech relevance via Harvey, but it is still primarily a startup financing/profile piece from a secondary outlet rather than a major policy, legal, or product milestone.",
-      "section": "industry",
+      "section": "enterprise_ai",
       "tier": "body"
     },
     "summary": "Parallel Web Systems, the startup founded by former Twitter CEO Parag Agrawal, has raised $100 million in a Series B led by Sequoia Capital, with Kleiner Perkins, Index Ventures, and Khosla Ventures also participating. The round values the company at $2 billion. Agrawal said the funding will support sales and marketing hires and speed up research and development on the company’s platform for AI agents that search the web and complete online tasks.\n\nThe company is building a programmatic web infrastructure that uses specialized APIs and a proprietary web index optimized for “machine retrieval,” aiming to help autonomous agents perform “deep research” tasks such as insurance claims processing and reviewing government contracts. One early user is legal AI company Harvey, whose president said agents need more granular control over which websites they access than standard search tools provide.\n\nSince launching in early 2024, Parallel says it has attracted more than 100,000 developers from AI-native startups and large enterprises, though it faces competition from companies including Tavily and Exa.",
@@ -615,7 +615,7 @@
       },
       "composite_score": 0.7397999999999999,
       "rationale": "This is directly about GPT-5 model behavior and OpenAI’s explanation of a specific output quirk, making it highly AI-relevant and novel from a strong primary source, but it appears to be a relatively narrow product/behavior post with limited legal or policy significance and modest broader buzz.",
-      "section": "tools_and_products",
+      "section": "ai_products",
       "tier": "body"
     },
     "summary": "How goblin outputs spread in AI models: timeline, root cause, and fixes behind personality-driven quirks in GPT-5 behavior.",
@@ -686,7 +686,7 @@
       },
       "composite_score": 0.7052,
       "rationale": "This is substantially about an AI browser API and governance concerns around embedding local language-model prompting into Chrome, making it AI-centric and moderately relevant to legal/policy-minded readers, though it is more product/platform standards news than a major legal or policy development.",
-      "section": "tools_and_products",
+      "section": "ai_products",
       "tier": "body"
     },
     "summary": "Mozilla has renewed its opposition to Google’s Prompt API, now being tested in Chrome and Microsoft Edge. The API lets web pages send prompts to a browser-provided local language model, such as Google’s Gemini Nano, to support local inference, offline use, faster responses, and lower-cost AI integration. Mozilla’s Jake Archibald said the company believes the API threatens the web’s interoperability, updatability, and neutrality.\n\nArchibald argued that developers will likely tune applications to the quirks of a specific model, creating pressure on other browser vendors to adopt the same model for consistency. He also objected that using the Prompt API requires agreement to Google’s Generative AI Prohibited Uses Policy, which restricts some content beyond what is illegal. Mozilla further disputed Google’s claim of strong developer support, saying the evidence cited did not support that characterization.\n\nGoogle Chrome engineer Rick Byers acknowledged Mozilla’s concerns but said he favors experimentation and asked the web community to gather evidence of harm. That debate comes as a February report found weak results from Prompt API implementations: for generative tasks, 24.29 percent of Edge responses and 15.17 percent of Chrome responses failed to complete the task, while classification failures were 29.58 percent and 23.93 percent, respectively.",
@@ -720,7 +720,7 @@
       },
       "composite_score": 0.7025999999999999,
       "rationale": "This is primarily about SAP restricting API use for third-party and generative AI integrations—a meaningful AI industry/platform-governance story with some legal and enterprise implications, but based on limited reporting and not yet a major cross-industry flashpoint.",
-      "section": "industry",
+      "section": "enterprise_ai",
       "tier": "body"
     },
     "summary": "SAP’s updated API policy is drawing concern from partners and consultants because it bars API use for integration with generative or semi-autonomous AI systems except through SAP-endorsed architectures and specified pathways. Critics say the language could limit customers’ ability to connect third-party AI tools to SAP data, especially if documented APIs are incomplete or slow to be updated.\n\nIndependent consultant Marian Zeis said the changes appear more restrictive than expected and could affect customers as well as partners, potentially pushing developers toward undocumented APIs to keep applications working. Other consultants echoed those concerns, and Handelsblatt reporter Christof Kerkmann said the policy sparked immediate controversy. SAP said the changes are meant to support secure, reliable, and equitable use of shared enterprise platforms, clarify intended interface use, and protect system stability and customer data without changing customer data ownership.\n\nSAP CEO Christian Klein told investors that customers would not pay to access their own data and said the company wants to keep its platform open, including for third-party AI agents, while throttling high-volume API traffic to prevent performance issues.",
@@ -754,7 +754,7 @@
       },
       "composite_score": 0.7021999999999999,
       "rationale": "This is clearly about OpenAI’s AI infrastructure strategy and a notable shift in how a major AI company secures compute, but it is secondhand reporting with limited pickup and only moderate direct relevance to a law-school audience.",
-      "section": "industry",
+      "section": "enterprise_ai",
       "tier": "body"
     },
     "summary": "OpenAI has reportedly moved away from the original Stargate plan to build and own AI data centers with Oracle and SoftBank, and now prefers long-term leased compute from third-party providers. According to the Financial Times, the company has “in practice” abandoned the joint venture model, with one person involved saying it had “sidelined first-party data centres.” OpenAI said Stargate is now an “umbrella for our compute strategy.”\n\nThe shift follows months of disagreements among Stargate partners over control of planned facilities. The first site in Abilene, Texas, is operational, but SoftBank will reportedly own and develop it while OpenAI designs and operates it under a lease. Other projects have stalled or changed hands: OpenAI paused a planned UK data center, citing regulatory and energy-cost concerns, and in Narvik, Norway, Microsoft took over the lease, with OpenAI set to lease compute from Microsoft instead.\n\nThe change matters because it has unsettled partners and reflects the financing pressures around large-scale AI infrastructure. The report says some partners felt “let down and misled,” even as OpenAI recently secured a record $110 billion funding round.",
@@ -789,7 +789,7 @@
       },
       "composite_score": 0.6979,
       "rationale": "This is clearly an AI product rollout—Google bringing Gemini into cars—but it is mainly a consumer feature update with limited direct relevance to law, policy, higher education, or security audiences despite being a credible and new official announcement.",
-      "section": "tools_and_products",
+      "section": "ai_products",
       "tier": "body"
     },
     "summary": "Google says Gemini is beginning to roll out in cars with Google built-in, replacing Google Assistant for eligible users signed into their Google Account. The upgrade will reach both new and existing vehicles through a software update, starting in English in the United States and expanding over the coming months. Drivers can access Gemini by voice, the home-screen microphone, or a steering wheel button.\n\nThe update adds more natural, hands-free interactions across navigation, messaging, media, and vehicle controls. Google says Gemini can use Google Maps information to suggest stops, answer follow-up questions, provide real-time trip updates, and help report road incidents. It can also summarize text messages, draft and edit replies, and support more specific music requests. Gemini Live, currently in beta, adds free-flowing conversations for learning and brainstorming while driving.\n\nGoogle also says Gemini is integrated with vehicle systems and manufacturer-provided owner’s manuals, allowing drivers to ask model-specific questions, check EV battery information, find chargers, and adjust comfort settings with natural language. Availability and detail vary by brand and model.",
@@ -823,7 +823,7 @@
       },
       "composite_score": 0.6943999999999999,
       "rationale": "This is meaningfully about AI infrastructure because Google is commercializing TPUs for AI customers, but it is still primarily an earnings/business strategy story rather than a major legal, policy, or product-development milestone for the newsletter’s core audience.",
-      "section": "industry",
+      "section": "enterprise_ai",
       "tier": "body"
     },
     "summary": "Google said on its Q1 2026 earnings call that Google Cloud will begin selling its custom tensor processing units to a select group of customers for use in their own data centers. CEO Sundar Pichai said demand is growing from AI labs, capital markets firms, and high-performance computing users, and added that some customers are also showing “massive interest” in Google’s GPU offerings. CFO Anat Ashkenazi said TPU sales will generate some revenue this year, with a larger balance-sheet effect expected in 2027, though quarterly results will vary based on shipment timing.\n\nThe move matters because Google says chip sales can help fund next-generation silicon research and create economies of scale for its own infrastructure buildout. It also comes as Google Cloud reports strong growth: Q1 2026 revenue topped $20 billion, up 63 percent from the same quarter last year, while Pichai said demand still exceeds available infrastructure. Google also reported a $460 billion backlog of undelivered contracts, and said AI is boosting both search activity and ad performance, with companywide revenue reaching $109.9 billion and net income at $62.6 billion.",
@@ -857,7 +857,7 @@
       },
       "composite_score": 0.6909999999999998,
       "rationale": "This is clearly about AI agents and a new open protocol for secure autonomous payments, but it is a company standards announcement with moderate broader significance and limited direct law-school relevance absent a stronger policy, legal, or security angle.",
-      "section": "tools_and_products",
+      "section": "ai_products",
       "tier": "honorable_mention"
     },
     "summary": "Google said it is donating its Agent Payments Protocol, or AP2, to the FIDO Alliance, an industry group focused on open standards. According to the company, moving AP2 to FIDO is intended to keep the protocol platform-agnostic and community-led while encouraging broader adoption of secure agentic payments.\n\nGoogle also released AP2 v.0.2 on GitHub, adding updates for autonomous transactions, including “Human Not Present” payments. The company said this would let agents carry out payments autonomously based on pre-authorized user instructions, such as purchasing limited-run tickets as soon as they go on sale.\n\nThe announcement also highlights Verifiable Intent, an AP2-compatible standard Google co-developed with Mastercard and is also donating to FIDO. Google said Verifiable Intent creates a tamper-proof log of user-authorized agent actions to support accountability. The move matters for companies building AI shopping and payment systems, as well as organizations interested in common standards for secure agent-led commerce.",
@@ -959,7 +959,7 @@
       },
       "composite_score": 0.6466,
       "rationale": "This is clearly an AI product announcement about a multilingual conversational speech model, but it is a routine vendor launch with limited demonstrated broader legal, policy, or higher-education significance and modest evidence of wider industry pickup.",
-      "section": "tools_and_products",
+      "section": "ai_products",
       "tier": "honorable_mention"
     },
     "summary": "Deepgram has made Flux Multilingual generally available, expanding its conversational speech recognition model to 10 languages and adding real-time language detection with the ability to switch languages mid-call. The single model and API support English, Spanish, French, German, Hindi, Russian, Portuguese, Japanese, Italian and Dutch, and can either take a developer-provided language hint or detect the language automatically during a conversation.\n\nThe release is aimed at developers building voice agents across markets, where separate transcription models, language detection tools and routing logic can add latency and create fragile handoffs. Deepgram says Flux Multilingual replaces that stack with one perception model, supports native code-switching within the same conversation, and uses model-based turn detection instead of silence detection, with end-of-turn decisions delivered in under 400 milliseconds.\n\nDeepgram says the model provides monolingual-grade accuracy across all supported languages, handles interruptions natively, and is backward-compatible with existing Flux API integrations. It is available through Deepgram’s cloud API or as a self-hosted deployment, including European Union endpoints and software development kits.",
@@ -993,7 +993,7 @@
       },
       "composite_score": 0.6172,
       "rationale": "This is clearly about OpenAI’s coding model behavior and prompt controls in Codex, but it is mostly a quirky product anecdote/meme rather than a major legal, policy, security, or industry development for the newsletter’s audience.",
-      "section": "tools_and_products",
+      "section": "ai_products",
       "tier": "honorable_mention"
     },
     "summary": "OpenAI’s Codex CLI includes repeated instructions telling the coding model not to “randomly” mention goblins, gremlins, raccoons, trolls, ogres, pigeons, or other creatures unless they are clearly relevant to the user’s request. The directive surfaced in guidance for Codex CLI, a command-line tool for AI code generation, and OpenAI did not immediately respond to WIRED’s request for comment.\n\nThe restriction drew attention after users on X said OpenAI models sometimes fixate on goblins and similar creatures when used with OpenClaw, a tool OpenAI acquired in February that lets AI control a computer and apps to complete tasks. One OpenAI employee, Nik Pash, appeared to confirm the issue by saying the prohibition was “indeed one of the reasons.” The episode matters because GPT-5.5, released earlier this month with improved coding abilities, is part of OpenAI’s push to compete on coding tools, where unexpected model behavior can affect users relying on AI for software and task automation.",

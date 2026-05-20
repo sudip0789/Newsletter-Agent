@@ -372,6 +372,15 @@
       line-height: 1.22;
     }
 
+    .article-title a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .article-title a:hover {
+      text-decoration: underline;
+    }
+
     .article-source {
       margin: 0 0 14px;
       color: var(--muted);
@@ -391,6 +400,55 @@
       text-transform: uppercase;
       color: var(--brand-red);
       font-weight: 700;
+    }
+
+    .media-section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 20px;
+      color: var(--brand-red);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.55rem;
+    }
+
+    .media-section-title svg {
+      flex-shrink: 0;
+      color: var(--brand-red);
+    }
+
+    .media-embeds {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .media-embed-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .media-embed-label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .media-embed-label svg {
+      flex-shrink: 0;
+    }
+
+    .media-embeds iframe {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      background: var(--soft);
     }
 
     .article-source a {
@@ -538,9 +596,9 @@
         <p class="sidebar-label">Sections</p>
         <nav class="sidebar-nav">
           
-          <a class="sidebar-link" href="#industry">
-            <img src="../../assets/logos/industry.png" alt="">
-            <span>Industry</span>
+          <a class="sidebar-link" href="#enterprise_ai">
+            <img src="../../assets/logos/enterprise_ai.png" alt="">
+            <span>Enterprise AI</span>
           </a>
           
           <a class="sidebar-link" href="#legal_intelligence">
@@ -548,9 +606,9 @@
             <span>Legal Intelligence</span>
           </a>
           
-          <a class="sidebar-link" href="#tools_and_products">
-            <img src="../../assets/logos/tools.png" alt="">
-            <span>Tools &amp; Products</span>
+          <a class="sidebar-link" href="#ai_products">
+            <img src="../../assets/logos/ai_products.png" alt="">
+            <span>AI Products</span>
           </a>
           
           <a class="sidebar-link" href="#security">
@@ -606,15 +664,17 @@
           </div>
         </section>
 
+        
+
         <section class="module">
           <h2 class="module-title">In This Issue</h2>
           <ul class="toc-list">
             
-            <li><a href="#industry">Industry</a></li>
+            <li><a href="#enterprise_ai">Enterprise AI</a></li>
             
             <li><a href="#legal_intelligence">Legal Intelligence</a></li>
             
-            <li><a href="#tools_and_products">Tools &amp; Products</a></li>
+            <li><a href="#ai_products">AI Products</a></li>
             
             <li><a href="#security">Security</a></li>
             
@@ -626,11 +686,15 @@
         </section>
 
         
-        <section class="module section-block" id="industry">
-          <h2 class="section-heading">Industry</h2>
+        <section class="module section-block" id="enterprise_ai">
+          <h2 class="section-heading">Enterprise AI</h2>
           
           <article class="article">
-            <h3 class="article-title">​Voice AI firm ElevenLabs tops $500 million ARR; announces additional funding</h3>
+            <h3 class="article-title">
+              
+              <a href="https://economictimes.indiatimes.com/tech/startups/voice-ai-firm-elevenlabs-tops-500-million-arr-announces-additional-funding/articleshow/130833365.cms" target="_blank" rel="noreferrer">​Voice AI firm ElevenLabs tops $500 million ARR; announces additional funding</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://economictimes.indiatimes.com/tech/startups/voice-ai-firm-elevenlabs-tops-500-million-arr-announces-additional-funding/articleshow/130833365.cms" target="_blank" rel="noreferrer">The Times of India</a>
@@ -645,7 +709,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Pentagon clears 8 tech firms to deploy their AI on its classified networks</h3>
+            <h3 class="article-title">
+              
+              <a href="https://freerepublic.com/focus/f-news/4377794/posts" target="_blank" rel="noreferrer">Pentagon clears 8 tech firms to deploy their AI on its classified networks</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://freerepublic.com/focus/f-news/4377794/posts" target="_blank" rel="noreferrer">Freerepublic.com</a>
@@ -660,7 +728,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Jamie Dimon blesses the trillion-dollar AI capex boom</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.axios.com/2026/05/05/jamie-dimon-ai-capex-anthropic" target="_blank" rel="noreferrer">Jamie Dimon blesses the trillion-dollar AI capex boom</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.axios.com/2026/05/05/jamie-dimon-ai-capex-anthropic" target="_blank" rel="noreferrer">Axios</a>
@@ -675,7 +747,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">OpenAI exec says company hopes to burn $50B of somebody else&#39;s money on compute this year</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.theregister.com/software/2026/05/05/openai-exec-says-it-will-burn-50b-on-compute-this-year/5226088" target="_blank" rel="noreferrer">OpenAI exec says company hopes to burn $50B of somebody else&#39;s money on compute this year</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.theregister.com/software/2026/05/05/openai-exec-says-it-will-burn-50b-on-compute-this-year/5226088" target="_blank" rel="noreferrer">The Register</a>
@@ -690,7 +766,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Claude hitches ride on SpaceX&#39;s datacenter capacity</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.theregister.com/ai-and-ml/2026/05/06/claude-hitches-a-ride-on-spacexs-datacenter-capacity/5231252" target="_blank" rel="noreferrer">Claude hitches ride on SpaceX&#39;s datacenter capacity</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.theregister.com/ai-and-ml/2026/05/06/claude-hitches-a-ride-on-spacexs-datacenter-capacity/5231252" target="_blank" rel="noreferrer">The Register</a>
@@ -710,7 +790,11 @@
           <h2 class="section-heading">Legal Intelligence</h2>
           
           <article class="article">
-            <h3 class="article-title">Scott Turow&#39;s latest real-life legal thriller: Suing Meta for copyright infringement</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.npr.org/2026/05/05/nx-s1-5812623/scott-turow-meta-lawsuit" target="_blank" rel="noreferrer">Scott Turow&#39;s latest real-life legal thriller: Suing Meta for copyright infringement</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.npr.org/2026/05/05/nx-s1-5812623/scott-turow-meta-lawsuit" target="_blank" rel="noreferrer">NPR</a>
@@ -725,7 +809,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Anthropic owes authors $1.5B for pirating work — but the claims process is a Kafkaesque mess</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.vox.com/culture/487860/anthropic-copyright-settlement-payout-claims-website-authors" target="_blank" rel="noreferrer">Anthropic owes authors $1.5B for pirating work — but the claims process is a Kafkaesque mess</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.vox.com/culture/487860/anthropic-copyright-settlement-payout-claims-website-authors" target="_blank" rel="noreferrer">Vox</a>
@@ -740,7 +828,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">NVIDIA and Atlassian back Legora’s $600m Series D in a $50m extension that values the legal AI startup at $5.6 billion</h3>
+            <h3 class="article-title">
+              
+              <a href="https://thenextweb.com/news/egora-nvidia-atlassian-600m-series-d/" target="_blank" rel="noreferrer">NVIDIA and Atlassian back Legora’s $600m Series D in a $50m extension that values the legal AI startup at $5.6 billion</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://thenextweb.com/news/egora-nvidia-atlassian-600m-series-d/" target="_blank" rel="noreferrer">The Next Web</a>
@@ -755,7 +847,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Apple Will Pay $250 Million to Settle Lawsuit Over Siri’s AI Features</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.wired.com/story/apple-will-pay-dollar250-million-to-settle-lawsuit-over-siris-ai-features/" target="_blank" rel="noreferrer">Apple Will Pay $250 Million to Settle Lawsuit Over Siri’s AI Features</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.wired.com/story/apple-will-pay-dollar250-million-to-settle-lawsuit-over-siris-ai-features/" target="_blank" rel="noreferrer">WIRED</a>
@@ -771,11 +867,15 @@
           
         </section>
         
-        <section class="module section-block" id="tools_and_products">
-          <h2 class="section-heading">Tools &amp; Products</h2>
+        <section class="module section-block" id="ai_products">
+          <h2 class="section-heading">AI Products</h2>
           
           <article class="article">
-            <h3 class="article-title">GPT-5.5 Instant: smarter, clearer, and more personalized</h3>
+            <h3 class="article-title">
+              
+              <a href="https://openai.com/index/gpt-5-5-instant" target="_blank" rel="noreferrer">GPT-5.5 Instant: smarter, clearer, and more personalized</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://openai.com/index/gpt-5-5-instant" target="_blank" rel="noreferrer">OpenAI Blog</a>
@@ -786,7 +886,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Accelerating Gemma 4: faster inference with  multi-token prediction drafters</h3>
+            <h3 class="article-title">
+              
+              <a href="https://blog.google/innovation-and-ai/technology/developers-tools/multi-token-prediction-gemma-4/" target="_blank" rel="noreferrer">Accelerating Gemma 4: faster inference with  multi-token prediction drafters</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://blog.google/innovation-and-ai/technology/developers-tools/multi-token-prediction-gemma-4/" target="_blank" rel="noreferrer">Google - The Keyword</a>
@@ -801,7 +905,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">How OpenAI delivers low-latency voice AI at scale</h3>
+            <h3 class="article-title">
+              
+              <a href="https://openai.com/index/delivering-low-latency-voice-ai-at-scale" target="_blank" rel="noreferrer">How OpenAI delivers low-latency voice AI at scale</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://openai.com/index/delivering-low-latency-voice-ai-at-scale" target="_blank" rel="noreferrer">OpenAI Blog</a>
@@ -812,7 +920,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">AWS lets agents drive its virtual cloudy desktops – which could cost 500,000 tokens per click</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.theregister.com/off-prem/2026/05/06/aws-lets-agents-drive-its-virtual-cloudy-desktops/5220438" target="_blank" rel="noreferrer">AWS lets agents drive its virtual cloudy desktops – which could cost 500,000 tokens per click</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.theregister.com/off-prem/2026/05/06/aws-lets-agents-drive-its-virtual-cloudy-desktops/5220438" target="_blank" rel="noreferrer">The Register</a>
@@ -827,7 +939,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Your car with Google built-in is about to get smarter, thanks to Gemini</h3>
+            <h3 class="article-title">
+              
+              <a href="https://blog.google/products-and-platforms/platforms/android/cars-with-google-built-in-gemini-tips-2026/" target="_blank" rel="noreferrer">Your car with Google built-in is about to get smarter, thanks to Gemini</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://blog.google/products-and-platforms/platforms/android/cars-with-google-built-in-gemini-tips-2026/" target="_blank" rel="noreferrer">Google - The Keyword</a>
@@ -847,7 +963,11 @@
           <h2 class="section-heading">Security</h2>
           
           <article class="article">
-            <h3 class="article-title">Red-teaming a network of agents: Understanding what breaks when AI agents interact at scale</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.microsoft.com/en-us/research/blog/red-teaming-a-network-of-agents-understanding-what-breaks-when-ai-agents-interact-at-scale/" target="_blank" rel="noreferrer">Red-teaming a network of agents: Understanding what breaks when AI agents interact at scale</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.microsoft.com/en-us/research/blog/red-teaming-a-network-of-agents-understanding-what-breaks-when-ai-agents-interact-at-scale/" target="_blank" rel="noreferrer">Microsoft Research Blog</a>
@@ -862,7 +982,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Even After Two Massacres, OpenAI Still Hasn’t Stopped ChatGPT From Helping Plan School Shootings</h3>
+            <h3 class="article-title">
+              
+              <a href="http://futurism.com/artificial-intelligence/two-shootings-openai-stopped" target="_blank" rel="noreferrer">Even After Two Massacres, OpenAI Still Hasn’t Stopped ChatGPT From Helping Plan School Shootings</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="http://futurism.com/artificial-intelligence/two-shootings-openai-stopped" target="_blank" rel="noreferrer">Futurism</a>
@@ -877,7 +1001,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Google Fixes CVSS 10 Gemini CLI CI RCE and Cursor Flaws Enable Code Execution</h3>
+            <h3 class="article-title">
+              
+              <a href="https://thehackernews.com/2026/04/google-fixes-cvss-10-gemini-cli-ci-rce.html" target="_blank" rel="noreferrer">Google Fixes CVSS 10 Gemini CLI CI RCE and Cursor Flaws Enable Code Execution</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://thehackernews.com/2026/04/google-fixes-cvss-10-gemini-cli-ci-rce.html" target="_blank" rel="noreferrer">The Hacker News</a>
@@ -892,7 +1020,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Doctors&#39; growing AI deepfakes problem</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.axios.com/2026/05/06/doctors-ai-deepfakes-misinformation-problem" target="_blank" rel="noreferrer">Doctors&#39; growing AI deepfakes problem</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.axios.com/2026/05/06/doctors-ai-deepfakes-misinformation-problem" target="_blank" rel="noreferrer">Axios</a>
@@ -907,7 +1039,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">&#39;Moment of Danger&#39;: Anthropic CEO Warns of Cyber Risk Window as AI Uncovers Software Flaws</h3>
+            <h3 class="article-title">
+              
+              <a href="https://decrypt.co/366891/anthropic-warns-cyber-risk-window-ai-uncovers-flaws" target="_blank" rel="noreferrer">&#39;Moment of Danger&#39;: Anthropic CEO Warns of Cyber Risk Window as AI Uncovers Software Flaws</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://decrypt.co/366891/anthropic-warns-cyber-risk-window-ai-uncovers-flaws" target="_blank" rel="noreferrer">Decrypt</a>
@@ -922,7 +1058,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">India orders infosec red alert in case Mythos sparks crime spree</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.theregister.com/security/2026/05/06/india-orders-infosec-red-alert-in-case-mythos-sparks-crime/5224961" target="_blank" rel="noreferrer">India orders infosec red alert in case Mythos sparks crime spree</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.theregister.com/security/2026/05/06/india-orders-infosec-red-alert-in-case-mythos-sparks-crime/5224961" target="_blank" rel="noreferrer">The Register</a>
@@ -942,7 +1082,11 @@
           <h2 class="section-heading">Policy</h2>
           
           <article class="article">
-            <h3 class="article-title">New frontier of AI forces Trump&#39;s heavy hand</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.axios.com/2026/05/05/trump-anthropic-ai-regulation-mythos-cyber" target="_blank" rel="noreferrer">New frontier of AI forces Trump&#39;s heavy hand</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.axios.com/2026/05/05/trump-anthropic-ai-regulation-mythos-cyber" target="_blank" rel="noreferrer">Axios</a>
@@ -957,7 +1101,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Microsoft, Google and xAI will let the government test their AI models before launch | CNN Business</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.cnn.com/2026/05/05/tech/microsoft-google-xai-government-test-ai-models" target="_blank" rel="noreferrer">Microsoft, Google and xAI will let the government test their AI models before launch | CNN Business</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.cnn.com/2026/05/05/tech/microsoft-google-xai-government-test-ai-models" target="_blank" rel="noreferrer">CNN</a>
@@ -972,7 +1120,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Google DeepMind Workers Vote to Unionize Over Military AI Deals</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.wired.com/story/google-deepmind-workers-vote-to-unionize-over-military-ai-deals/" target="_blank" rel="noreferrer">Google DeepMind Workers Vote to Unionize Over Military AI Deals</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.wired.com/story/google-deepmind-workers-vote-to-unionize-over-military-ai-deals/" target="_blank" rel="noreferrer">WIRED</a>
@@ -987,7 +1139,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Top European tech CEOs call for easier AI rules</h3>
+            <h3 class="article-title">
+              
+              <a href="https://economictimes.indiatimes.com/tech/artificial-intelligence/top-european-tech-ceos-call-for-easier-ai-rules/articleshow/130834016.cms" target="_blank" rel="noreferrer">Top European tech CEOs call for easier AI rules</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://economictimes.indiatimes.com/tech/artificial-intelligence/top-european-tech-ceos-call-for-easier-ai-rules/articleshow/130834016.cms" target="_blank" rel="noreferrer">The Times of India</a>
@@ -1002,7 +1158,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">A Kid With a Fake Mustache Tricked an Online Age-Verification Tool</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.wired.com/story/a-kid-with-a-fake-mustache-tricked-an-online-age-verification-tool/" target="_blank" rel="noreferrer">A Kid With a Fake Mustache Tricked an Online Age-Verification Tool</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.wired.com/story/a-kid-with-a-fake-mustache-tricked-an-online-age-verification-tool/" target="_blank" rel="noreferrer">WIRED</a>
@@ -1017,7 +1177,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">How David Sacks crashed and burned in the White House</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.theverge.com/column/925487/david-sacks-trump-administration-ai-model-review" target="_blank" rel="noreferrer">How David Sacks crashed and burned in the White House</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.theverge.com/column/925487/david-sacks-trump-administration-ai-model-review" target="_blank" rel="noreferrer">The Verge</a>
@@ -1037,7 +1201,11 @@
           <h2 class="section-heading">Higher Education</h2>
           
           <article class="article">
-            <h3 class="article-title">Using AI for Just 10 Minutes Might Make You Lazy and Dumb, Study Shows</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.wired.com/story/using-ai-negative-impact-thinking-problem-solving-study/" target="_blank" rel="noreferrer">Using AI for Just 10 Minutes Might Make You Lazy and Dumb, Study Shows</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.wired.com/story/using-ai-negative-impact-thinking-problem-solving-study/" target="_blank" rel="noreferrer">WIRED</a>

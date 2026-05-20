@@ -171,7 +171,7 @@ class TestPipelineRunReporting(unittest.TestCase):
         summarizer = mock_summarizer_cls.return_value
         summarizer.run.return_value = [
             SummarizedStory(
-                scored_story=self._scored_story("Reviewed story", "industry", 0.9),
+                scored_story=self._scored_story("Reviewed story", "enterprise_ai", 0.9),
                 newsletter_title="Reviewed newsletter title",
                 summary="Looks good.",
                 needs_manual_review=False,

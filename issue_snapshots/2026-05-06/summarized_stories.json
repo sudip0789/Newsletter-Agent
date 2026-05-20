@@ -251,7 +251,7 @@
       },
       "composite_score": 0.8380000000000001,
       "rationale": "This is clearly an AI-industry story about a major Chinese AI lab's first funding round and surging valuation, with meaningful geopolitical and competitive implications, though it is based on reported talks rather than an official completed deal.",
-      "section": "industry",
+      "section": "enterprise_ai",
       "tier": "body"
     },
     "summary": "Chinese AI lab DeepSeek is reportedly in talks to raise its first venture capital round at a potential valuation of $45 billion, more than doubling from $20 billion just weeks earlier. The company gained international attention in early 2025 after launching a large language model that achieved competitive performance with leading U.S. models while using significantly less compute power and training costs.\n\nFounded by hedge fund billionaire Liang Wenfeng, who controls nearly 90% of the company, DeepSeek had previously operated without external investors. The funding round is reportedly being pursued to offer employee equity as competitors attempt to poach the lab's researchers. China's state investment vehicle China Integrated Circuit Industry Investment Fund is said to be leading the round, with cloud giants Tencent and Alibaba reportedly in talks to participate.\n\nThe investment aligns with China's broader strategy to develop homegrown AI technology and reduce dependence on U.S. chips and technology. DeepSeek has optimized its models to run on chips from Chinese hardware company Huawei Technologies, creating what observers consider a significant domestic AI capability for China.",
@@ -429,7 +429,7 @@
       },
       "composite_score": 0.7936,
       "rationale": "This is clearly an AI product announcement about OpenAI’s default ChatGPT model update, with meaningful but not landmark impact for the Stanford Law audience, strong novelty and source credibility, but limited broader coverage so far.",
-      "section": "tools_and_products",
+      "section": "ai_products",
       "tier": "body"
     },
     "summary": "GPT-5.5 Instant updates ChatGPT’s default model with smarter, more accurate answers, reduced hallucinations, and improved personalization controls.",
@@ -604,7 +604,7 @@
       },
       "composite_score": 0.7564,
       "rationale": "This is clearly an AI industry story about ElevenLabs’ voice AI revenue growth and additional funding, significant as a major company milestone but only moderately relevant to the law-school audience because it is business-focused rather than legal, policy, or higher-education centered.",
-      "section": "industry",
+      "section": "enterprise_ai",
       "tier": "body"
     },
     "summary": "Voice AI startup ElevenLabs announced that its annual recurring revenue surpassed $500 million in the first four months of 2026, while simultaneously securing additional funding in its ongoing Series D round. The company previously raised $500 million at an $11 billion valuation in February, led by Sequoia Capital, representing a dramatic jump from its January Series C round of $180 million at a $3.3 billion valuation.\n\nThe latest funding round attracted major institutional investors including BlackRock, Wellington Management, D E Shaw, and Schroders, alongside enterprise participants such as Nvidia, Salesforce, Santander, KPN, and Deutsche Telekom. These enterprise partners deploy ElevenLabs' voice AI technology across customer support, sales, hiring, and marketing operations. Cofounder Mati Staniszewski attributed the company's accelerated growth to enterprise adoption of voice agents across businesses.\n\nElevenLabs plans to use the funding to advance its platform by combining multimedia creation tools for marketing and developing AI agents that support multi-channel communication, while expanding globally. The company positions natural, human-like communication as critical infrastructure for AI adoption, with Wellington Management's Rob Mazzoni predicting that every major enterprise will eventually communicate with customers through AI agents.",
@@ -639,7 +639,7 @@
       },
       "composite_score": 0.7557,
       "rationale": "This is clearly an AI story with meaningful defense and security implications because the Pentagon is approving multiple major firms’ AI systems for classified networks, but the provided source is a repost/forum excerpt rather than strong original reporting.",
-      "section": "industry",
+      "section": "enterprise_ai",
       "tier": "body"
     },
     "summary": "The Pentagon has authorized eight major technology companies to deploy artificial intelligence systems on its classified networks, marking a significant expansion of commercial AI into military operations. The approved companies include Amazon Web Services, Google, Microsoft, OpenAI, SpaceX, NVIDIA, Reflection, and Oracle, with some already under contract while others finalize agreement details.\n\nThe AI systems will operate on networks classified as Impact Level 6 (handling secret data) and Impact Level 7 (the most highly classified systems). According to the Pentagon, these agreements support Secretary Pete Hegseth's initiative to transform the U.S. military into an \"AI-first fighting force\" and enhance warfighters' decision-making capabilities across all warfare domains.\n\nThis development builds on the December launch of the GenAI.mil platform for secure but unclassified operations. The Pentagon states the partnerships will accelerate military transformation and strengthen decision superiority, representing the most significant integration of commercial AI technology into classified defense networks to date.",
@@ -674,7 +674,7 @@
       },
       "composite_score": 0.7504000000000002,
       "rationale": "This is clearly about AI investment and Anthropic’s financial-services push, with some security-policy implications, but it is primarily an industry signal piece rather than a major legal or policy development.",
-      "section": "industry",
+      "section": "enterprise_ai",
       "tier": "body"
     },
     "summary": "JPMorgan Chase CEO Jamie Dimon endorsed the massive AI investment wave at an Anthropic event in New York, declaring the technology worth a projected trillion-dollar capital expenditure next year. Speaking alongside Anthropic CEO Dario Amodei, Dimon addressed growing investor concerns about whether AI revenue can justify the unprecedented spending levels driving both stock market performance and broader U.S. economic growth.\n\nThe executives also discussed Anthropic's new Mythos model, whose cyber capabilities prompted an emergency meeting between Treasury Secretary Scott Bessent, Federal Reserve Chair Jerome Powell, and major bank CEOs last month. Dimon, who missed that meeting, said banks have since collaborated to \"triage the issues\" and argued that cybersecurity protections should extend beyond just the largest financial institutions.\n\nAmodei pushed back against suggestions that Mythos's limited release stemmed from compute constraints, calling that characterization a \"misconception.\" The event also featured announcements of new Anthropic partnerships and AI agents designed specifically for financial services applications.",
@@ -815,7 +815,7 @@
       },
       "composite_score": 0.7326999999999999,
       "rationale": "This is clearly about a major AI company’s compute spending and financing strategy, which matters as industry context, but it is partly a colorful follow-up on previously reported figures from court testimony rather than a fresh, law- or policy-centered AI development.",
-      "section": "industry",
+      "section": "enterprise_ai",
       "tier": "body"
     },
     "summary": "OpenAI president Greg Brockman testified in court Tuesday that the company expects to spend $50 billion on computing power in 2026, a figure that emerged during the AI firm's ongoing legal dispute with Elon Musk. The massive expenditure would come from investor funds, as OpenAI has yet to achieve profitability nearly four years after launching ChatGPT.\n\nRecent investment announcements from major tech companies including Microsoft, Amazon, SoftBank, and Nvidia involve complex financial arrangements rather than straightforward funding. A February deal totaling $110 billion includes conditions requiring OpenAI to purchase compute services from the investors themselves. Amazon's $50 billion commitment requires OpenAI to rent two gigawatts of Amazon's AI accelerators, while Nvidia's $30 billion investment is tied to deploying five gigawatts of training capacity at an estimated $300 billion cost.\n\nThese structured investments function more like discounts or rebates than traditional funding, raising questions about whether OpenAI can actually spend the projected $50 billion or if the figure represents continued efforts to project momentum in the competitive AI market.",
@@ -850,7 +850,7 @@
       },
       "composite_score": 0.7319,
       "rationale": "This is clearly about Anthropic’s AI infrastructure and Claude service capacity, making it strongly AI-focused and moderately important industry news, but it is less directly relevant to the law-school audience than AI policy, legal, or higher-ed developments.",
-      "section": "industry",
+      "section": "enterprise_ai",
       "tier": "body"
     },
     "summary": "Anthropic announced a partnership with SpaceX to dramatically expand Claude's processing capacity, addressing ongoing service constraints that have frustrated developers. The AI company will utilize SpaceX's entire Colossus 1 datacenter, which features over 220,000 Nvidia GPUs including H100, H200, and GB200 accelerators. This arrangement adds more than 300 megawatts of new capacity within the month.\n\nThe expanded infrastructure allows Anthropic to double Claude Code's five-hour rate limits across Pro, Max, Team, and enterprise plans while considerably raising API limits for Claude Opus. The company is also eliminating peak hours limit reductions for Pro and Max accounts. Chief Product Officer Ami Vora cited explosive growth driving the capacity needs, with API volume increasing nearly 17-fold year-over-year and developers now spending an average of 20 hours weekly using Claude Code.\n\nAnthropic has expressed interest in taking the partnership further, exploring \"multiple gigawatts of orbital AI compute capacity\" with SpaceX. The company has also secured similar compute arrangements with Amazon and Google/Broadcom as it works to meet surging demand that has strained its services in recent months.",
@@ -886,7 +886,7 @@
       },
       "composite_score": 0.7054,
       "rationale": "This is clearly an AI-focused product/update announcement about improving Gemma 4 inference, but it is a technical performance optimization with limited direct law/policy/higher-ed relevance and only modest broader buzz.",
-      "section": "tools_and_products",
+      "section": "ai_products",
       "tier": "body"
     },
     "summary": "Google has released Multi-Token Prediction (MTP) drafters for its Gemma 4 open-source AI model family, delivering up to 3x faster inference speeds without compromising output quality. The technology uses speculative decoding, where a lightweight drafter model predicts multiple tokens simultaneously while a larger target model verifies them in parallel, addressing the memory-bandwidth bottleneck that typically limits standard language model inference.\n\nThe MTP drafters are designed to benefit developers across deployment scenarios, from real-time chat applications and coding assistants to on-device mobile apps. Google reports that the technique allows complex models like the 26B mixture-of-experts and 31B dense versions to run more efficiently on consumer hardware, while edge models like E2B and E4B can preserve battery life through faster generation.\n\nThe drafters are available under the Apache 2.0 license and can be accessed through Hugging Face, Kaggle, and various inference frameworks including transformers, MLX, VLLM, and Ollama. Google has also published technical documentation detailing the architectural enhancements, including KV cache sharing and efficient clustering techniques that enable the performance gains.",
@@ -956,7 +956,7 @@
       },
       "composite_score": 0.6932999999999999,
       "rationale": "This is clearly about AI infrastructure for OpenAI’s real-time voice product, but it is a technical product-engineering post with limited direct law or higher-education relevance and modest broader-news impact.",
-      "section": "tools_and_products",
+      "section": "ai_products",
       "tier": "honorable_mention"
     },
     "summary": "How OpenAI rebuilt its WebRTC stack to power real-time Voice AI with low latency, global scale, and seamless conversational turn-taking.",
@@ -1026,7 +1026,7 @@
       },
       "composite_score": 0.6674,
       "rationale": "This is primarily about a new AWS product capability for AI agents operating virtual desktops, which is genuinely new and relevant to enterprise AI tooling, but it is more of a niche product preview than a major legal, policy, higher-ed, or industry-shifting development.",
-      "section": "tools_and_products",
+      "section": "ai_products",
       "tier": "honorable_mention"
     },
     "summary": "Amazon Web Services has launched a preview service that allows AI agents to operate virtual desktop environments through its WorkSpaces platform. Agents receive unique identities via Amazon's Identity and Access Management service and access WorkSpaces through pre-signed URLs, where they can control applications using computer vision, screenshots, mouse control, and text input. AWS recommends giving each agent a distinct identity to track activities and distinguish them from human users.\n\nThe service targets organizations seeking automated software operations in isolated cloud environments rather than on local networks. WorkSpaces instances range from basic configurations with single virtual CPUs and 2GB RAM to high-end setups featuring GPUs, 32 vCPUs, and 256GB RAM. Microsoft offers a similar agent-focused version of its Windows 365 service.\n\nHowever, cost concerns may limit adoption. Research from AI company Reflex suggests that vision-based agents require substantial computational resources—their study found that a browser agent needed 500,000 tokens just to click a dropdown menu, making agent-driven tasks potentially 45 times more expensive than API-based alternatives. While improved AI models may reduce costs over time, Reflex argues that agents will inherently require more steps than direct API calls to complete tasks.",
@@ -1062,7 +1062,7 @@
       },
       "composite_score": 0.628,
       "rationale": "This is clearly an AI product rollout centered on Gemini in cars, but it is a consumer feature update with limited legal, policy, higher-ed, or security relevance and only modest broader AI significance.",
-      "section": "tools_and_products",
+      "section": "ai_products",
       "tier": "honorable_mention"
     },
     "summary": "Google announced that Gemini, its AI assistant, is rolling out to cars with Google built-in as an upgrade from Google Assistant. The rollout begins with English in the United States and will continue over the coming months, reaching both new vehicles and existing ones through software updates.\n\nGemini enables natural conversation for various driving tasks. Drivers can ask for restaurant recommendations with specific criteria, get real-time traffic updates about events near stadiums, have text messages summarized and respond with estimated arrival times, and request specific music without knowing station details. The Gemini Live feature allows for conversational learning about destinations and activity brainstorming during drives.\n\nThe system integrates directly with vehicle systems, drawing from manufacturer-provided owner's manuals to answer car-specific questions about features like trunk programming and car wash preparation. For electric vehicles, Gemini provides battery status information and nearby charging station locations. Future updates will expand language support and integrate with Gmail, Calendar, and Google Home apps.",

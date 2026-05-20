@@ -38,7 +38,7 @@ class TestRunScoredStoryViewer(unittest.TestCase):
                     "buzz_momentum": 0.95,
                 },
                 "composite_score": 0.91,
-                "section": "industry",
+                "section": "enterprise_ai",
                 "tier": "headline",
             },
         ]
@@ -66,7 +66,7 @@ class TestRunScoredStoryViewer(unittest.TestCase):
                         "buzz_momentum": 0.95,
                     },
                     "composite_score": 0.91,
-                    "section": "industry",
+                    "section": "enterprise_ai",
                 },
                 {
                     "rank": 2,
@@ -135,7 +135,7 @@ class TestRunScoredStoryViewer(unittest.TestCase):
                     "buzz_momentum": 0.9,
                 },
                 "composite_score": 0.8,
-                "section": "industry",
+                "section": "enterprise_ai",
             }
         ]
 

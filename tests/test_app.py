@@ -53,7 +53,7 @@ class TestAppArticleRecords(unittest.TestCase):
                     "coverage_count": 1,
                 },
                 "composite_score": 0.92,
-                "section": "industry",
+                "section": "enterprise_ai",
                 "scores": {"impact": 0.92},
                 "rationale": "Example rationale.",
             }

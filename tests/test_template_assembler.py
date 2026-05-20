@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -59,7 +60,7 @@ class TestTemplateAssembler(unittest.TestCase):
             "title": title,
             "source_name": "Headline Source",
             "url": url,
-            "section": "industry",
+            "section": "enterprise_ai",
             "composite_score": 0.99,
             "blurb": "A short headline blurb.",
             "image_path": image_path,
@@ -79,8 +80,8 @@ class TestTemplateAssembler(unittest.TestCase):
             self._write_json(
                 stories_path,
                 [
-                    self._story_payload("industry_headline", "industry", 0.91, "Industry lead"),
-                    self._story_payload("industry_body", "industry", 0.89, "Industry body"),
+                    self._story_payload("industry_headline", "enterprise_ai", 0.91, "Industry lead"),
+                    self._story_payload("industry_body", "enterprise_ai", 0.89, "Industry body"),
                     self._story_payload("security_high", "security", 0.95, "Security high"),
                     self._story_payload("security_low", "security", 0.82, "Security low"),
                     self._story_payload("policy_headline", "policy", 0.88, "Policy lead"),
@@ -118,14 +119,14 @@ class TestTemplateAssembler(unittest.TestCase):
                 exclude_urls=[item["url"] for item in assembler.headlines],
             )
 
-            self.assertEqual(list(grouped.keys()), ["industry", "security"])
+            self.assertEqual(list(grouped.keys()), ["enterprise_ai", "security"])
             self.assertEqual(
                 [story["title"] for story in grouped["security"]],
                 ["Story security_high", "Story security_low"],
             )
             self.assertEqual(
                 assembler.get_active_sections(grouped),
-                [("industry", "Industry"), ("security", "Security")],
+                [("enterprise_ai", "Enterprise AI"), ("security", "Security")],
             )
 
     def test_run_renders_expected_html_with_active_sections_and_paragraphs(self) -> None:
@@ -151,7 +152,7 @@ class TestTemplateAssembler(unittest.TestCase):
                 [
                     self._story_payload(
                         "industry_headline",
-                        "industry",
+                        "enterprise_ai",
                         0.98,
                         "Headline story summary",
                         title="Industry headline story",
@@ -180,7 +181,7 @@ class TestTemplateAssembler(unittest.TestCase):
                     ),
                     self._story_payload(
                         "tools_headline",
-                        "tools_and_products",
+                        "ai_products",
                         0.85,
                         "Tools headline summary",
                         title="Tools headline story",
@@ -194,7 +195,7 @@ class TestTemplateAssembler(unittest.TestCase):
                         "title": "Industry headline",
                         "source_name": "Headline Source",
                         "url": "https://example.com/industry_headline",
-                        "section": "industry",
+                        "section": "enterprise_ai",
                         "composite_score": 0.98,
                         "blurb": "Industry blurb",
                         "image_path": "assets/generated/headline_1.png",
@@ -212,7 +213,7 @@ class TestTemplateAssembler(unittest.TestCase):
                         "title": "Tools headline",
                         "source_name": "Headline Source",
                         "url": "https://example.com/tools_headline",
-                        "section": "tools_and_products",
+                        "section": "ai_products",
                         "composite_score": 0.85,
                         "blurb": "Tools blurb",
                         "image_path": "assets/generated/headline_3.png",
@@ -238,6 +239,16 @@ class TestTemplateAssembler(unittest.TestCase):
             self.assertIn("id=\"security\"", html)
             self.assertIn(">Rewritten security story<", html)
             self.assertNotIn(">Security story<", html)
+            self.assertRegex(
+                html,
+                re.compile(
+                    r'<h3 class="article-title">\s*<a href="https://example.com/security_story" target="_blank" rel="noreferrer">Rewritten security story</a>\s*</h3>'
+                ),
+            )
+            self.assertIn(
+                'Read the article:\n              <a href="https://example.com/security_story" target="_blank" rel="noreferrer">Example Source</a>',
+                html,
+            )
             self.assertIn("<p>Paragraph one.</p>", html)
             self.assertIn("<p>Paragraph two.</p>", html)
             self.assertIn(">Headline Source<", html)
@@ -369,14 +380,14 @@ class TestTemplateAssembler(unittest.TestCase):
                 [
                     self._story_payload(
                         "ethics_story",
-                        "ethics_and_bias",
+                        "responsible_ai",
                         0.93,
                         "Ethics summary.",
                         title="Ethics story",
                     ),
                     self._story_payload(
                         "environment_story",
-                        "impact_on_environment",
+                        "ai_sustainability",
                         0.92,
                         "Environment summary.",
                         title="Environment story",
@@ -395,16 +406,16 @@ class TestTemplateAssembler(unittest.TestCase):
             self.assertEqual(
                 assembler.get_active_sections(grouped),
                 [
-                    ("ethics_and_bias", "Ethics & Bias"),
-                    ("impact_on_environment", "Impact on Environment"),
+                    ("responsible_ai", "Responsible AI"),
+                    ("ai_sustainability", "AI Sustainability"),
                 ],
             )
 
             html = assembler.run(publish_date="2026-05-01", output_path=str(output_path))
 
-            self.assertIn("href=\"#ethics_and_bias\"", html)
-            self.assertIn("href=\"#impact_on_environment\"", html)
-            self.assertIn("id=\"ethics_and_bias\"", html)
-            self.assertIn("id=\"impact_on_environment\"", html)
-            self.assertIn(">Ethics &amp; Bias<", html)
-            self.assertIn(">Impact on Environment<", html)
+            self.assertIn("href=\"#responsible_ai\"", html)
+            self.assertIn("href=\"#ai_sustainability\"", html)
+            self.assertIn("id=\"responsible_ai\"", html)
+            self.assertIn("id=\"ai_sustainability\"", html)
+            self.assertIn(">Responsible AI<", html)
+            self.assertIn(">AI Sustainability<", html)

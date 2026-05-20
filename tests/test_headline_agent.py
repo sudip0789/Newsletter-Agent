@@ -77,9 +77,9 @@ class TestHeadlineAgent(unittest.TestCase):
     def test_run_uses_gpt54_selection_order_and_prompt(self) -> None:
         input_path = self._write_input(
             [
-                self._story_payload("launch", "tools_and_products", 0.98, "Launch summary"),
+                self._story_payload("launch", "ai_products", 0.98, "Launch summary"),
                 self._story_payload("lawsuit", "legal_intelligence", 0.95, "Lawsuit summary"),
-                self._story_payload("risk", "industry", 0.94, "Risk summary"),
+                self._story_payload("risk", "enterprise_ai", 0.94, "Risk summary"),
                 self._story_payload("research", "research", 0.93, "Research summary"),
             ]
         )
@@ -116,9 +116,9 @@ class TestHeadlineAgent(unittest.TestCase):
     def test_run_falls_back_to_score_ranked_selection_when_llm_output_is_invalid(self) -> None:
         input_path = self._write_input(
             [
-                self._story_payload("launch", "tools_and_products", 0.98, "Launch summary"),
+                self._story_payload("launch", "ai_products", 0.98, "Launch summary"),
                 self._story_payload("lawsuit", "legal_intelligence", 0.95, "Lawsuit summary"),
-                self._story_payload("risk", "industry", 0.94, "Risk summary"),
+                self._story_payload("risk", "enterprise_ai", 0.94, "Risk summary"),
                 self._story_payload("research", "research", 0.93, "Research summary"),
             ]
         )
@@ -147,11 +147,11 @@ class TestHeadlineAgent(unittest.TestCase):
         )
         input_path = self._write_input(
             [
-                self._story_payload("industry", "industry", 0.97, "Industry summary"),
+                self._story_payload("enterprise_ai", "enterprise_ai", 0.97, "Industry summary"),
                 self._story_payload("legal", "legal_intelligence", 0.96, "Legal summary"),
                 self._story_payload(
                     "tools",
-                    "tools_and_products",
+                    "ai_products",
                     0.95,
                     "Tools summary",
                     title=long_title,
@@ -184,8 +184,8 @@ class TestHeadlineAgent(unittest.TestCase):
     def test_run_fails_when_fewer_than_three_eligible_stories_exist(self) -> None:
         input_path = self._write_input(
             [
-                self._story_payload("industry", "industry", 0.91, "Industry summary"),
-                self._story_payload("tools", "tools_and_products", 0.90, "Tools summary"),
+                self._story_payload("enterprise_ai", "enterprise_ai", 0.91, "Industry summary"),
+                self._story_payload("tools", "ai_products", 0.90, "Tools summary"),
                 self._story_payload(
                     "creative",
                     "creative_ai",
@@ -201,7 +201,7 @@ class TestHeadlineAgent(unittest.TestCase):
             agent.run()
 
     def test_init_accepts_summarized_stories_without_article_text(self) -> None:
-        payload = self._story_payload("industry", "industry", 0.91, "Industry summary")
+        payload = self._story_payload("enterprise_ai", "enterprise_ai", 0.91, "Industry summary")
         del payload["scored_story"]["cluster"]["primary_article"]["text"]
         input_path = self._write_input([payload])
 
@@ -325,7 +325,7 @@ class TestHeadlineAgent(unittest.TestCase):
                 "title": "Story 1",
                 "source_name": "Example Source",
                 "url": "https://example.com/1",
-                "section": "industry",
+                "section": "enterprise_ai",
                 "composite_score": 0.91,
                 "summary": "Hidden summary",
                 "blurb": "Visible blurb",
@@ -343,7 +343,7 @@ class TestHeadlineAgent(unittest.TestCase):
                     "title": "Story 1",
                     "source_name": "Example Source",
                     "url": "https://example.com/1",
-                    "section": "industry",
+                    "section": "enterprise_ai",
                     "composite_score": 0.91,
                     "blurb": "Visible blurb",
                     "image_path": None,

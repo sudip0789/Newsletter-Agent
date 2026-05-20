@@ -372,6 +372,15 @@
       line-height: 1.22;
     }
 
+    .article-title a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .article-title a:hover {
+      text-decoration: underline;
+    }
+
     .article-source {
       margin: 0 0 14px;
       color: var(--muted);
@@ -391,6 +400,55 @@
       text-transform: uppercase;
       color: var(--brand-red);
       font-weight: 700;
+    }
+
+    .media-section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 20px;
+      color: var(--brand-red);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.55rem;
+    }
+
+    .media-section-title svg {
+      flex-shrink: 0;
+      color: var(--brand-red);
+    }
+
+    .media-embeds {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .media-embed-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .media-embed-label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .media-embed-label svg {
+      flex-shrink: 0;
+    }
+
+    .media-embeds iframe {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      background: var(--soft);
     }
 
     .article-source a {
@@ -543,9 +601,9 @@
             <span>Legal Intelligence</span>
           </a>
           
-          <a class="sidebar-link" href="#tools_and_products">
-            <img src="../../assets/logos/tools.png" alt="">
-            <span>Tools &amp; Products</span>
+          <a class="sidebar-link" href="#ai_products">
+            <img src="../../assets/logos/ai_products.png" alt="">
+            <span>AI Products</span>
           </a>
           
           <a class="sidebar-link" href="#security">
@@ -558,14 +616,14 @@
             <span>Policy</span>
           </a>
           
-          <a class="sidebar-link" href="#ethics_and_bias">
+          <a class="sidebar-link" href="#responsible_ai">
             <img src="../../assets/logos/newsletter_logo.png" alt="">
-            <span>Ethics &amp; Bias</span>
+            <span>Responsible AI</span>
           </a>
           
-          <a class="sidebar-link" href="#impact_on_environment">
+          <a class="sidebar-link" href="#ai_sustainability">
             <img src="../../assets/logos/newsletter_logo.png" alt="">
-            <span>Impact on Environment</span>
+            <span>AI Sustainability</span>
           </a>
           
           <a class="sidebar-link" href="#creative_ai">
@@ -621,21 +679,23 @@
           </div>
         </section>
 
+        
+
         <section class="module">
           <h2 class="module-title">In This Issue</h2>
           <ul class="toc-list">
             
             <li><a href="#legal_intelligence">Legal Intelligence</a></li>
             
-            <li><a href="#tools_and_products">Tools &amp; Products</a></li>
+            <li><a href="#ai_products">AI Products</a></li>
             
             <li><a href="#security">Security</a></li>
             
             <li><a href="#policy">Policy</a></li>
             
-            <li><a href="#ethics_and_bias">Ethics &amp; Bias</a></li>
+            <li><a href="#responsible_ai">Responsible AI</a></li>
             
-            <li><a href="#impact_on_environment">Impact on Environment</a></li>
+            <li><a href="#ai_sustainability">AI Sustainability</a></li>
             
             <li><a href="#creative_ai">Creative AI</a></li>
             
@@ -651,7 +711,11 @@
           <h2 class="section-heading">Legal Intelligence</h2>
           
           <article class="article">
-            <h3 class="article-title">Big Law Bets on Anthropic AI Even as Hallucinations Hit Court Filings</h3>
+            <h3 class="article-title">
+              
+              <a href="https://fortune.com/2026/05/12/anthropic-legal-plug-in-release-claude-cowork-big-law/" target="_blank" rel="noreferrer">Big Law Bets on Anthropic AI Even as Hallucinations Hit Court Filings</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://fortune.com/2026/05/12/anthropic-legal-plug-in-release-claude-cowork-big-law/" target="_blank" rel="noreferrer">Fortune</a>
@@ -666,7 +730,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Anthropic Expands Claude&#39;s Legal AI Tools With Major Law Platform Integrations</h3>
+            <h3 class="article-title">
+              
+              <a href="https://economictimes.indiatimes.com/tech/artificial-intelligence/anthropic-expands-claudes-ai-tools-for-law-firms-lawyers/articleshow/131046874.cms" target="_blank" rel="noreferrer">Anthropic Expands Claude&#39;s Legal AI Tools With Major Law Platform Integrations</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://economictimes.indiatimes.com/tech/artificial-intelligence/anthropic-expands-claudes-ai-tools-for-law-firms-lawyers/articleshow/131046874.cms" target="_blank" rel="noreferrer">The Times of India</a>
@@ -681,7 +749,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Family Sues OpenAI Claiming ChatGPT Advised Teen Before Fatal Overdose</h3>
+            <h3 class="article-title">
+              
+              <a href="https://decrypt.co/367601/openai-faces-lawsuit-chatgpt-encouraged-teens-fatal-overdose" target="_blank" rel="noreferrer">Family Sues OpenAI Claiming ChatGPT Advised Teen Before Fatal Overdose</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://decrypt.co/367601/openai-faces-lawsuit-chatgpt-encouraged-teens-fatal-overdose" target="_blank" rel="noreferrer">Decrypt</a>
@@ -696,7 +768,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Major Publishers Sue Meta Over Alleged Mass Copyright Infringement in AI Training</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.celebitchy.com/976279/top_publishers_are_suing_meta_for_training_ai_with_books_under_copyright/" target="_blank" rel="noreferrer">Major Publishers Sue Meta Over Alleged Mass Copyright Infringement in AI Training</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.celebitchy.com/976279/top_publishers_are_suing_meta_for_training_ai_with_books_under_copyright/" target="_blank" rel="noreferrer">Celebitchy.com</a>
@@ -711,7 +787,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Senate Hearing Puts Copyright Office Independence and AI Policy Under Scrutiny</h3>
+            <h3 class="article-title">
+              
+              <a href="https://ipwatchdog.com/2026/05/13/senators-defend-copyright-office-independence-ai-executive-overreach-dominate-oversight-hearing/" target="_blank" rel="noreferrer">Senate Hearing Puts Copyright Office Independence and AI Policy Under Scrutiny</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://ipwatchdog.com/2026/05/13/senators-defend-copyright-office-independence-ai-executive-overreach-dominate-oversight-hearing/" target="_blank" rel="noreferrer">IPWatchdog.com</a>
@@ -727,11 +807,15 @@
           
         </section>
         
-        <section class="module section-block" id="tools_and_products">
-          <h2 class="section-heading">Tools &amp; Products</h2>
+        <section class="module section-block" id="ai_products">
+          <h2 class="section-heading">AI Products</h2>
           
           <article class="article">
-            <h3 class="article-title">AI Medical Search Tool Used by 65% of U.S. Doctors, Often Without Patient Awareness</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.nbcnews.com/tech/tech-news/openevidence-ai-doctor-medical-physician-login-app-what-npi-uptodate-rcna341064" target="_blank" rel="noreferrer">AI Medical Search Tool Used by 65% of U.S. Doctors, Often Without Patient Awareness</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.nbcnews.com/tech/tech-news/openevidence-ai-doctor-medical-physician-login-app-what-npi-uptodate-rcna341064" target="_blank" rel="noreferrer">NBC News</a>
@@ -746,7 +830,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Voice Dictation Tools Are Reshaping How Workers Interact With Computers</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.theguardian.com/technology/2026/may/12/end-of-typing-workers-ditching-keyboards-voicepilling-ai-dictation" target="_blank" rel="noreferrer">Voice Dictation Tools Are Reshaping How Workers Interact With Computers</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.theguardian.com/technology/2026/may/12/end-of-typing-workers-ditching-keyboards-voicepilling-ai-dictation" target="_blank" rel="noreferrer">The Guardian - Technology</a>
@@ -766,7 +854,11 @@
           <h2 class="section-heading">Security</h2>
           
           <article class="article">
-            <h3 class="article-title">AI Tools Can Design Toxins and Pathogens—But How Real Is the Bioweapon Threat?</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.nature.com/articles/d41586-026-01476-x" target="_blank" rel="noreferrer">AI Tools Can Design Toxins and Pathogens—But How Real Is the Bioweapon Threat?</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.nature.com/articles/d41586-026-01476-x" target="_blank" rel="noreferrer">Nature.com</a>
@@ -781,7 +873,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">House Committee Examines Anthropic&#39;s Mythos AI and Federal Cybersecurity Gaps</h3>
+            <h3 class="article-title">
+              
+              <a href="https://cyberscoop.com/house-homeland-security-briefing-anthropic-mythos-cyber-risks/" target="_blank" rel="noreferrer">House Committee Examines Anthropic&#39;s Mythos AI and Federal Cybersecurity Gaps</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://cyberscoop.com/house-homeland-security-briefing-anthropic-mythos-cyber-risks/" target="_blank" rel="noreferrer">CyberScoop</a>
@@ -796,7 +892,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">OpenAI Launches Daybreak Cybersecurity Platform to Rival Anthropic&#39;s Glasswing</h3>
+            <h3 class="article-title">
+              
+              <a href="https://cyberscoop.com/openai-daybreak-gpt-5-5-anthropic-mythos-cybersecurity/" target="_blank" rel="noreferrer">OpenAI Launches Daybreak Cybersecurity Platform to Rival Anthropic&#39;s Glasswing</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://cyberscoop.com/openai-daybreak-gpt-5-5-anthropic-mythos-cybersecurity/" target="_blank" rel="noreferrer">CyberScoop</a>
@@ -816,7 +916,11 @@
           <h2 class="section-heading">Policy</h2>
           
           <article class="article">
-            <h3 class="article-title">White House Split on Giving Spy Agencies Power Over AI Deployment Reviews</h3>
+            <h3 class="article-title">
+              
+              <a href="https://cryptobriefing.com/trump-admin-divided-ai-spy-agencies/" target="_blank" rel="noreferrer">White House Split on Giving Spy Agencies Power Over AI Deployment Reviews</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://cryptobriefing.com/trump-admin-divided-ai-spy-agencies/" target="_blank" rel="noreferrer">Crypto Briefing</a>
@@ -831,7 +935,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Trump Takes American Tech Executives to China While Borrowing Beijing&#39;s AI Playbook</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.theguardian.com/technology/2026/may/12/trump-china-ai-big-tech-xi-jinping" target="_blank" rel="noreferrer">Trump Takes American Tech Executives to China While Borrowing Beijing&#39;s AI Playbook</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.theguardian.com/technology/2026/may/12/trump-china-ai-big-tech-xi-jinping" target="_blank" rel="noreferrer">The Guardian - Technology</a>
@@ -847,11 +955,15 @@
           
         </section>
         
-        <section class="module section-block" id="ethics_and_bias">
-          <h2 class="section-heading">Ethics &amp; Bias</h2>
+        <section class="module section-block" id="responsible_ai">
+          <h2 class="section-heading">Responsible AI</h2>
           
           <article class="article">
-            <h3 class="article-title">Dystopian Sci-Fi Trained Anthropic&#39;s AI to Behave Badly, Researchers Find</h3>
+            <h3 class="article-title">
+              
+              <a href="https://arstechnica.com/ai/2026/05/anthropic-blames-dystopian-sci-fi-for-training-ai-models-to-act-evil/" target="_blank" rel="noreferrer">Dystopian Sci-Fi Trained Anthropic&#39;s AI to Behave Badly, Researchers Find</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://arstechnica.com/ai/2026/05/anthropic-blames-dystopian-sci-fi-for-training-ai-models-to-act-evil/" target="_blank" rel="noreferrer">Ars Technica</a>
@@ -866,7 +978,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">UK Study: One in Seven Now Consult AI Chatbots Instead of Their Doctor</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.theguardian.com/society/2026/may/13/one-in-seven-prefer-ai-chatbots-to-seeing-doctor-uk-study" target="_blank" rel="noreferrer">UK Study: One in Seven Now Consult AI Chatbots Instead of Their Doctor</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.theguardian.com/society/2026/may/13/one-in-seven-prefer-ai-chatbots-to-seeing-doctor-uk-study" target="_blank" rel="noreferrer">The Guardian - Technology</a>
@@ -881,7 +997,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">When AI Obsession Comes Home: The Toll on Tech Spouses</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.wired.com/story/meet-the-sad-wives-of-ai/" target="_blank" rel="noreferrer">When AI Obsession Comes Home: The Toll on Tech Spouses</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.wired.com/story/meet-the-sad-wives-of-ai/" target="_blank" rel="noreferrer">WIRED</a>
@@ -897,11 +1017,15 @@
           
         </section>
         
-        <section class="module section-block" id="impact_on_environment">
-          <h2 class="section-heading">Impact on Environment</h2>
+        <section class="module section-block" id="ai_sustainability">
+          <h2 class="section-heading">AI Sustainability</h2>
           
           <article class="article">
-            <h3 class="article-title">Making AI Sustainable: What Companies and Researchers Must Do Now</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.wired.com/story/what-it-will-take-to-make-ai-sustainable/" target="_blank" rel="noreferrer">Making AI Sustainable: What Companies and Researchers Must Do Now</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.wired.com/story/what-it-will-take-to-make-ai-sustainable/" target="_blank" rel="noreferrer">WIRED</a>
@@ -916,7 +1040,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Utah Approves Massive AI Datacenter Twice Manhattan&#39;s Size, Sparking Backlash</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.theguardian.com/us-news/2026/may/13/utah-approves-datacenter-backlash" target="_blank" rel="noreferrer">Utah Approves Massive AI Datacenter Twice Manhattan&#39;s Size, Sparking Backlash</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.theguardian.com/us-news/2026/may/13/utah-approves-datacenter-backlash" target="_blank" rel="noreferrer">The Guardian - Technology</a>
@@ -931,7 +1059,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Datacenters Now Consume 6% of Electricity in the UK and US</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.theguardian.com/technology/2026/may/13/datacentres-electricity-consumption-uk-us-ai" target="_blank" rel="noreferrer">Datacenters Now Consume 6% of Electricity in the UK and US</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.theguardian.com/technology/2026/may/13/datacentres-electricity-consumption-uk-us-ai" target="_blank" rel="noreferrer">The Guardian - Technology</a>
@@ -946,7 +1078,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Gallup Poll: Americans Prefer Nuclear Plants Over AI Datacenters as Neighbors</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.theregister.com/on-prem/2026/05/14/americans-would-rather-have-a-nuclear-plant-in-their-backyard-than-a-datacenter/5240203" target="_blank" rel="noreferrer">Gallup Poll: Americans Prefer Nuclear Plants Over AI Datacenters as Neighbors</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.theregister.com/on-prem/2026/05/14/americans-would-rather-have-a-nuclear-plant-in-their-backyard-than-a-datacenter/5240203" target="_blank" rel="noreferrer">The Register</a>
@@ -966,7 +1102,11 @@
           <h2 class="section-heading">Creative AI</h2>
           
           <article class="article">
-            <h3 class="article-title">Stockholm AI Studio&#39;s Viral Sci-Fi Shorts Attract Hollywood as Film Industry Shifts</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.theguardian.com/technology/2026/may/14/gossip-goblin-ai-film-making-new-era-hollywood" target="_blank" rel="noreferrer">Stockholm AI Studio&#39;s Viral Sci-Fi Shorts Attract Hollywood as Film Industry Shifts</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.theguardian.com/technology/2026/may/14/gossip-goblin-ai-film-making-new-era-hollywood" target="_blank" rel="noreferrer">The Guardian - Technology</a>
@@ -981,7 +1121,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">AI Hype Promised a Wristwatch; Chinese Manufacturers Will Actually Make It</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.wired.com/story/ai-ruined-the-audemars-piguet-x-swatch-collaboration-china-could-save-it/" target="_blank" rel="noreferrer">AI Hype Promised a Wristwatch; Chinese Manufacturers Will Actually Make It</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.wired.com/story/ai-ruined-the-audemars-piguet-x-swatch-collaboration-china-could-save-it/" target="_blank" rel="noreferrer">WIRED</a>
@@ -1001,7 +1145,11 @@
           <h2 class="section-heading">Higher Education</h2>
           
           <article class="article">
-            <h3 class="article-title">Princeton&#39;s Honor Code Struggles as AI Drives 30% Senior Cheating Rate</h3>
+            <h3 class="article-title">
+              
+              <a href="https://arstechnica.com/tech-policy/2026/05/ai-driven-cheating-widespread-even-at-elite-schools-like-princeton/" target="_blank" rel="noreferrer">Princeton&#39;s Honor Code Struggles as AI Drives 30% Senior Cheating Rate</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://arstechnica.com/tech-policy/2026/05/ai-driven-cheating-widespread-even-at-elite-schools-like-princeton/" target="_blank" rel="noreferrer">Ars Technica</a>
@@ -1021,7 +1169,11 @@
           <h2 class="section-heading">Research</h2>
           
           <article class="article">
-            <h3 class="article-title">AI Agents Adopt Marxist Rhetoric When Given Harsh Working Conditions</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.wired.com/story/overworked-ai-agents-turn-marxist-study/" target="_blank" rel="noreferrer">AI Agents Adopt Marxist Rhetoric When Given Harsh Working Conditions</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.wired.com/story/overworked-ai-agents-turn-marxist-study/" target="_blank" rel="noreferrer">WIRED</a>
