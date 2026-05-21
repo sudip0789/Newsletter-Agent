@@ -1,0 +1,29 @@
+[
+  {
+    "title": "Google I/O 2026: 100 AI Announcements Spanning Search, Models, and Agents",
+    "source_name": "Google - The Keyword",
+    "url": "https://blog.google/innovation-and-ai/technology/ai/google-io-2026-all-our-announcements/",
+    "section": "ai_products",
+    "composite_score": 0.8073999999999999,
+    "blurb": "Every corner of Google's product lineup just got an AI layer. Here's what actually changes for you.",
+    "image_path": "assets/generated/headline_1.png"
+  },
+  {
+    "title": "OpenAI's AI Model Independently Solves 80-Year-Old Erdős Math Conjecture",
+    "source_name": "TechCrunch",
+    "url": "https://techcrunch.com/2026/05/20/openai-claims-it-solved-an-80-year-old-math-problem-for-real-this-time/",
+    "section": "research",
+    "composite_score": 0.8385999999999999,
+    "blurb": "A geometry puzzle unsolved since 1946 finally has an answer — and a machine found it without being asked.",
+    "image_path": "assets/generated/headline_2.png"
+  },
+  {
+    "title": "Trump Executive Order Would Give Government Early Access to Frontier AI Models",
+    "source_name": "Axios",
+    "url": "https://www.axios.com/2026/05/20/ai-trump-executive-order-white-house-infighting",
+    "section": "policy",
+    "composite_score": 0.8286999999999999,
+    "blurb": "AI developers may soon hand over frontier models to the government months before you see them.",
+    "image_path": "assets/generated/headline_3.png"
+  }
+]

@@ -25,16 +25,16 @@ class TemplateAssembler:
         ("research", "Research"),
     ]
     SECTION_ICON_FILENAMES = {
-        "enterprise_ai": "enterprise_ai.png",
-        "legal_intelligence": "legal_intelligence.png",
-        "ai_products": "ai_products.png",
-        "security": "security.png",
-        "policy": "policy.png",
-        "responsible_ai": "responsible_ai.png",
-        "ai_sustainability": "ai_sustainability.png",
-        "creative_ai": "creative_ai.png",
-        "higher_education": "higher_education.png",
-        "research": "research.png",
+        "enterprise_ai": "enterprise_ai.svg",
+        "legal_intelligence": "legal_intelligence.svg",
+        "ai_products": "ai_products.svg",
+        "security": "security.svg",
+        "policy": "policy.svg",
+        "responsible_ai": "responsible_ai.svg",
+        "ai_sustainability": "ai_sustainability.svg",
+        "creative_ai": "creative_ai.svg",
+        "higher_education": "higher_education.svg",
+        "research": "research.svg",
     }
 
     def __init__(

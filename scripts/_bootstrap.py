@@ -12,4 +12,11 @@ def configure_script_environment() -> Path:
     if project_root_str not in sys.path:
         sys.path.insert(0, project_root_str)
     os.chdir(project_root)
+
+    try:
+        from dotenv import load_dotenv
+        load_dotenv(project_root / ".env")
+    except ImportError:
+        pass
+
     return project_root

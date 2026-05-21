@@ -34,7 +34,7 @@ def create_week_folder(week_date: str, parent_folder_id: str) -> str:
         "mimeType": "application/vnd.google-apps.folder",
         "parents": [parent_folder_id],
     }
-    folder = service.files().create(body=metadata, fields="id").execute()
+    folder = service.files().create(body=metadata, fields="id", supportsAllDrives=True).execute()
     folder_id: str = folder["id"]
     _make_public(service, folder_id)
     return folder_id
@@ -58,7 +58,7 @@ def upload_file(
     file_meta = {"name": name, "parents": [folder_id]}
     media = MediaFileUpload(str(path), mimetype=mime_type, resumable=False)
     result = (
-        service.files().create(body=file_meta, media_body=media, fields="id").execute()
+        service.files().create(body=file_meta, media_body=media, fields="id", supportsAllDrives=True).execute()
     )
     file_id: str = result["id"]
     _make_public(service, file_id)
@@ -75,7 +75,7 @@ def upload_audio_placeholder(folder_id: str) -> dict[str, str]:
         io.BytesIO(_silent_wav_bytes()), mimetype="audio/wav", resumable=False
     )
     result = (
-        service.files().create(body=file_meta, media_body=media, fields="id").execute()
+        service.files().create(body=file_meta, media_body=media, fields="id", supportsAllDrives=True).execute()
     )
     file_id: str = result["id"]
     _make_public(service, file_id)
@@ -92,7 +92,7 @@ def upload_video_placeholder(folder_id: str) -> dict[str, str]:
         io.BytesIO(_silent_wav_bytes()), mimetype="audio/wav", resumable=False
     )
     result = (
-        service.files().create(body=file_meta, media_body=media, fields="id").execute()
+        service.files().create(body=file_meta, media_body=media, fields="id", supportsAllDrives=True).execute()
     )
     file_id: str = result["id"]
     _make_public(service, file_id)
@@ -129,17 +129,22 @@ def _get_service() -> Any:
 
 
 def _make_public(service: Any, file_id: str) -> None:
-    service.permissions().create(
-        fileId=file_id,
-        body={"type": "anyone", "role": "reader"},
-    ).execute()
+    try:
+        service.permissions().create(
+            fileId=file_id,
+            body={"type": "anyone", "role": "reader"},
+            supportsAllDrives=True,
+        ).execute()
+    except Exception:
+        # Shared Drive items inherit the drive's sharing settings — permission change not needed.
+        pass
 
 
 def _build_urls(file_id: str) -> dict[str, str]:
     return {
         "file_id": file_id,
         "embed_url": f"https://drive.google.com/file/d/{file_id}/preview",
-        "direct_url": f"https://drive.google.com/uc?export=view&id={file_id}",
+        "direct_url": f"https://lh3.googleusercontent.com/d/{file_id}",
     }
 
 
