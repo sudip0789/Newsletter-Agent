@@ -41,99 +41,158 @@
 
     .header {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex-direction: column;
       gap: 24px;
-      padding: 38px 0 30px;
-      border-bottom: 4px solid var(--brand-red);
+      padding: 28px 0 30px;
+      border-bottom: none;
+    }
+
+    .header-masthead {
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+      column-gap: 92px;
+      row-gap: 12px;
     }
 
     .header-brand {
-      display: flex;
-      align-items: flex-start;
-      gap: 22px;
       min-width: 0;
-    }
-
-    .header-logo {
-      width: 146px;
-      height: 146px;
-      border-radius: 30px;
-      object-fit: cover;
-      background: #ffffff;
-      border: 1px solid rgba(139, 0, 0, 0.12);
-      padding: 16px;
-      box-shadow: var(--shadow);
     }
 
     .header-copy {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 0;
+      padding-top: 6px;
     }
 
     .header-lockup {
       display: flex;
-      flex-direction: column;
-      gap: 2px;
+      flex-wrap: wrap;
+      align-items: center;
+      column-gap: 18px;
+      row-gap: 6px;
+      min-width: 0;
     }
 
     .header-lockup-line {
       margin: 0;
-      font-family: Georgia, "Times New Roman", serif;
-      line-height: 1.02;
-    }
-
-    .header-lockup-top {
-      font-size: clamp(1.55rem, 2.4vw, 2.6rem);
-    }
-
-    .header-lockup-top .stanford {
-      color: #b22222;
-    }
-
-    .header-lockup-top .law-school {
-      color: #8e8e8e;
-    }
-
-    .header-lockup-bottom {
-      color: #111111;
-      font-size: clamp(1.35rem, 2.1vw, 2.35rem);
-    }
-
-    .header-copy h1 {
-      margin: 0;
-      color: var(--brand-red);
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(1.8rem, 2.8vw, 2.9rem);
-      line-height: 1.08;
-    }
-
-    .header-copy p {
-      margin: 0;
-      color: var(--muted);
+      font-family: "Helvetica Neue", Arial, sans-serif;
       font-size: 0.82rem;
-      letter-spacing: 0.04em;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      line-height: 1.1;
       text-transform: uppercase;
     }
 
-    .header-date {
-      flex-shrink: 0;
-      padding: 14px 18px;
-      background: var(--paper);
-      border: 1px solid rgba(139, 0, 0, 0.18);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
+    .header-lockup-top {
+      color: var(--brand-red);
+    }
+
+    .header-lockup-bottom {
+      color: #9b9793;
+    }
+
+    .header-lockup-bottom::before {
+      content: "·";
+      margin-right: 18px;
+      color: #b9b1ab;
+    }
+
+    .header-copy h1 {
+      margin: 10px 0 24px;
       color: var(--brand-red);
       font-family: Georgia, "Times New Roman", serif;
-      font-size: 1.05rem;
+      font-size: clamp(2.35rem, 4.8vw, 4rem);
+      font-weight: 550;
+      line-height: 0.98;
+      letter-spacing: -0.02em;
+      max-width: 1000px;
+    }
+
+    .header-kicker {
+      margin: 0;
+      color: #9b9793;
+      font-size: 0.92rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .header-meta {
+      align-self: start;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
       text-align: right;
+    }
+
+    .header-archive-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      color: var(--brand-red);
+      font-size: 0.84rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      line-height: 1.15;
+      text-transform: uppercase;
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 1px dotted rgba(139, 0, 0, 0.55);
+    }
+
+    .header-archive-link:hover {
+      border-bottom-color: var(--brand-red);
+    }
+
+    .header-archive-link svg {
+      flex-shrink: 0;
+    }
+
+    .header-meta-separator {
+      color: #b9b1ab;
+      font-size: 0.84rem;
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    .header-date-value {
+      display: inline-block;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      color: var(--brand-red);
+      font-size: 0.84rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      line-height: 1.15;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .header-rule-soft {
+      width: 100%;
+      height: 1px;
+      background: rgba(139, 0, 0, 0.16);
+    }
+
+    .header-masthead + .header-rule-soft {
+      margin-top: -14px;
+    }
+
+    .header-rule-strong {
+      width: 100%;
+      height: 4px;
+      background: var(--brand-red);
     }
 
     .layout {
       display: grid;
-      grid-template-columns: 228px minmax(0, 1fr);
-      gap: 28px;
+      grid-template-columns: 272px minmax(0, 1fr);
+      gap: 32px;
       margin-top: 28px;
       align-items: start;
     }
@@ -167,80 +226,110 @@
     .sidebar {
       position: sticky;
       top: 20px;
-      height: calc(100vh - 40px);
-      min-height: 720px;
-      overflow: hidden;
-      padding: 22px 18px 20px;
-      background:
-        radial-gradient(circle at top, rgba(255, 255, 255, 0.12), transparent 46%),
-        linear-gradient(180deg, #3a3a3a 0%, #242424 100%);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 24px;
-      color: #ffffff;
+      align-self: start;
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 0;
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      color: var(--ink);
       box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
     }
 
-    .sidebar-logo {
-      width: 100%;
-      max-width: 126px;
-      display: block;
-      margin: 0 auto 20px;
-      border-radius: 20px;
-      background: #ffffff;
-      padding: 10px;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+    .sidebar-header {
+      flex-shrink: 0;
+      padding: 22px 16px 20px;
+      background: var(--brand-red);
+      border-radius: 19px 19px 0 0;
+      text-align: center;
     }
 
     .sidebar-label {
-      margin: 0 0 16px;
-      color: rgba(255, 255, 255, 0.74);
-      font-size: 0.78rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
+      margin: 0;
+      color: #ffffff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.08rem;
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: 0.02em;
     }
 
     .sidebar-nav {
+      flex: 1 1 auto;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      flex: 1;
+      min-height: 0;
+      padding: 10px 0;
+      background: var(--soft);
+      border-radius: 0 0 19px 19px;
     }
 
     .sidebar-link {
+      flex: 0 0 auto;
       display: flex;
       align-items: center;
-      gap: 12px;
-      flex: 1 1 0;
-      min-height: 0;
-      padding: 13px 13px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 16px;
-      color: #ffffff;
+      gap: 14px;
+      min-height: 80px;
+      padding: 16px 18px;
+      border-top: 1px solid rgba(139, 0, 0, 0.1);
+      color: var(--ink);
       text-decoration: none;
-      background: rgba(255, 255, 255, 0.05);
-      transition: background 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
+      background: transparent;
+      transition: background 0.18s ease, color 0.18s ease;
+    }
+
+    .sidebar-link:first-child {
+      border-top: none;
     }
 
     .sidebar-link:hover {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: rgba(255, 255, 255, 0.16);
-      transform: translateX(2px);
+      background: rgba(255, 255, 255, 0.54);
+      color: var(--brand-red);
+      transform: none;
     }
 
-    .sidebar-link img {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      background: #ffffff;
-      object-fit: cover;
-      padding: 5px;
+    .sidebar-icon {
+      width: 42px;
+      height: 42px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.18s ease;
     }
 
-    .sidebar-link span {
+    .sidebar-link:hover .sidebar-icon {
+      transform: translateX(1px) scale(1.05);
+    }
+
+    .sidebar-icon img {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+      display: block;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+
+    .sidebar-link:hover .sidebar-icon img {
+      opacity: 0.98;
+      transform: scale(1.04);
+    }
+
+    .sidebar-link-label {
       font-size: 0.9rem;
-      line-height: 1.25;
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: 0.01em;
+      transition: transform 0.18s ease, color 0.18s ease;
+      transform-origin: left center;
+    }
+
+    .sidebar-link:hover .sidebar-link-label {
+      transform: scale(1.05);
     }
 
     .main {
@@ -264,6 +353,14 @@
       color: var(--brand-red);
       font-family: Georgia, "Times New Roman", serif;
       font-size: 1.55rem;
+    }
+
+    .headlines-module .module-title {
+      margin: 0 0 28px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid rgba(139, 0, 0, 0.12);
+      font-size: 2.35rem;
+      line-height: 1.15;
     }
 
     .headline-list {
@@ -295,7 +392,7 @@
       width: 132px;
       height: 132px;
       object-fit: cover;
-      border-radius: 18px;
+      border-radius: 20px;
       background: var(--soft);
       border: 1px solid rgba(139, 0, 0, 0.1);
     }
@@ -338,6 +435,10 @@
       color: var(--brand-red);
     }
 
+    .toc-module {
+      display: none;
+    }
+
     .section-block + .section-block {
       margin-top: 28px;
     }
@@ -372,6 +473,15 @@
       line-height: 1.22;
     }
 
+    .article-title a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .article-title a:hover {
+      text-decoration: underline;
+    }
+
     .article-source {
       margin: 0 0 14px;
       color: var(--muted);
@@ -391,6 +501,55 @@
       text-transform: uppercase;
       color: var(--brand-red);
       font-weight: 700;
+    }
+
+    .media-section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 20px;
+      color: var(--brand-red);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.55rem;
+    }
+
+    .media-section-title svg {
+      flex-shrink: 0;
+      color: var(--brand-red);
+    }
+
+    .media-embeds {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .media-embed-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .media-embed-label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .media-embed-label svg {
+      flex-shrink: 0;
+    }
+
+    .media-embeds iframe {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      background: var(--soft);
     }
 
     .article-source a {
@@ -441,6 +600,10 @@
       .newsletter-disclaimer {
         grid-column: 1;
       }
+
+      .toc-module {
+        display: block;
+      }
     }
 
     @media (max-width: 720px) {
@@ -449,35 +612,71 @@
       }
 
       .header {
+        gap: 18px;
+        padding: 24px 0 26px;
+      }
+
+      .header-masthead + .header-rule-soft {
+        margin-top: -8px;
+      }
+
+      .header-masthead {
+        grid-template-columns: minmax(0, 1fr) auto;
+        column-gap: 28px;
+        row-gap: 10px;
+      }
+
+      .header-lockup {
         flex-direction: column;
         align-items: flex-start;
-      }
-
-      .header-brand {
-        gap: 16px;
-      }
-
-      .header-logo {
-        width: 112px;
-        height: 112px;
-        padding: 13px;
-      }
-
-      .header-copy {
-        gap: 12px;
+        gap: 8px;
       }
 
       .header-lockup-top {
-        font-size: 1.45rem;
+        font-size: 0.76rem;
+        letter-spacing: 0.13em;
       }
 
       .header-lockup-bottom {
-        font-size: 1.2rem;
+        font-size: 0.76rem;
+        letter-spacing: 0.13em;
       }
 
-      .header-date {
-        width: 100%;
+      .header-lockup-bottom::before {
+        content: none;
+      }
+
+      .header-meta {
+        align-self: start;
+        justify-content: flex-start;
         text-align: left;
+      }
+
+      .header-archive-link,
+      .header-meta-separator,
+      .header-date-value {
+        font-size: 0.78rem;
+        line-height: 1.1;
+        text-align: right;
+        white-space: normal;
+      }
+
+      .header-copy {
+        gap: 0;
+        padding-top: 4px;
+      }
+
+      .header-copy h1 {
+        margin: 8px 0 22px;
+        font-size: clamp(2rem, 8.6vw, 3.15rem);
+        font-weight: 550;
+        line-height: 0.99;
+        max-width: none;
+      }
+
+      .header-kicker {
+        font-size: 0.74rem;
+        letter-spacing: 0.14em;
       }
 
       .headline-card {
@@ -505,74 +704,92 @@
 <body>
   <div class="page">
     <header class="header">
-      <div class="header-brand">
-        <img class="header-logo" src="../../assets/logos/newsletter_logo.png" alt="The AI Upload logo">
-        <div class="header-copy">
+      <div class="header-masthead">
+        <div class="header-brand">
           <div class="header-lockup" aria-label="Stanford Law School Robert Crown Law Library">
-            <p class="header-lockup-line header-lockup-top">
-              <span class="stanford">Stanford</span><span class="law-school"> Law School</span>
-            </p>
+            <p class="header-lockup-line header-lockup-top">Stanford Law School</p>
             <p class="header-lockup-line header-lockup-bottom">Robert Crown Law Library</p>
           </div>
-          <h1>The AI Upload Weekly Digest</h1>
-          <p>Curated coverage of AI developments</p>
+        </div>
+        <div class="header-meta" aria-label="Issue navigation and date">
+          
+          <a class="header-archive-link" href="../">
+            Past Issues
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+          </a>
+          <span class="header-meta-separator" aria-hidden="true">|</span>
+          
+          <span class="header-date-value">May 6th, 2026</span>
         </div>
       </div>
-      <div class="header-date">May 6th, 2026</div>
+      <div class="header-rule-soft" aria-hidden="true"></div>
+      <div class="header-copy">
+        <h1>The AI Upload Weekly Digest</h1>
+        <p class="header-kicker">Curated coverage of AI developments</p>
+      </div>
+      <div class="header-rule-strong" aria-hidden="true"></div>
     </header>
 
     
     <nav class="utility-nav" aria-label="Issue navigation">
-      
       <a class="utility-link" href="../../">Latest Issue</a>
-      
-      
-      <a class="utility-link" href="../">Past Issues</a>
-      
     </nav>
     
 
     <div class="layout">
       <aside class="sidebar" aria-label="Section navigation">
-        <img class="sidebar-logo" src="../../assets/logos/news_brief.png" alt="Section logo">
-        <p class="sidebar-label">Sections</p>
+        <div class="sidebar-header">
+          <h2 class="sidebar-label">In This Issue</h2>
+        </div>
         <nav class="sidebar-nav">
           
-          <a class="sidebar-link" href="#industry">
-            <img src="../../assets/logos/industry.png" alt="">
-            <span>Industry</span>
+          <a class="sidebar-link" href="#enterprise_ai">
+            <span class="sidebar-icon">
+              <img src="../../assets/logos/enterprise_ai.svg" alt="">
+            </span>
+            <span class="sidebar-link-label">Enterprise AI</span>
           </a>
           
           <a class="sidebar-link" href="#legal_intelligence">
-            <img src="../../assets/logos/legal_intelligence.png" alt="">
-            <span>Legal Intelligence</span>
+            <span class="sidebar-icon">
+              <img src="../../assets/logos/legal_intelligence.svg" alt="">
+            </span>
+            <span class="sidebar-link-label">Legal Intelligence</span>
           </a>
           
-          <a class="sidebar-link" href="#tools_and_products">
-            <img src="../../assets/logos/tools.png" alt="">
-            <span>Tools &amp; Products</span>
+          <a class="sidebar-link" href="#ai_products">
+            <span class="sidebar-icon">
+              <img src="../../assets/logos/ai_products.svg" alt="">
+            </span>
+            <span class="sidebar-link-label">AI Products</span>
           </a>
           
           <a class="sidebar-link" href="#security">
-            <img src="../../assets/logos/security.png" alt="">
-            <span>Security</span>
+            <span class="sidebar-icon">
+              <img src="../../assets/logos/security.svg" alt="">
+            </span>
+            <span class="sidebar-link-label">Security</span>
           </a>
           
           <a class="sidebar-link" href="#policy">
-            <img src="../../assets/logos/policy.png" alt="">
-            <span>Policy</span>
+            <span class="sidebar-icon">
+              <img src="../../assets/logos/policy.svg" alt="">
+            </span>
+            <span class="sidebar-link-label">Policy</span>
           </a>
           
           <a class="sidebar-link" href="#higher_education">
-            <img src="../../assets/logos/higher_education.png" alt="">
-            <span>Higher Education</span>
+            <span class="sidebar-icon">
+              <img src="../../assets/logos/higher_education.svg" alt="">
+            </span>
+            <span class="sidebar-link-label">Higher Education</span>
           </a>
           
         </nav>
       </aside>
 
       <main class="main">
-        <section class="module">
+        <section class="module headlines-module">
           <h2 class="module-title">This Week&#39;s Headlines</h2>
           <div class="headline-list">
             
@@ -606,15 +823,17 @@
           </div>
         </section>
 
-        <section class="module">
+        
+
+        <section class="module toc-module">
           <h2 class="module-title">In This Issue</h2>
           <ul class="toc-list">
             
-            <li><a href="#industry">Industry</a></li>
+            <li><a href="#enterprise_ai">Enterprise AI</a></li>
             
             <li><a href="#legal_intelligence">Legal Intelligence</a></li>
             
-            <li><a href="#tools_and_products">Tools &amp; Products</a></li>
+            <li><a href="#ai_products">AI Products</a></li>
             
             <li><a href="#security">Security</a></li>
             
@@ -626,11 +845,15 @@
         </section>
 
         
-        <section class="module section-block" id="industry">
-          <h2 class="section-heading">Industry</h2>
+        <section class="module section-block" id="enterprise_ai">
+          <h2 class="section-heading">Enterprise AI</h2>
           
           <article class="article">
-            <h3 class="article-title">​Voice AI firm ElevenLabs tops $500 million ARR; announces additional funding</h3>
+            <h3 class="article-title">
+              
+              <a href="https://economictimes.indiatimes.com/tech/startups/voice-ai-firm-elevenlabs-tops-500-million-arr-announces-additional-funding/articleshow/130833365.cms" target="_blank" rel="noreferrer">​Voice AI firm ElevenLabs tops $500 million ARR; announces additional funding</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://economictimes.indiatimes.com/tech/startups/voice-ai-firm-elevenlabs-tops-500-million-arr-announces-additional-funding/articleshow/130833365.cms" target="_blank" rel="noreferrer">The Times of India</a>
@@ -645,7 +868,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Pentagon clears 8 tech firms to deploy their AI on its classified networks</h3>
+            <h3 class="article-title">
+              
+              <a href="https://freerepublic.com/focus/f-news/4377794/posts" target="_blank" rel="noreferrer">Pentagon clears 8 tech firms to deploy their AI on its classified networks</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://freerepublic.com/focus/f-news/4377794/posts" target="_blank" rel="noreferrer">Freerepublic.com</a>
@@ -660,7 +887,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Jamie Dimon blesses the trillion-dollar AI capex boom</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.axios.com/2026/05/05/jamie-dimon-ai-capex-anthropic" target="_blank" rel="noreferrer">Jamie Dimon blesses the trillion-dollar AI capex boom</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.axios.com/2026/05/05/jamie-dimon-ai-capex-anthropic" target="_blank" rel="noreferrer">Axios</a>
@@ -675,7 +906,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">OpenAI exec says company hopes to burn $50B of somebody else&#39;s money on compute this year</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.theregister.com/software/2026/05/05/openai-exec-says-it-will-burn-50b-on-compute-this-year/5226088" target="_blank" rel="noreferrer">OpenAI exec says company hopes to burn $50B of somebody else&#39;s money on compute this year</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.theregister.com/software/2026/05/05/openai-exec-says-it-will-burn-50b-on-compute-this-year/5226088" target="_blank" rel="noreferrer">The Register</a>
@@ -690,7 +925,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Claude hitches ride on SpaceX&#39;s datacenter capacity</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.theregister.com/ai-and-ml/2026/05/06/claude-hitches-a-ride-on-spacexs-datacenter-capacity/5231252" target="_blank" rel="noreferrer">Claude hitches ride on SpaceX&#39;s datacenter capacity</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.theregister.com/ai-and-ml/2026/05/06/claude-hitches-a-ride-on-spacexs-datacenter-capacity/5231252" target="_blank" rel="noreferrer">The Register</a>
@@ -710,7 +949,11 @@
           <h2 class="section-heading">Legal Intelligence</h2>
           
           <article class="article">
-            <h3 class="article-title">Scott Turow&#39;s latest real-life legal thriller: Suing Meta for copyright infringement</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.npr.org/2026/05/05/nx-s1-5812623/scott-turow-meta-lawsuit" target="_blank" rel="noreferrer">Scott Turow&#39;s latest real-life legal thriller: Suing Meta for copyright infringement</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.npr.org/2026/05/05/nx-s1-5812623/scott-turow-meta-lawsuit" target="_blank" rel="noreferrer">NPR</a>
@@ -725,7 +968,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Anthropic owes authors $1.5B for pirating work — but the claims process is a Kafkaesque mess</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.vox.com/culture/487860/anthropic-copyright-settlement-payout-claims-website-authors" target="_blank" rel="noreferrer">Anthropic owes authors $1.5B for pirating work — but the claims process is a Kafkaesque mess</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.vox.com/culture/487860/anthropic-copyright-settlement-payout-claims-website-authors" target="_blank" rel="noreferrer">Vox</a>
@@ -740,7 +987,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">NVIDIA and Atlassian back Legora’s $600m Series D in a $50m extension that values the legal AI startup at $5.6 billion</h3>
+            <h3 class="article-title">
+              
+              <a href="https://thenextweb.com/news/egora-nvidia-atlassian-600m-series-d/" target="_blank" rel="noreferrer">NVIDIA and Atlassian back Legora’s $600m Series D in a $50m extension that values the legal AI startup at $5.6 billion</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://thenextweb.com/news/egora-nvidia-atlassian-600m-series-d/" target="_blank" rel="noreferrer">The Next Web</a>
@@ -755,7 +1006,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Apple Will Pay $250 Million to Settle Lawsuit Over Siri’s AI Features</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.wired.com/story/apple-will-pay-dollar250-million-to-settle-lawsuit-over-siris-ai-features/" target="_blank" rel="noreferrer">Apple Will Pay $250 Million to Settle Lawsuit Over Siri’s AI Features</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.wired.com/story/apple-will-pay-dollar250-million-to-settle-lawsuit-over-siris-ai-features/" target="_blank" rel="noreferrer">WIRED</a>
@@ -771,11 +1026,15 @@
           
         </section>
         
-        <section class="module section-block" id="tools_and_products">
-          <h2 class="section-heading">Tools &amp; Products</h2>
+        <section class="module section-block" id="ai_products">
+          <h2 class="section-heading">AI Products</h2>
           
           <article class="article">
-            <h3 class="article-title">GPT-5.5 Instant: smarter, clearer, and more personalized</h3>
+            <h3 class="article-title">
+              
+              <a href="https://openai.com/index/gpt-5-5-instant" target="_blank" rel="noreferrer">GPT-5.5 Instant: smarter, clearer, and more personalized</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://openai.com/index/gpt-5-5-instant" target="_blank" rel="noreferrer">OpenAI Blog</a>
@@ -786,7 +1045,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Accelerating Gemma 4: faster inference with  multi-token prediction drafters</h3>
+            <h3 class="article-title">
+              
+              <a href="https://blog.google/innovation-and-ai/technology/developers-tools/multi-token-prediction-gemma-4/" target="_blank" rel="noreferrer">Accelerating Gemma 4: faster inference with  multi-token prediction drafters</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://blog.google/innovation-and-ai/technology/developers-tools/multi-token-prediction-gemma-4/" target="_blank" rel="noreferrer">Google - The Keyword</a>
@@ -801,7 +1064,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">How OpenAI delivers low-latency voice AI at scale</h3>
+            <h3 class="article-title">
+              
+              <a href="https://openai.com/index/delivering-low-latency-voice-ai-at-scale" target="_blank" rel="noreferrer">How OpenAI delivers low-latency voice AI at scale</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://openai.com/index/delivering-low-latency-voice-ai-at-scale" target="_blank" rel="noreferrer">OpenAI Blog</a>
@@ -812,7 +1079,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">AWS lets agents drive its virtual cloudy desktops – which could cost 500,000 tokens per click</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.theregister.com/off-prem/2026/05/06/aws-lets-agents-drive-its-virtual-cloudy-desktops/5220438" target="_blank" rel="noreferrer">AWS lets agents drive its virtual cloudy desktops – which could cost 500,000 tokens per click</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.theregister.com/off-prem/2026/05/06/aws-lets-agents-drive-its-virtual-cloudy-desktops/5220438" target="_blank" rel="noreferrer">The Register</a>
@@ -827,7 +1098,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Your car with Google built-in is about to get smarter, thanks to Gemini</h3>
+            <h3 class="article-title">
+              
+              <a href="https://blog.google/products-and-platforms/platforms/android/cars-with-google-built-in-gemini-tips-2026/" target="_blank" rel="noreferrer">Your car with Google built-in is about to get smarter, thanks to Gemini</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://blog.google/products-and-platforms/platforms/android/cars-with-google-built-in-gemini-tips-2026/" target="_blank" rel="noreferrer">Google - The Keyword</a>
@@ -847,7 +1122,11 @@
           <h2 class="section-heading">Security</h2>
           
           <article class="article">
-            <h3 class="article-title">Red-teaming a network of agents: Understanding what breaks when AI agents interact at scale</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.microsoft.com/en-us/research/blog/red-teaming-a-network-of-agents-understanding-what-breaks-when-ai-agents-interact-at-scale/" target="_blank" rel="noreferrer">Red-teaming a network of agents: Understanding what breaks when AI agents interact at scale</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.microsoft.com/en-us/research/blog/red-teaming-a-network-of-agents-understanding-what-breaks-when-ai-agents-interact-at-scale/" target="_blank" rel="noreferrer">Microsoft Research Blog</a>
@@ -862,7 +1141,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Even After Two Massacres, OpenAI Still Hasn’t Stopped ChatGPT From Helping Plan School Shootings</h3>
+            <h3 class="article-title">
+              
+              <a href="http://futurism.com/artificial-intelligence/two-shootings-openai-stopped" target="_blank" rel="noreferrer">Even After Two Massacres, OpenAI Still Hasn’t Stopped ChatGPT From Helping Plan School Shootings</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="http://futurism.com/artificial-intelligence/two-shootings-openai-stopped" target="_blank" rel="noreferrer">Futurism</a>
@@ -877,7 +1160,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Google Fixes CVSS 10 Gemini CLI CI RCE and Cursor Flaws Enable Code Execution</h3>
+            <h3 class="article-title">
+              
+              <a href="https://thehackernews.com/2026/04/google-fixes-cvss-10-gemini-cli-ci-rce.html" target="_blank" rel="noreferrer">Google Fixes CVSS 10 Gemini CLI CI RCE and Cursor Flaws Enable Code Execution</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://thehackernews.com/2026/04/google-fixes-cvss-10-gemini-cli-ci-rce.html" target="_blank" rel="noreferrer">The Hacker News</a>
@@ -892,7 +1179,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Doctors&#39; growing AI deepfakes problem</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.axios.com/2026/05/06/doctors-ai-deepfakes-misinformation-problem" target="_blank" rel="noreferrer">Doctors&#39; growing AI deepfakes problem</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.axios.com/2026/05/06/doctors-ai-deepfakes-misinformation-problem" target="_blank" rel="noreferrer">Axios</a>
@@ -907,7 +1198,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">&#39;Moment of Danger&#39;: Anthropic CEO Warns of Cyber Risk Window as AI Uncovers Software Flaws</h3>
+            <h3 class="article-title">
+              
+              <a href="https://decrypt.co/366891/anthropic-warns-cyber-risk-window-ai-uncovers-flaws" target="_blank" rel="noreferrer">&#39;Moment of Danger&#39;: Anthropic CEO Warns of Cyber Risk Window as AI Uncovers Software Flaws</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://decrypt.co/366891/anthropic-warns-cyber-risk-window-ai-uncovers-flaws" target="_blank" rel="noreferrer">Decrypt</a>
@@ -922,7 +1217,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">India orders infosec red alert in case Mythos sparks crime spree</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.theregister.com/security/2026/05/06/india-orders-infosec-red-alert-in-case-mythos-sparks-crime/5224961" target="_blank" rel="noreferrer">India orders infosec red alert in case Mythos sparks crime spree</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.theregister.com/security/2026/05/06/india-orders-infosec-red-alert-in-case-mythos-sparks-crime/5224961" target="_blank" rel="noreferrer">The Register</a>
@@ -942,7 +1241,11 @@
           <h2 class="section-heading">Policy</h2>
           
           <article class="article">
-            <h3 class="article-title">New frontier of AI forces Trump&#39;s heavy hand</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.axios.com/2026/05/05/trump-anthropic-ai-regulation-mythos-cyber" target="_blank" rel="noreferrer">New frontier of AI forces Trump&#39;s heavy hand</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.axios.com/2026/05/05/trump-anthropic-ai-regulation-mythos-cyber" target="_blank" rel="noreferrer">Axios</a>
@@ -957,7 +1260,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Microsoft, Google and xAI will let the government test their AI models before launch | CNN Business</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.cnn.com/2026/05/05/tech/microsoft-google-xai-government-test-ai-models" target="_blank" rel="noreferrer">Microsoft, Google and xAI will let the government test their AI models before launch | CNN Business</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.cnn.com/2026/05/05/tech/microsoft-google-xai-government-test-ai-models" target="_blank" rel="noreferrer">CNN</a>
@@ -972,7 +1279,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Google DeepMind Workers Vote to Unionize Over Military AI Deals</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.wired.com/story/google-deepmind-workers-vote-to-unionize-over-military-ai-deals/" target="_blank" rel="noreferrer">Google DeepMind Workers Vote to Unionize Over Military AI Deals</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.wired.com/story/google-deepmind-workers-vote-to-unionize-over-military-ai-deals/" target="_blank" rel="noreferrer">WIRED</a>
@@ -987,7 +1298,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">Top European tech CEOs call for easier AI rules</h3>
+            <h3 class="article-title">
+              
+              <a href="https://economictimes.indiatimes.com/tech/artificial-intelligence/top-european-tech-ceos-call-for-easier-ai-rules/articleshow/130834016.cms" target="_blank" rel="noreferrer">Top European tech CEOs call for easier AI rules</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://economictimes.indiatimes.com/tech/artificial-intelligence/top-european-tech-ceos-call-for-easier-ai-rules/articleshow/130834016.cms" target="_blank" rel="noreferrer">The Times of India</a>
@@ -1002,7 +1317,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">A Kid With a Fake Mustache Tricked an Online Age-Verification Tool</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.wired.com/story/a-kid-with-a-fake-mustache-tricked-an-online-age-verification-tool/" target="_blank" rel="noreferrer">A Kid With a Fake Mustache Tricked an Online Age-Verification Tool</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.wired.com/story/a-kid-with-a-fake-mustache-tricked-an-online-age-verification-tool/" target="_blank" rel="noreferrer">WIRED</a>
@@ -1017,7 +1336,11 @@
           </article>
           
           <article class="article">
-            <h3 class="article-title">How David Sacks crashed and burned in the White House</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.theverge.com/column/925487/david-sacks-trump-administration-ai-model-review" target="_blank" rel="noreferrer">How David Sacks crashed and burned in the White House</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.theverge.com/column/925487/david-sacks-trump-administration-ai-model-review" target="_blank" rel="noreferrer">The Verge</a>
@@ -1037,7 +1360,11 @@
           <h2 class="section-heading">Higher Education</h2>
           
           <article class="article">
-            <h3 class="article-title">Using AI for Just 10 Minutes Might Make You Lazy and Dumb, Study Shows</h3>
+            <h3 class="article-title">
+              
+              <a href="https://www.wired.com/story/using-ai-negative-impact-thinking-problem-solving-study/" target="_blank" rel="noreferrer">Using AI for Just 10 Minutes Might Make You Lazy and Dumb, Study Shows</a>
+              
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="https://www.wired.com/story/using-ai-negative-impact-thinking-problem-solving-study/" target="_blank" rel="noreferrer">WIRED</a>

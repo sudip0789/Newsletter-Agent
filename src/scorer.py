@@ -40,11 +40,11 @@ Also assign the article to exactly one newsletter section:
 - "higher_education" — AI in universities, AI in Libraries, AI in higher education, AI in law schools, academic research on AI, student/faculty AI use
 - "security" — security vulnerabilities in AI systems, AI-powered cyber threats, AI safety incidents
 - "creative_ai" — AI music, video, image, design tools and platforms
-- "industry" — AI company funding, acquisitions, strategy, leadership, partnerships
+- "enterprise_ai" — AI company funding, acquisitions, strategy, leadership, partnerships
 - "policy" — government AI regulation, executive orders, international AI policy, legislative action
-- "impact_on_environment" — AI's environmental footprint, energy use, water use, emissions, sustainability impact, resource consumption
-- "ethics_and_bias" — fairness, discrimination, harmful outputs, labor/rights concerns, accountability, ethical AI debates
-- "tools_and_products" — new AI tool launches, AI product updates, developer AI tools
+- "ai_sustainability" — AI's environmental footprint, energy use, water use, emissions, sustainability impact, resource consumption
+- "responsible_ai" — fairness, discrimination, harmful outputs, labor/rights concerns, accountability, ethical AI debates
+- "ai_products" — new AI tool launches, AI product updates, developer AI tools
 - "research" — academic papers, benchmarks, technical breakthroughs, AI index reports
 
 Respond with ONLY a JSON object, no markdown, no explanation:
@@ -64,11 +64,11 @@ VALID_SECTIONS = {
     "higher_education",
     "security",
     "creative_ai",
-    "industry",
+    "enterprise_ai",
     "policy",
-    "impact_on_environment",
-    "ethics_and_bias",
-    "tools_and_products",
+    "ai_sustainability",
+    "responsible_ai",
+    "ai_products",
     "research",
 }
 
@@ -83,7 +83,7 @@ SCORE_FIELDS = (
 
 LOWER_BUZZ_THRESHOLD_SECTIONS = {
     "creative_ai",
-    "tools_and_products",
+    "ai_products",
     "higher_education",
 }
 
@@ -93,8 +93,8 @@ SECTION_CAPS = {
     "security": 4,
 }
 GUARANTEED_SECTIONS = (
-    "impact_on_environment",
-    "ethics_and_bias",
+    "ai_sustainability",
+    "responsible_ai",
 )
 
 
@@ -461,11 +461,11 @@ class Scorer:
         normalized = str(section or "").strip().lower()
         if normalized not in VALID_SECTIONS:
             LOGGER.warning(
-                "Invalid section '%s' for article '%s'; defaulting to industry.",
+                "Invalid section '%s' for article '%s'; defaulting to enterprise_ai.",
                 section,
                 article_title,
             )
-            return "industry"
+            return "enterprise_ai"
         return normalized
 
     def _validate_weights(self, weights: dict[str, Any]) -> dict[str, float]:

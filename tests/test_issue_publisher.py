@@ -65,9 +65,9 @@ class TestIssuePublisher(unittest.TestCase):
             for name in [
                 "newsletter_logo.png",
                 "news_brief.png",
-                "security.png",
+                "security.svg",
             ]:
-                (project_root / "assets" / "logos" / name).write_bytes(b"png")
+                (project_root / "assets" / "logos" / name).write_bytes(b"logo")
             (project_root / "assets" / "generated" / "headline_1.png").write_bytes(b"png")
 
             self._write_json(

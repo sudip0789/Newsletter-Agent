@@ -13,26 +13,28 @@ from src.text_utils import normalize_markdown_escaped_text
 
 class TemplateAssembler:
     ALL_SECTIONS = [
-        ("industry", "Industry"),
+        ("enterprise_ai", "Enterprise AI"),
         ("legal_intelligence", "Legal Intelligence"),
-        ("tools_and_products", "Tools & Products"),
+        ("ai_products", "AI Products"),
         ("security", "Security"),
         ("policy", "Policy"),
-        ("ethics_and_bias", "Ethics & Bias"),
-        ("impact_on_environment", "Impact on Environment"),
+        ("responsible_ai", "Responsible AI"),
+        ("ai_sustainability", "AI Sustainability"),
         ("creative_ai", "Creative AI"),
         ("higher_education", "Higher Education"),
         ("research", "Research"),
     ]
     SECTION_ICON_FILENAMES = {
-        "industry": "industry.png",
-        "legal_intelligence": "legal_intelligence.png",
-        "tools_and_products": "tools.png",
-        "security": "security.png",
-        "policy": "policy.png",
-        "creative_ai": "creative_ai.png",
-        "higher_education": "higher_education.png",
-        "research": "research.png",
+        "enterprise_ai": "enterprise_ai.svg",
+        "legal_intelligence": "legal_intelligence.svg",
+        "ai_products": "ai_products.svg",
+        "security": "security.svg",
+        "policy": "policy.svg",
+        "responsible_ai": "responsible_ai.svg",
+        "ai_sustainability": "ai_sustainability.svg",
+        "creative_ai": "creative_ai.svg",
+        "higher_education": "higher_education.svg",
+        "research": "research.svg",
     }
 
     def __init__(
@@ -41,6 +43,7 @@ class TemplateAssembler:
         headlines_path: str = "data/output/headline_picks.json",
         template_path: str = "templates/newsletter.html",
         headline_asset_root: str | Path | None = None,
+        media: dict | None = None,
     ):
         self.stories_path = Path(stories_path)
         self.headlines_path = Path(headlines_path)
@@ -49,6 +52,7 @@ class TemplateAssembler:
         self.headline_asset_root = (
             None if headline_asset_root is None else Path(headline_asset_root).resolve()
         )
+        self.media = media or {}
         self.stories = self._load_json(self.stories_path)
         self.headlines = self._load_json(self.headlines_path)
         self.jinja = Environment(
@@ -93,28 +97,28 @@ class TemplateAssembler:
             output_file,
             Path("assets/logos/newsletter_logo.png"),
         )
-        sidebar_logo_path = self._resolve_project_asset_path(
-            output_file,
-            Path("assets/logos/news_brief.png"),
-        )
-        headlines = [
-            {
-                **headline,
-                "image_path": self._resolve_headline_image_path(output_file, headline),
-            }
-            for headline in self.headlines
-        ]
+        drive_images = self.media.get("headline_images", [])
+        headlines = []
+        for i, headline in enumerate(self.headlines):
+            drive_url = drive_images[i] if i < len(drive_images) and drive_images[i] else None
+            image_path = drive_url or self._resolve_headline_image_path(
+                output_file,
+                headline,
+                index=i + 1,
+            )
+            headlines.append({**headline, "image_path": image_path})
 
         template = self.jinja.from_string(self.template_path.read_text(encoding="utf-8"))
         html = template.render(
             publish_date=self._format_publish_date(publish_date),
             logo_path=logo_path,
-            sidebar_logo_path=sidebar_logo_path,
             headlines=headlines,
             active_sections=section_navigation,
             sections=sections,
             archive_url=archive_url,
             latest_issue_url=latest_issue_url,
+            podcast_embed_url=self.media.get("podcast_embed_url"),
+            video_embed_url=self.media.get("video_embed_url"),
         )
         output_file.write_text(html, encoding="utf-8")
         return html
@@ -176,7 +180,12 @@ class TemplateAssembler:
     def _load_json(self, path: Path) -> list[dict[str, Any]]:
         return json.loads(path.read_text(encoding="utf-8"))
 
-    def _resolve_headline_image_path(self, output_file: Path, headline: dict[str, Any]) -> str:
+    def _resolve_headline_image_path(
+        self,
+        output_file: Path,
+        headline: dict[str, Any],
+        index: int | None = None,
+    ) -> str:
         raw_path = headline.get("image_path")
         if raw_path:
             if self.headline_asset_root is not None:
@@ -185,6 +194,16 @@ class TemplateAssembler:
                     self.headline_asset_root / Path(raw_path),
                 )
             return self._resolve_project_asset_path(output_file, Path(raw_path))
+        if index is not None:
+            conventional_path = Path("assets/generated") / f"headline_{index}.png"
+            candidate_root = (
+                self.headline_asset_root if self.headline_asset_root is not None else self.project_root
+            )
+            candidate_path = candidate_root / conventional_path
+            if candidate_path.exists():
+                if self.headline_asset_root is not None:
+                    return self._to_relative_asset_path(output_file, candidate_path)
+                return self._resolve_project_asset_path(output_file, conventional_path)
         return self._resolve_project_asset_path(
             output_file,
             Path("assets/logos/newsletter_logo.png"),

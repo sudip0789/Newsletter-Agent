@@ -66,8 +66,7 @@ def main() -> None:
         headlines = agent.run()
 
     if args.blurbs_only:
-        for headline in headlines:
-            headline["image_path"] = None
+        headlines = agent.preserve_existing_image_paths(headlines)
     else:
         for index, headline in enumerate(headlines, start=1):
             headline["image_path"] = agent.generate_headline_image(headline, index)

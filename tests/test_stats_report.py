@@ -83,13 +83,13 @@ class TestPipelineReporting(unittest.TestCase):
 
     def test_format_manual_review_summary_lists_titles_or_none(self) -> None:
         kept_story = SummarizedStory(
-            scored_story=self._scored_story("Clear summary", "industry", 0.9),
+            scored_story=self._scored_story("Clear summary", "enterprise_ai", 0.9),
             newsletter_title="Clear newsletter title",
             summary="Looks good.",
             needs_manual_review=False,
         )
         flagged_story = SummarizedStory(
-            scored_story=self._scored_story("Needs editor eyes", "industry", 0.8),
+            scored_story=self._scored_story("Needs editor eyes", "enterprise_ai", 0.8),
             newsletter_title="Needs editor eyes",
             summary="Manual review required.",
             needs_manual_review=True,

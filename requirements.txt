@@ -12,3 +12,5 @@ numpy
 scikit-learn
 streamlit
 Jinja2
+google-api-python-client
+google-auth

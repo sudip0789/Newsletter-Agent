@@ -4,10 +4,17 @@ venv/
 __pycache__/
 *.pyc
 .DS_Store
+.claude/
+.devcontainer/
+.superpowers/
+CLAUDE.md
+credentials/
 data/output/
 !data/output/
 data/output/*
 !data/output/scored_stories.json
 !data/output/summarized_stories.json
 !data/output/headline_picks.json
+!data/output/media.json
 .vercel
+docs/

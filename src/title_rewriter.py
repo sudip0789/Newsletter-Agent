@@ -78,10 +78,7 @@ class TitleRewriter:
         self.provider = self.model_config["provider"]
         self.api_model = self.model_config["api_model"]
         if input_path is None:
-            input_path = (
-                "data/output/"
-                f"summarized_stories_{self.model_config['output_label']}.json"
-            )
+            input_path = "data/output/summarized_stories.json"
         self.input_path = Path(input_path)
         self.output_path = self.input_path
         self.top_n = top_n

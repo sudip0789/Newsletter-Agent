@@ -99,6 +99,12 @@ def _build_archive_index(root: Path, issues: list[dict[str, str]]) -> None:
     )
 
 
+def _load_media(path: Path) -> dict | None:
+    if path.exists():
+        return json.loads(path.read_text(encoding="utf-8"))
+    return None
+
+
 def build_public_site(
     project_root: Path | None = None,
     publish_date: date | datetime | str | None = None,
@@ -115,10 +121,19 @@ def build_public_site(
     if issues_public_root.exists():
         shutil.rmtree(issues_public_root)
 
+    # Load media.json for the latest issue: prefer the issue snapshot (when publish_date
+    # is known), fall back to data/output/media.json (committed alongside headline_picks.json).
+    if publish_date is not None:
+        issue_date = _normalize_issue_date(publish_date)
+        current_media = _load_media(root / "issue_snapshots" / issue_date / "media.json")
+    else:
+        current_media = _load_media(root / "data" / "output" / "media.json")
+
     assembler = TemplateAssembler(
         stories_path=str(root / "data" / "output" / "summarized_stories.json"),
         headlines_path=str(root / "data" / "output" / "headline_picks.json"),
         template_path=str(root / "templates" / "newsletter.html"),
+        media=current_media,
     )
     latest_html = assembler.run(
         publish_date=publish_date,
@@ -129,16 +144,21 @@ def build_public_site(
     for issue in _collect_issue_snapshots(root):
         issue_source_dir = Path(issue["source_dir"])
         issue_output_dir = issues_public_root / issue["issue_date"]
-        _copy_generated_assets(
-            issue_source_dir / "assets" / "generated",
-            issue_output_dir / "assets" / "generated",
-        )
+        issue_media = _load_media(issue_source_dir / "media.json")
+
+        # Only copy local generated assets when there are no Drive image URLs for this issue.
+        if not (issue_media and issue_media.get("headline_images")):
+            _copy_generated_assets(
+                issue_source_dir / "assets" / "generated",
+                issue_output_dir / "assets" / "generated",
+            )
 
         issue_assembler = TemplateAssembler(
             stories_path=str(issue_source_dir / "summarized_stories.json"),
             headlines_path=str(issue_source_dir / "headline_picks.json"),
             template_path=str(root / "templates" / "newsletter.html"),
             headline_asset_root=issue_output_dir,
+            media=issue_media,
         )
         issue_assembler.run(
             publish_date=issue["issue_date"],

@@ -356,7 +356,7 @@
       },
       "composite_score": 0.7557,
       "rationale": "This is clearly an AI adoption story centered on a widely used clinical chatbot, with meaningful implications for professional practice and accountability, but it is more healthcare-product focused than directly tied to law, policy, or higher education.",
-      "section": "tools_and_products",
+      "section": "ai_products",
       "tier": "body"
     },
     "newsletter_title": "AI Medical Search Tool Used by 65% of U.S. Doctors, Often Without Patient Awareness",
@@ -461,7 +461,7 @@
       },
       "composite_score": 0.7326,
       "rationale": "This is clearly an AI alignment story centered on Anthropic's explanation for unsafe model behavior and mitigation methods, with credible reporting and some novelty, but it is more technical/behavioral than directly legal or higher-ed focused and does not appear to be a top-tier industry-shifting event.",
-      "section": "ethics_and_bias",
+      "section": "responsible_ai",
       "tier": "body"
     },
     "newsletter_title": "Dystopian Sci-Fi Trained Anthropic's AI to Behave Badly, Researchers Find",
@@ -496,7 +496,7 @@
       },
       "composite_score": 0.7266999999999999,
       "rationale": "This is clearly centered on AI’s environmental footprint and transparency around AI energy use, with credible reporting from WIRED and some novelty via Luccioni’s new venture, but it is more of an interview-driven sustainability discussion than a major breaking AI industry or policy event.",
-      "section": "impact_on_environment",
+      "section": "ai_sustainability",
       "tier": "body"
     },
     "newsletter_title": "Making AI Sustainable: What Companies and Researchers Must Do Now",
@@ -567,7 +567,7 @@
       },
       "composite_score": 0.6978,
       "rationale": "This is substantially about AI infrastructure through a massive proposed AI datacenter, with meaningful relevance for readers interested in AI’s environmental footprint, though it is more an environmental/local approval story than a broader AI policy or product development milestone.",
-      "section": "impact_on_environment",
+      "section": "ai_sustainability",
       "tier": "body"
     },
     "newsletter_title": "Utah Approves Massive AI Datacenter Twice Manhattan's Size, Sparking Backlash",
@@ -602,7 +602,7 @@
       },
       "composite_score": 0.6950000000000001,
       "rationale": "This is clearly about public use of AI chatbots in healthcare and raises accountability and safety concerns, but it is a survey-based UK health story rather than a major legal or policy development for the newsletter’s core audience.",
-      "section": "ethics_and_bias",
+      "section": "responsible_ai",
       "tier": "body"
     },
     "newsletter_title": "UK Study: One in Seven Now Consult AI Chatbots Instead of Their Doctor",
@@ -637,7 +637,7 @@
       },
       "composite_score": 0.6942,
       "rationale": "This article is substantially about AI-driven datacentre energy demand and its environmental and political consequences, making it relevant to AI coverage though partly broader than AI alone.",
-      "section": "impact_on_environment",
+      "section": "ai_sustainability",
       "tier": "body"
     },
     "newsletter_title": "Datacenters Now Consume 6% of Electricity in the UK and US",
@@ -744,7 +744,7 @@
       },
       "composite_score": 0.6274,
       "rationale": "This is meaningfully about AI infrastructure and public backlash to AI datacenters—especially their energy, water, and local environmental impacts—but it is more a public-opinion/environment story than a core AI development, policy, or legal story.",
-      "section": "impact_on_environment",
+      "section": "ai_sustainability",
       "tier": "body"
     },
     "newsletter_title": "Gallup Poll: Americans Prefer Nuclear Plants Over AI Datacenters as Neighbors",
@@ -849,7 +849,7 @@
       },
       "composite_score": 0.5533999999999999,
       "rationale": "The article is clearly about the social and gendered effects of the AI boom on family life, making it AI-related but more cultural than legally or institutionally significant for this audience.",
-      "section": "ethics_and_bias",
+      "section": "responsible_ai",
       "tier": "body"
     },
     "newsletter_title": "When AI Obsession Comes Home: The Toll on Tech Spouses",
@@ -919,7 +919,7 @@
       },
       "composite_score": 0.391,
       "rationale": "The article is partly about AI-powered voice dictation tools like ChatGPT Voice and Wispr, but it is mainly a light trend piece rather than significant AI news with strong legal, policy, or higher-education relevance.",
-      "section": "tools_and_products",
+      "section": "ai_products",
       "tier": "honorable_mention"
     },
     "newsletter_title": "Voice Dictation Tools Are Reshaping How Workers Interact With Computers",

@@ -57,9 +57,9 @@ class TestPublicSiteBuilder(unittest.TestCase):
         for name in [
             "newsletter_logo.png",
             "news_brief.png",
-            "security.png",
+            "security.svg",
         ]:
-            (project_root / "assets" / "logos" / name).write_bytes(b"png")
+            (project_root / "assets" / "logos" / name).write_bytes(b"logo")
 
     def _write_issue_snapshot(
         self,
@@ -138,7 +138,39 @@ class TestPublicSiteBuilder(unittest.TestCase):
             self.assertTrue((project_root / "public" / "assets" / "generated" / "headline_1.png").exists())
             self.assertTrue((project_root / "public" / "assets" / "logos" / "newsletter_logo.png").exists())
             self.assertIn("src=\"assets/generated/headline_1.png\"", html)
-            self.assertIn("src=\"assets/logos/security.png\"", html)
+            self.assertIn("src=\"assets/logos/security.svg\"", html)
+
+    def test_build_public_site_uses_generated_headline_images_when_metadata_is_missing(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir_name:
+            tmpdir = Path(tmpdir_name)
+            project_root = tmpdir / "project"
+            (project_root / "assets" / "generated").mkdir(parents=True)
+            (project_root / "assets" / "logos").mkdir(parents=True)
+            (project_root / "data" / "output").mkdir(parents=True)
+            (project_root / "templates").mkdir(parents=True)
+            (project_root / "public").mkdir(parents=True)
+
+            self._write_shared_template(project_root)
+            self._write_shared_logos(project_root)
+
+            self._write_json(
+                project_root / "data" / "output" / "summarized_stories.json",
+                [self._story_payload()],
+            )
+            self._write_json(
+                project_root / "data" / "output" / "headline_picks.json",
+                [{**self._headline_payload(), "image_path": None}],
+            )
+
+            (project_root / "assets" / "generated" / "headline_1.png").write_bytes(b"png")
+
+            html = build_public_site(project_root=project_root, publish_date="2026-05-01")
+
+            self.assertIn("src=\"assets/generated/headline_1.png\"", html)
+            self.assertNotIn(
+                '<img src="assets/logos/newsletter_logo.png" alt="Other headline">',
+                html,
+            )
 
     def test_build_public_site_renders_archive_index_and_issue_pages(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir_name:

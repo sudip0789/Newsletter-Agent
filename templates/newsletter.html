@@ -41,99 +41,158 @@
 
     .header {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex-direction: column;
       gap: 24px;
-      padding: 38px 0 30px;
-      border-bottom: 4px solid var(--brand-red);
+      padding: 28px 0 30px;
+      border-bottom: none;
+    }
+
+    .header-masthead {
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+      column-gap: 92px;
+      row-gap: 12px;
     }
 
     .header-brand {
-      display: flex;
-      align-items: flex-start;
-      gap: 22px;
       min-width: 0;
-    }
-
-    .header-logo {
-      width: 146px;
-      height: 146px;
-      border-radius: 30px;
-      object-fit: cover;
-      background: #ffffff;
-      border: 1px solid rgba(139, 0, 0, 0.12);
-      padding: 16px;
-      box-shadow: var(--shadow);
     }
 
     .header-copy {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 0;
+      padding-top: 6px;
     }
 
     .header-lockup {
       display: flex;
-      flex-direction: column;
-      gap: 2px;
+      flex-wrap: wrap;
+      align-items: center;
+      column-gap: 18px;
+      row-gap: 6px;
+      min-width: 0;
     }
 
     .header-lockup-line {
       margin: 0;
-      font-family: Georgia, "Times New Roman", serif;
-      line-height: 1.02;
-    }
-
-    .header-lockup-top {
-      font-size: clamp(1.55rem, 2.4vw, 2.6rem);
-    }
-
-    .header-lockup-top .stanford {
-      color: #b22222;
-    }
-
-    .header-lockup-top .law-school {
-      color: #8e8e8e;
-    }
-
-    .header-lockup-bottom {
-      color: #111111;
-      font-size: clamp(1.35rem, 2.1vw, 2.35rem);
-    }
-
-    .header-copy h1 {
-      margin: 0;
-      color: var(--brand-red);
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(1.8rem, 2.8vw, 2.9rem);
-      line-height: 1.08;
-    }
-
-    .header-copy p {
-      margin: 0;
-      color: var(--muted);
+      font-family: "Helvetica Neue", Arial, sans-serif;
       font-size: 0.82rem;
-      letter-spacing: 0.04em;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      line-height: 1.1;
       text-transform: uppercase;
     }
 
-    .header-date {
-      flex-shrink: 0;
-      padding: 14px 18px;
-      background: var(--paper);
-      border: 1px solid rgba(139, 0, 0, 0.18);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
+    .header-lockup-top {
+      color: var(--brand-red);
+    }
+
+    .header-lockup-bottom {
+      color: #9b9793;
+    }
+
+    .header-lockup-bottom::before {
+      content: "·";
+      margin-right: 18px;
+      color: #b9b1ab;
+    }
+
+    .header-copy h1 {
+      margin: 10px 0 24px;
       color: var(--brand-red);
       font-family: Georgia, "Times New Roman", serif;
-      font-size: 1.05rem;
+      font-size: clamp(2.35rem, 4.8vw, 4rem);
+      font-weight: 550;
+      line-height: 0.98;
+      letter-spacing: -0.02em;
+      max-width: 1000px;
+    }
+
+    .header-kicker {
+      margin: 0;
+      color: #9b9793;
+      font-size: 0.92rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .header-meta {
+      align-self: start;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
       text-align: right;
+    }
+
+    .header-archive-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      color: var(--brand-red);
+      font-size: 0.84rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      line-height: 1.15;
+      text-transform: uppercase;
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 1px dotted rgba(139, 0, 0, 0.55);
+    }
+
+    .header-archive-link:hover {
+      border-bottom-color: var(--brand-red);
+    }
+
+    .header-archive-link svg {
+      flex-shrink: 0;
+    }
+
+    .header-meta-separator {
+      color: #b9b1ab;
+      font-size: 0.84rem;
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    .header-date-value {
+      display: inline-block;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      color: var(--brand-red);
+      font-size: 0.84rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      line-height: 1.15;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .header-rule-soft {
+      width: 100%;
+      height: 1px;
+      background: rgba(139, 0, 0, 0.16);
+    }
+
+    .header-masthead + .header-rule-soft {
+      margin-top: -14px;
+    }
+
+    .header-rule-strong {
+      width: 100%;
+      height: 4px;
+      background: var(--brand-red);
     }
 
     .layout {
       display: grid;
-      grid-template-columns: 228px minmax(0, 1fr);
-      gap: 28px;
+      grid-template-columns: 272px minmax(0, 1fr);
+      gap: 32px;
       margin-top: 28px;
       align-items: start;
     }
@@ -167,80 +226,110 @@
     .sidebar {
       position: sticky;
       top: 20px;
-      height: calc(100vh - 40px);
-      min-height: 720px;
-      overflow: hidden;
-      padding: 22px 18px 20px;
-      background:
-        radial-gradient(circle at top, rgba(255, 255, 255, 0.12), transparent 46%),
-        linear-gradient(180deg, #3a3a3a 0%, #242424 100%);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 24px;
-      color: #ffffff;
+      align-self: start;
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 0;
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      color: var(--ink);
       box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
     }
 
-    .sidebar-logo {
-      width: 100%;
-      max-width: 126px;
-      display: block;
-      margin: 0 auto 20px;
-      border-radius: 20px;
-      background: #ffffff;
-      padding: 10px;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+    .sidebar-header {
+      flex-shrink: 0;
+      padding: 22px 16px 20px;
+      background: var(--brand-red);
+      border-radius: 19px 19px 0 0;
+      text-align: center;
     }
 
     .sidebar-label {
-      margin: 0 0 16px;
-      color: rgba(255, 255, 255, 0.74);
-      font-size: 0.78rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
+      margin: 0;
+      color: #ffffff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.08rem;
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: 0.02em;
     }
 
     .sidebar-nav {
+      flex: 1 1 auto;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      flex: 1;
+      min-height: 0;
+      padding: 10px 0;
+      background: var(--soft);
+      border-radius: 0 0 19px 19px;
     }
 
     .sidebar-link {
+      flex: 0 0 auto;
       display: flex;
       align-items: center;
-      gap: 12px;
-      flex: 1 1 0;
-      min-height: 0;
-      padding: 13px 13px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 16px;
-      color: #ffffff;
+      gap: 14px;
+      min-height: 80px;
+      padding: 16px 18px;
+      border-top: 1px solid rgba(139, 0, 0, 0.1);
+      color: var(--ink);
       text-decoration: none;
-      background: rgba(255, 255, 255, 0.05);
-      transition: background 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
+      background: transparent;
+      transition: background 0.18s ease, color 0.18s ease;
+    }
+
+    .sidebar-link:first-child {
+      border-top: none;
     }
 
     .sidebar-link:hover {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: rgba(255, 255, 255, 0.16);
-      transform: translateX(2px);
+      background: rgba(255, 255, 255, 0.54);
+      color: var(--brand-red);
+      transform: none;
     }
 
-    .sidebar-link img {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      background: #ffffff;
-      object-fit: cover;
-      padding: 5px;
+    .sidebar-icon {
+      width: 42px;
+      height: 42px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.18s ease;
     }
 
-    .sidebar-link span {
+    .sidebar-link:hover .sidebar-icon {
+      transform: translateX(1px) scale(1.05);
+    }
+
+    .sidebar-icon img {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+      display: block;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+
+    .sidebar-link:hover .sidebar-icon img {
+      opacity: 0.98;
+      transform: scale(1.04);
+    }
+
+    .sidebar-link-label {
       font-size: 0.9rem;
-      line-height: 1.25;
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: 0.01em;
+      transition: transform 0.18s ease, color 0.18s ease;
+      transform-origin: left center;
+    }
+
+    .sidebar-link:hover .sidebar-link-label {
+      transform: scale(1.05);
     }
 
     .main {
@@ -264,6 +353,14 @@
       color: var(--brand-red);
       font-family: Georgia, "Times New Roman", serif;
       font-size: 1.55rem;
+    }
+
+    .headlines-module .module-title {
+      margin: 0 0 28px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid rgba(139, 0, 0, 0.12);
+      font-size: 2.35rem;
+      line-height: 1.15;
     }
 
     .headline-list {
@@ -295,7 +392,7 @@
       width: 132px;
       height: 132px;
       object-fit: cover;
-      border-radius: 18px;
+      border-radius: 20px;
       background: var(--soft);
       border: 1px solid rgba(139, 0, 0, 0.1);
     }
@@ -338,6 +435,10 @@
       color: var(--brand-red);
     }
 
+    .toc-module {
+      display: none;
+    }
+
     .section-block + .section-block {
       margin-top: 28px;
     }
@@ -372,6 +473,15 @@
       line-height: 1.22;
     }
 
+    .article-title a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .article-title a:hover {
+      text-decoration: underline;
+    }
+
     .article-source {
       margin: 0 0 14px;
       color: var(--muted);
@@ -391,6 +501,55 @@
       text-transform: uppercase;
       color: var(--brand-red);
       font-weight: 700;
+    }
+
+    .media-section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 20px;
+      color: var(--brand-red);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.55rem;
+    }
+
+    .media-section-title svg {
+      flex-shrink: 0;
+      color: var(--brand-red);
+    }
+
+    .media-embeds {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .media-embed-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .media-embed-label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .media-embed-label svg {
+      flex-shrink: 0;
+    }
+
+    .media-embeds iframe {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      background: var(--soft);
     }
 
     .article-source a {
@@ -441,6 +600,10 @@
       .newsletter-disclaimer {
         grid-column: 1;
       }
+
+      .toc-module {
+        display: block;
+      }
     }
 
     @media (max-width: 720px) {
@@ -449,35 +612,71 @@
       }
 
       .header {
+        gap: 18px;
+        padding: 24px 0 26px;
+      }
+
+      .header-masthead + .header-rule-soft {
+        margin-top: -8px;
+      }
+
+      .header-masthead {
+        grid-template-columns: minmax(0, 1fr) auto;
+        column-gap: 28px;
+        row-gap: 10px;
+      }
+
+      .header-lockup {
         flex-direction: column;
         align-items: flex-start;
-      }
-
-      .header-brand {
-        gap: 16px;
-      }
-
-      .header-logo {
-        width: 112px;
-        height: 112px;
-        padding: 13px;
-      }
-
-      .header-copy {
-        gap: 12px;
+        gap: 8px;
       }
 
       .header-lockup-top {
-        font-size: 1.45rem;
+        font-size: 0.76rem;
+        letter-spacing: 0.13em;
       }
 
       .header-lockup-bottom {
-        font-size: 1.2rem;
+        font-size: 0.76rem;
+        letter-spacing: 0.13em;
       }
 
-      .header-date {
-        width: 100%;
+      .header-lockup-bottom::before {
+        content: none;
+      }
+
+      .header-meta {
+        align-self: start;
+        justify-content: flex-start;
         text-align: left;
+      }
+
+      .header-archive-link,
+      .header-meta-separator,
+      .header-date-value {
+        font-size: 0.78rem;
+        line-height: 1.1;
+        text-align: right;
+        white-space: normal;
+      }
+
+      .header-copy {
+        gap: 0;
+        padding-top: 4px;
+      }
+
+      .header-copy h1 {
+        margin: 8px 0 22px;
+        font-size: clamp(2rem, 8.6vw, 3.15rem);
+        font-weight: 550;
+        line-height: 0.99;
+        max-width: none;
+      }
+
+      .header-kicker {
+        font-size: 0.74rem;
+        letter-spacing: 0.14em;
       }
 
       .headline-card {
@@ -505,49 +704,57 @@
 <body>
   <div class="page">
     <header class="header">
-      <div class="header-brand">
-        <img class="header-logo" src="{{ logo_path }}" alt="The AI Upload logo">
-        <div class="header-copy">
+      <div class="header-masthead">
+        <div class="header-brand">
           <div class="header-lockup" aria-label="Stanford Law School Robert Crown Law Library">
-            <p class="header-lockup-line header-lockup-top">
-              <span class="stanford">Stanford</span><span class="law-school"> Law School</span>
-            </p>
+            <p class="header-lockup-line header-lockup-top">Stanford Law School</p>
             <p class="header-lockup-line header-lockup-bottom">Robert Crown Law Library</p>
           </div>
-          <h1>The AI Upload Weekly Digest</h1>
-          <p>Curated coverage of AI developments</p>
+        </div>
+        <div class="header-meta" aria-label="Issue navigation and date">
+          {% if archive_url %}
+          <a class="header-archive-link" href="{{ archive_url }}">
+            Past Issues
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+          </a>
+          <span class="header-meta-separator" aria-hidden="true">|</span>
+          {% endif %}
+          <span class="header-date-value">{{ publish_date }}</span>
         </div>
       </div>
-      <div class="header-date">{{ publish_date }}</div>
+      <div class="header-rule-soft" aria-hidden="true"></div>
+      <div class="header-copy">
+        <h1>The AI Upload Weekly Digest</h1>
+        <p class="header-kicker">Curated coverage of AI developments</p>
+      </div>
+      <div class="header-rule-strong" aria-hidden="true"></div>
     </header>
 
-    {% if latest_issue_url or archive_url %}
+    {% if latest_issue_url %}
     <nav class="utility-nav" aria-label="Issue navigation">
-      {% if latest_issue_url %}
       <a class="utility-link" href="{{ latest_issue_url }}">Latest Issue</a>
-      {% endif %}
-      {% if archive_url %}
-      <a class="utility-link" href="{{ archive_url }}">Past Issues</a>
-      {% endif %}
     </nav>
     {% endif %}
 
     <div class="layout">
       <aside class="sidebar" aria-label="Section navigation">
-        <img class="sidebar-logo" src="{{ sidebar_logo_path }}" alt="Section logo">
-        <p class="sidebar-label">Sections</p>
+        <div class="sidebar-header">
+          <h2 class="sidebar-label">In This Issue</h2>
+        </div>
         <nav class="sidebar-nav">
           {% for section in active_sections %}
           <a class="sidebar-link" href="#{{ section.key }}">
-            <img src="{{ section.icon_path }}" alt="">
-            <span>{{ section.name }}</span>
+            <span class="sidebar-icon">
+              <img src="{{ section.icon_path }}" alt="">
+            </span>
+            <span class="sidebar-link-label">{{ section.name }}</span>
           </a>
           {% endfor %}
         </nav>
       </aside>
 
       <main class="main">
-        <section class="module">
+        <section class="module headlines-module">
           <h2 class="module-title">This Week&#39;s Headlines</h2>
           <div class="headline-list">
             {% for headline in headlines %}
@@ -563,7 +770,36 @@
           </div>
         </section>
 
-        <section class="module">
+        {% if podcast_embed_url or video_embed_url %}
+        <section class="module media-section">
+          <h2 class="media-section-title">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+            Listen &amp; Watch
+          </h2>
+          <div class="media-embeds">
+            {% if video_embed_url %}
+            <div class="media-embed-block">
+              <span class="media-embed-label">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                Video
+              </span>
+              <iframe src="{{ video_embed_url }}" height="315" allow="autoplay" allowfullscreen></iframe>
+            </div>
+            {% endif %}
+            {% if podcast_embed_url %}
+            <div class="media-embed-block">
+              <span class="media-embed-label">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg>
+                Podcast
+              </span>
+              <iframe src="{{ podcast_embed_url }}" height="80" allow="autoplay"></iframe>
+            </div>
+            {% endif %}
+          </div>
+        </section>
+        {% endif %}
+
+        <section class="module toc-module">
           <h2 class="module-title">In This Issue</h2>
           <ul class="toc-list">
             {% for section in active_sections %}
@@ -577,7 +813,13 @@
           <h2 class="section-heading">{{ section.name }}</h2>
           {% for article in section.articles %}
           <article class="article">
-            <h3 class="article-title">{{ article.title }}</h3>
+            <h3 class="article-title">
+              {% if article.url %}
+              <a href="{{ article.url }}" target="_blank" rel="noreferrer">{{ article.title }}</a>
+              {% else %}
+              {{ article.title }}
+              {% endif %}
+            </h3>
             <p class="article-source">
               Read the article:
               <a href="{{ article.url }}" target="_blank" rel="noreferrer">{{ article.source_name }}</a>
