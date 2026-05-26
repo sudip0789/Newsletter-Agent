@@ -18,12 +18,16 @@ from src.issue_publisher import publish_issue
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Snapshot the approved issue, rebuild the archive, and prepare the site for deployment."
+        description=(
+            "Snapshot the approved issue, rebuild the archive, and prepare the site "
+            "for deployment. Weekly audio/video links are read from "
+            "data/output/media_inputs.json."
+        )
     )
     parser.add_argument(
         "--date",
         required=True,
-        help="Publish date for the issue snapshot, ideally in YYYY-MM-DD format.",
+        help="Prep date for the issue snapshot in YYYY-MM-DD format; the published issue uses the next day.",
     )
     return parser.parse_args()
 

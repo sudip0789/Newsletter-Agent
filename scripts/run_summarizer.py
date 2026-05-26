@@ -3,7 +3,7 @@ Generate editorial summaries for top scored stories.
 
 Usage:
     python3 scripts/run_summarizer.py
-    python3 scripts/run_summarizer.py --top 30
+    python3 scripts/run_summarizer.py --top 25
     python3 scripts/run_summarizer.py --input data/output/scored_stories.json
     python3 scripts/run_summarizer.py --model sonnet-4.6
     python3 scripts/run_summarizer.py --model gpt-5.4
@@ -42,7 +42,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--top",
         type=int,
-        default=30,
+        default=25,
         help="Number of top stories to summarize.",
     )
     parser.add_argument(

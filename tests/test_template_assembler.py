@@ -231,9 +231,14 @@ class TestTemplateAssembler(unittest.TestCase):
             html = assembler.run(publish_date="2026-05-01", output_path=str(output_path))
 
             self.assertEqual(output_path.read_text(encoding="utf-8"), html)
-            self.assertIn("The AI Upload Weekly Digest", html)
-            self.assertIn("May 1st, 2026", html)
+            self.assertIn("The AI Upload", html)
+            self.assertIn("WEEKLY DIGEST", html.upper())
+            self.assertIn("SATURDAY", html)
+            self.assertIn("MAY 02", html)
+            self.assertIn("2026", html)
+            self.assertIn("ISSUE 01", html)
             self.assertIn("This Week&#39;s Headlines", html)
+            self.assertRegex(html, re.compile(r">\d{2} Min<"))
             self.assertIn("href=\"#security\"", html)
             self.assertNotIn("href=\"#policy\"", html)
             self.assertIn("id=\"security\"", html)
@@ -245,10 +250,7 @@ class TestTemplateAssembler(unittest.TestCase):
                     r'<h3 class="article-title">\s*<a href="https://example.com/security_story" target="_blank" rel="noreferrer">Rewritten security story</a>\s*</h3>'
                 ),
             )
-            self.assertIn(
-                'Read the article:\n              <a href="https://example.com/security_story" target="_blank" rel="noreferrer">Example Source</a>',
-                html,
-            )
+            self.assertIn(">Example Source<", html)
             self.assertIn("<p>Paragraph one.</p>", html)
             self.assertIn("<p>Paragraph two.</p>", html)
             self.assertIn(">Headline Source<", html)
@@ -318,39 +320,71 @@ class TestTemplateAssembler(unittest.TestCase):
 
             self.assertTrue(output_path.exists())
             self.assertEqual(output_path.read_text(encoding="utf-8"), html)
-            self.assertIn("May 1st, 2026", html)
             self.assertNotIn("{{ publish_date }}", html)
-            self.assertNotIn("src=\"assets/logos/newsletter_logo.png\"", html)
-            self.assertIn("src=\"assets/logos/security.svg\"", html)
+            self.assertIn("ISSUE 01", html)
+            self.assertIn("SATURDAY", html)
+            self.assertIn("MAY 02", html)
+            self.assertIn("src=\"assets/logos/RBG_RCLL_vrt.png\"", html)
             self.assertIn("src=\"assets/generated/headline_1.png\"", html)
             self.assertNotIn("news_brief.png", html)
-            self.assertNotIn("class=\"header-logo\"", html)
-            self.assertIn(">In This Issue<", html)
-            self.assertIn('class="module toc-module"', html)
-            self.assertIn(".header-masthead {", html)
-            self.assertIn(".header-meta {", html)
-            self.assertIn(".header-date-value {", html)
-            self.assertIn(".header-rule-soft {", html)
-            self.assertIn(".header-rule-strong {", html)
-            self.assertIn(".header-kicker {", html)
-            self.assertNotIn('content: "— ";', html)
-            self.assertIn("font-size: clamp(2.35rem, 4.8vw, 4rem);", html)
-            self.assertIn("font-weight: 550;", html)
-            self.assertIn("column-gap: 92px;", html)
-            self.assertIn("margin: 10px 0 24px;", html)
-            self.assertIn(">Stanford Law School<", html)
-            self.assertIn(">Robert Crown Law Library<", html)
-            self.assertNotIn("Issue Date", html)
-            self.assertIn(".sidebar-nav {\n      flex: 1 1 auto;", html)
-            self.assertIn(".sidebar-link {\n      flex: 0 0 auto;", html)
-            self.assertIn(".sidebar-link:hover .sidebar-icon {", html)
-            self.assertIn("min-height: 80px;", html)
-            self.assertIn(".sidebar-link:hover .sidebar-link-label {", html)
-            self.assertNotIn("border-color: rgba(139, 0, 0, 0.16);", html)
-            self.assertNotIn("background: rgba(139, 0, 0, 0.06);", html)
-            self.assertIn("max-height: calc(100vh - 40px);", html)
-            self.assertIn("overflow-y: auto;", html)
-            self.assertNotIn("\n      height: calc(100vh - 40px);", html)
+            self.assertIn('class="brand-mark"', html)
+            self.assertIn('class="stats-strip"', html)
+            self.assertIn('class="sidebar"', html)
+            self.assertIn('class="content-section"', html)
+            self.assertIn("This Week&#39;s Briefing", html)
+            self.assertIn("Stanford Law School Robert Crown Law Library", html)
+
+    def test_run_shifts_publish_date_forward_one_day(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir_name:
+            tmpdir = Path(tmpdir_name)
+            project_root = tmpdir / "project"
+            project_root.mkdir()
+            (project_root / "assets" / "generated").mkdir(parents=True)
+            (project_root / "assets" / "logos").mkdir(parents=True)
+            (project_root / "templates").mkdir()
+            (project_root / "data" / "output").mkdir(parents=True)
+
+            stories_path = project_root / "data" / "output" / "summarized_stories.json"
+            headlines_path = project_root / "data" / "output" / "headline_picks.json"
+            template_path = project_root / "templates" / "newsletter.html"
+            output_path = project_root / "data" / "output" / "newsletter.html"
+            repo_template_path = (
+                Path(__file__).resolve().parent.parent / "templates" / "newsletter.html"
+            )
+
+            self._write_json(
+                stories_path,
+                [
+                    self._story_payload(
+                        "security_story",
+                        "security",
+                        0.94,
+                        "Paragraph one.\n\nParagraph two.",
+                    ),
+                ],
+            )
+            self._write_json(
+                headlines_path,
+                [
+                    self._headline_payload(
+                        "https://example.com/other_headline",
+                        "Other headline",
+                        "assets/generated/headline_1.png",
+                    ),
+                ],
+            )
+            template_path.write_text(repo_template_path.read_text(encoding="utf-8"))
+
+            assembler = TemplateAssembler(
+                stories_path=str(stories_path),
+                headlines_path=str(headlines_path),
+                template_path=str(template_path),
+            )
+
+            html = assembler.run(publish_date="2026-05-26", output_path=str(output_path))
+
+            self.assertIn("WEDNESDAY", html)
+            self.assertIn("MAY 27", html)
 
     def test_story_to_article_prefers_newsletter_title(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir_name:
@@ -446,7 +480,5 @@ class TestTemplateAssembler(unittest.TestCase):
             self.assertIn("id=\"ai_sustainability\"", html)
             self.assertIn(">Responsible AI<", html)
             self.assertIn(">AI Sustainability<", html)
-            self.assertIn("assets/logos/responsible_ai.svg", html)
-            self.assertIn("assets/logos/ai_sustainability.svg", html)
-            self.assertIn(".toc-module {\n      display: none;", html)
-            self.assertIn(".sidebar {\n        display: none;", html)
+            self.assertIn('class="sidebar"', html)
+            self.assertIn('class="content-section"', html)

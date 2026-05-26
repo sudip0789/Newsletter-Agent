@@ -55,6 +55,10 @@ This command syncs `assets/` into `public/assets/` and renders `public/index.htm
 
 When an issue is approved and ready to go live:
 
+1. Upload that week's `.m4a` and `.mp4` files to Google Drive.
+2. Paste their Google Drive share links into `data/output/media_inputs.json`.
+3. Run:
+
 ```bash
 python3 scripts/publish_issue.py --date 2026-05-06
 ```
@@ -63,8 +67,11 @@ This workflow:
 
 - snapshots the current issue into `issue_snapshots/YYYY-MM-DD/`
 - copies generated headline images into that dated snapshot
+- reads weekly audio/video links from `data/output/media_inputs.json`
 - rebuilds `public/index.html` for the latest issue
 - rebuilds `public/issues/index.html` plus dated archive pages for older issues
+
+`data/output/media_inputs.json` is the weekly handoff file for media links. It accepts either full Google Drive share URLs such as `https://drive.google.com/file/d/.../view?...` or already-normalized `/preview` URLs. The publisher converts those into the embed URLs used by the newsletter.
 
 After that, commit the snapshot and rebuilt static files, then trigger a manual production deployment on Vercel.
 

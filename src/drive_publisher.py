@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-import io
 import logging
 import os
-import wave
 from pathlib import Path
 from typing import Any
 
@@ -65,40 +63,6 @@ def upload_file(
     return _build_urls(file_id)
 
 
-def upload_audio_placeholder(folder_id: str) -> dict[str, str]:
-    """Upload a tiny silent WAV as podcast.mp3 placeholder. Returns URL dict."""
-    from googleapiclient.http import MediaIoBaseUpload
-
-    service = _get_service()
-    file_meta = {"name": "podcast.mp3", "parents": [folder_id]}
-    media = MediaIoBaseUpload(
-        io.BytesIO(_silent_wav_bytes()), mimetype="audio/wav", resumable=False
-    )
-    result = (
-        service.files().create(body=file_meta, media_body=media, fields="id", supportsAllDrives=True).execute()
-    )
-    file_id: str = result["id"]
-    _make_public(service, file_id)
-    return _build_urls(file_id)
-
-
-def upload_video_placeholder(folder_id: str) -> dict[str, str]:
-    """Upload a tiny silent WAV as video.mp4 placeholder. Returns URL dict."""
-    from googleapiclient.http import MediaIoBaseUpload
-
-    service = _get_service()
-    file_meta = {"name": "video.mp4", "parents": [folder_id]}
-    media = MediaIoBaseUpload(
-        io.BytesIO(_silent_wav_bytes()), mimetype="audio/wav", resumable=False
-    )
-    result = (
-        service.files().create(body=file_meta, media_body=media, fields="id", supportsAllDrives=True).execute()
-    )
-    file_id: str = result["id"]
-    _make_public(service, file_id)
-    return _build_urls(file_id)
-
-
 def _get_service() -> Any:
     global _SERVICE_CACHE
     if _SERVICE_CACHE is not None:
@@ -146,14 +110,3 @@ def _build_urls(file_id: str) -> dict[str, str]:
         "embed_url": f"https://drive.google.com/file/d/{file_id}/preview",
         "direct_url": f"https://lh3.googleusercontent.com/d/{file_id}",
     }
-
-
-def _silent_wav_bytes() -> bytes:
-    """Generate a ~850-byte silent WAV (100 ms, 8 kHz, mono, 8-bit unsigned)."""
-    buf = io.BytesIO()
-    with wave.open(buf, "wb") as wf:
-        wf.setnchannels(1)
-        wf.setsampwidth(1)
-        wf.setframerate(8000)
-        wf.writeframes(b"\x80" * 800)  # 0x80 = silence for unsigned 8-bit PCM
-    return buf.getvalue()

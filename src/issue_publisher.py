@@ -7,19 +7,11 @@ from datetime import date, datetime
 from pathlib import Path
 from typing import Any
 
+from src.media_config import MEDIA_INPUTS_FILENAME, load_media_inputs
+from src.publish_dates import normalize_issue_date, resolve_publication_date
 from src.public_site_builder import build_public_site
 
 LOGGER = logging.getLogger(__name__)
-
-
-def _normalize_issue_date(publish_date: date | datetime | str | None) -> str:
-    if publish_date is None:
-        return datetime.now().date().isoformat()
-    if isinstance(publish_date, datetime):
-        return publish_date.date().isoformat()
-    if isinstance(publish_date, date):
-        return publish_date.isoformat()
-    return str(publish_date).strip()
 
 
 def _load_json(path: Path) -> list[dict[str, Any]]:
@@ -31,7 +23,7 @@ def _build_drive_media(
     issue_date: str,
     headlines: list[dict[str, Any]],
 ) -> dict[str, Any] | None:
-    """Upload images + placeholders to Drive. Returns media dict or None if Drive not configured."""
+    """Upload headline images to Drive. Returns media dict or None if Drive not configured."""
     from src import drive_publisher
 
     if not drive_publisher.is_configured():
@@ -58,18 +50,10 @@ def _build_drive_media(
         urls = drive_publisher.upload_file(folder_id, local_image, f"headline_{i}.png")
         image_direct_urls.append(urls["direct_url"])
 
-    LOGGER.info("Uploading podcast placeholder ...")
-    podcast_urls = drive_publisher.upload_audio_placeholder(folder_id)
-
-    LOGGER.info("Uploading video placeholder ...")
-    video_urls = drive_publisher.upload_video_placeholder(folder_id)
-
     return {
         "folder_id": folder_id,
         "folder_url": folder_url,
         "headline_images": image_direct_urls,
-        "podcast_embed_url": podcast_urls["embed_url"],
-        "video_embed_url": video_urls["embed_url"],
     }
 
 
@@ -78,7 +62,7 @@ def publish_issue(
     publish_date: date | datetime | str | None = None,
 ) -> Path:
     root = (project_root or Path(__file__).resolve().parent.parent).resolve()
-    issue_date = _normalize_issue_date(publish_date)
+    issue_date = normalize_issue_date(resolve_publication_date(publish_date))
     issue_root = root / "issue_snapshots" / issue_date
 
     if issue_root.exists():
@@ -99,16 +83,32 @@ def publish_issue(
         target_path.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(source_path, target_path)
 
-    media = _build_drive_media(issue_root, issue_date, headlines)
+    media_inputs_path = root / "data" / "output" / MEDIA_INPUTS_FILENAME
+    manual_media = load_media_inputs(media_inputs_path)
+    drive_media = _build_drive_media(issue_root, issue_date, headlines)
+    media = {**(drive_media or {}), **manual_media}
+
     if media:
         media_json = json.dumps(media, indent=2, ensure_ascii=False)
         (issue_root / "media.json").write_text(media_json, encoding="utf-8")
         (root / "data" / "output" / "media.json").write_text(media_json, encoding="utf-8")
+        if media.get("folder_url"):
+            LOGGER.info("Drive folder ready for editor: %s", media["folder_url"])
+            print(f"\nEditor Drive folder: {media['folder_url']}\n")
+    else:
         LOGGER.info(
-            "Drive folder ready for editor: %s",
-            media["folder_url"],
+            "No media metadata found. Add weekly audio/video links to %s when ready.",
+            media_inputs_path,
         )
-        print(f"\nEditor Drive folder: {media['folder_url']}\n")
+        print(
+            "\nWeekly media URLs: update "
+            f"{media_inputs_path.relative_to(root)} "
+            "with the Google Drive share links for this week's .m4a and .mp4 files.\n"
+        )
 
-    build_public_site(project_root=root, publish_date=issue_date)
+    build_public_site(
+        project_root=root,
+        publish_date=issue_date,
+        publish_date_is_resolved=True,
+    )
     return issue_root

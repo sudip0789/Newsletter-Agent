@@ -152,7 +152,7 @@ class TestPipelineRunReporting(unittest.TestCase):
                     main()
 
         output = stdout.getvalue()
-        self.assertIn("Top 30 articles selected:", output)
+        self.assertIn("Top 25 articles selected:", output)
         self.assertIn("Policy:", output)
         self.assertIn("- Policy story", output)
         self.assertIn("Legal Intelligence:", output)

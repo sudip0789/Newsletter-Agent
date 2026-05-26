@@ -7,19 +7,13 @@ from pathlib import Path
 from typing import Any
 
 from jinja2 import Environment, select_autoescape
+from src.media_config import MEDIA_INPUTS_FILENAME, load_media_inputs
+from src.publish_dates import normalize_issue_date, resolve_publication_date
 from src.template_assembler import TemplateAssembler
 
 
 def _load_json(path: Path) -> list[dict[str, Any]]:
     return json.loads(path.read_text(encoding="utf-8"))
-
-
-def _normalize_issue_date(publish_date: date | datetime | str) -> str:
-    if isinstance(publish_date, datetime):
-        return publish_date.date().isoformat()
-    if isinstance(publish_date, date):
-        return publish_date.isoformat()
-    return str(publish_date).strip()
 
 
 def _format_issue_date(issue_date: str) -> str:
@@ -108,6 +102,7 @@ def _load_media(path: Path) -> dict | None:
 def build_public_site(
     project_root: Path | None = None,
     publish_date: date | datetime | str | None = None,
+    publish_date_is_resolved: bool = False,
 ) -> str:
     root = (project_root or Path(__file__).resolve().parent.parent).resolve()
     source_assets = root / "assets"
@@ -124,10 +119,20 @@ def build_public_site(
     # Load media.json for the latest issue: prefer the issue snapshot (when publish_date
     # is known), fall back to data/output/media.json (committed alongside headline_picks.json).
     if publish_date is not None:
-        issue_date = _normalize_issue_date(publish_date)
-        current_media = _load_media(root / "issue_snapshots" / issue_date / "media.json")
+        if publish_date_is_resolved:
+            issue_date = normalize_issue_date(publish_date)
+        else:
+            issue_date = normalize_issue_date(resolve_publication_date(publish_date))
+        current_media = (
+            _load_media(root / "issue_snapshots" / issue_date / "media.json")
+            or _load_media(root / "data" / "output" / "media.json")
+            or load_media_inputs(root / "data" / "output" / MEDIA_INPUTS_FILENAME)
+        )
     else:
-        current_media = _load_media(root / "data" / "output" / "media.json")
+        current_media = (
+            _load_media(root / "data" / "output" / "media.json")
+            or load_media_inputs(root / "data" / "output" / MEDIA_INPUTS_FILENAME)
+        )
 
     assembler = TemplateAssembler(
         stories_path=str(root / "data" / "output" / "summarized_stories.json"),
@@ -139,6 +144,7 @@ def build_public_site(
         publish_date=publish_date,
         output_path=str(root / "public" / "index.html"),
         archive_url="issues/",
+        publish_date_is_resolved=publish_date_is_resolved,
     )
 
     for issue in _collect_issue_snapshots(root):
@@ -165,6 +171,7 @@ def build_public_site(
             output_path=str(issue_output_dir / "index.html"),
             archive_url="../",
             latest_issue_url="../../",
+            publish_date_is_resolved=True,
         )
 
     _build_archive_index(root, _collect_issue_snapshots(root))
