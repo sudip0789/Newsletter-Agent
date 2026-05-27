@@ -16,7 +16,7 @@
     </div>
     <nav class="mobile-issue-nav-grid">
       {% for section in active_sections %}
-      <a class="mobile-issue-nav-link" href="#{{ section.key }}">
+      <a class="mobile-issue-nav-link" href="{{ section.href }}">
         <span class="mobile-issue-nav-index">{{ "%02d"|format(section.index) }}</span>
         <span class="mobile-issue-nav-label">{{ section.name }}</span>
       </a>
@@ -1557,6 +1557,7 @@
       }
     }
   </style>
+  <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
   <div class="page-viewport">
@@ -1653,17 +1654,21 @@
             <span class="sidebar-meta-strong">{{ "%02d"|format(section_count) }}</span>
             <span>Sections</span>
             <span class="sidebar-meta-separator" aria-hidden="true">·</span>
-            <span class="sidebar-meta-strong">{{ section_story_count }}</span>
+            <span class="sidebar-meta-strong">{{ story_count }}</span>
             <span>Stories</span>
           </div>
         </div>
         <nav class="sidebar-nav">
           {% for section in active_sections %}
-          <a class="sidebar-link" href="#{{ section.key }}">
+          <a class="sidebar-link" href="{{ section.href }}">
             <span class="sidebar-link-number">{{ "%02d"|format(section.index) }}</span>
             <span class="sidebar-link-body">
               <span class="sidebar-link-title">{{ section.name }}</span>
+              {% if section.in_headlines %}
+              <span class="sidebar-link-count">In Headlines</span>
+              {% else %}
               <span class="sidebar-link-count">{{ section.story_count }} {{ "Story" if section.story_count == 1 else "Stories" }}</span>
+              {% endif %}
             </span>
             <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
           </a>

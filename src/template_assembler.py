@@ -79,6 +79,7 @@ class TemplateAssembler:
         output_file.parent.mkdir(parents=True, exist_ok=True)
 
         exclude_urls = [headline.get("url", "") for headline in self.headlines]
+        grouped_all = self.group_by_section(self.stories, exclude_urls=[])
         grouped = self.group_by_section(self.stories, exclude_urls=exclude_urls)
         active_sections = self.get_active_sections(grouped)
         section_navigation = [
@@ -87,9 +88,14 @@ class TemplateAssembler:
                 "name": name,
                 "icon_path": self._resolve_section_icon_path(output_file, key),
                 "index": index,
-                "story_count": len(grouped[key]),
+                "story_count": len(grouped.get(key, [])),
+                "href": f"#{key}" if grouped.get(key) else "#headlines",
+                "in_headlines": bool(not grouped.get(key) and grouped_all.get(key)),
             }
-            for index, (key, name) in enumerate(active_sections, start=1)
+            for index, (key, name) in enumerate(
+                [(k, n) for k, n in self.ALL_SECTIONS if grouped_all.get(k)],
+                start=1,
+            )
         ]
         sections = [
             {

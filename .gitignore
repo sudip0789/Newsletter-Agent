@@ -17,4 +17,7 @@ data/output/*
 !data/output/headline_picks.json
 !data/output/media.json
 .vercel
+node_modules/
+package-lock.json
+package.json
 docs/

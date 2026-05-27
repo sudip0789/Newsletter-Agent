@@ -113,6 +113,19 @@ def _load_media(path: Path) -> dict | None:
     return None
 
 
+def _convert_to_mp3(source_path: Path) -> Path:
+    """Convert audio to mp3 via ffmpeg for browser seek compatibility. Returns mp3 path."""
+    import subprocess
+
+    output_path = source_path.with_suffix(".mp3")
+    subprocess.run(
+        ["ffmpeg", "-y", "-i", str(source_path), "-q:a", "2", str(output_path)],
+        check=True,
+        capture_output=True,
+    )
+    return output_path
+
+
 def _copy_local_podcast_audio(
     source_path: Path,
     target_root: Path,
@@ -126,6 +139,36 @@ def _copy_local_podcast_audio(
     target_path.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(source_path, target_path)
     return relative_path.as_posix()
+
+
+def _sync_media_to_snapshot(
+    root: Path,
+    issue_date: str,
+    audio_source: Path,
+    media_inputs: dict,
+) -> None:
+    """Sync local audio file and media_inputs.json back into the issue snapshot.
+
+    Called by build_public_site so that adding audio/video after the initial
+    publish_issue run keeps the snapshot up to date for future archive builds.
+    """
+    snapshot_dir = root / "issue_snapshots" / issue_date
+    if not snapshot_dir.exists():
+        return
+
+    if audio_source.exists():
+        relative = Path(build_local_podcast_audio_path(issue_date, audio_source.suffix))
+        target = snapshot_dir / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(audio_source, target)
+
+    if media_inputs:
+        media_json_path = snapshot_dir / "media.json"
+        existing = _load_media(media_json_path) or {}
+        merged = {**existing, **media_inputs}
+        media_json_path.write_text(
+            json.dumps(merged, indent=2, ensure_ascii=False), encoding="utf-8"
+        )
 
 
 def build_public_site(
@@ -169,16 +212,27 @@ def build_public_site(
             _load_media(root / "data" / "output" / "media.json")
             or load_media_inputs(root / "data" / "output" / MEDIA_INPUTS_FILENAME)
         )
-    current_media = dict(current_media or {})
+    media_inputs = load_media_inputs(root / "data" / "output" / MEDIA_INPUTS_FILENAME)
+    current_media = {**dict(current_media or {}), **media_inputs}
 
+    mp3_path = root / "data" / "output" / "audio.mp3"
+    m4a_path = root / "data" / "output" / LOCAL_PODCAST_AUDIO_FILENAME
+    if mp3_path.exists():
+        audio_source = mp3_path
+    elif m4a_path.exists():
+        audio_source = _convert_to_mp3(m4a_path)
+    else:
+        audio_source = mp3_path
     latest_audio_path = _copy_local_podcast_audio(
-        root / "data" / "output" / LOCAL_PODCAST_AUDIO_FILENAME,
+        audio_source,
         root / "public",
         latest_issue_date,
     )
     if latest_audio_path:
         current_media["podcast_audio_url"] = latest_audio_path
         current_media.pop("podcast_embed_url", None)
+
+    _sync_media_to_snapshot(root, latest_issue_date, audio_source, media_inputs)
 
     assembler = TemplateAssembler(
         stories_path=str(root / "data" / "output" / "summarized_stories.json"),

@@ -7,7 +7,7 @@ from typing import Any, Mapping
 from urllib.parse import parse_qs, urlparse
 
 MEDIA_INPUTS_FILENAME = "media_inputs.json"
-LOCAL_PODCAST_AUDIO_FILENAME = "audio.mp3"
+LOCAL_PODCAST_AUDIO_FILENAME = "audio.m4a"
 
 _DRIVE_FILE_PATH_RE = re.compile(r"/file/d/([^/]+)")
 _DRIVE_FILE_ID_RE = re.compile(r"^[A-Za-z0-9_-]{10,}$")
