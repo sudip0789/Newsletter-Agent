@@ -21,29 +21,6 @@ BLURB_SYSTEM_PROMPT = (
     "Just the core hook that makes someone want to read more."
 )
 
-HEADLINE_SELECTION_SYSTEM_PROMPT = """You are the lead editor for an AI news newsletter.
-
-Your job is to choose exactly 3 headline stories from the candidate list. Think like a human editor, not a deterministic ranking script.
-
-Prioritize:
-- highly popular product launches from the current week
-- stories that feel broadly important, conversation-driving, and genuinely headline-worthy
-- big company moments, public failures, business risk, strategy shocks, executive conflict, or market-moving news
-- lawsuits, regulatory action, copyright disputes, security incidents, or other high-stakes AI controversies
-
-Avoid selecting three headlines that feel like the same story type unless the week is clearly dominated by that topic. Aim for variety across the final 3 picks when possible.
-
-Respond with ONLY a JSON object in this shape:
-{
-  "selected_headlines": [
-    {"url": "https://example.com/1"},
-    {"url": "https://example.com/2"},
-    {"url": "https://example.com/3"}
-  ]
-}
-"""
-
-
 class HeadlineAgent:
     HEADLINE_SELECTION_MODEL = "gpt-5.4"
     BLURB_MODEL = "claude-sonnet-4-6"
@@ -66,11 +43,11 @@ class HeadlineAgent:
         self.blurb_client: Any | None = None
         self.image_client: Any | None = None
 
-    def run(self) -> list[dict[str, Any]]:
+    def run(self, preferred_titles: list[str] | None = None) -> list[dict[str, Any]]:
         """
         Select 3 headline stories, generate blurbs, and return the headline payloads.
         """
-        selected_stories = self._select_headline_stories()
+        selected_stories = self._select_headline_stories(preferred_titles=preferred_titles)
         headlines: list[dict[str, Any]] = []
         for story in selected_stories:
             blurb = self.generate_blurb(story)
@@ -83,6 +60,10 @@ class HeadlineAgent:
             )
 
         return headlines
+
+    def list_headline_candidates(self) -> list[dict[str, Any]]:
+        """Return ranked eligible candidates for optional manual headline picking."""
+        return self._rank_eligible_stories()
 
     def generate_blurb(self, story: dict[str, Any]) -> str:
         """
@@ -133,17 +114,21 @@ class HeadlineAgent:
         client = self._get_image_client()
         prompt_context = story.get("blurb") or ""
         prompt = (
-            f"Flat vector icon illustration representing: {story['title']}. "
+            f"Editorial magazine illustration for a story titled: {story['title']}. "
             f"Context: {prompt_context}. "
-            "Style: modern product-style icon (similar to Stripe or Notion illustrations). "
-            "Clean geometric shapes, soft gradients, subtle shadows. "
-            "Color palette: muted professional tones (navy, teal, gray) with small accent colors (red or yellow). "
-            "Composition: single centered icon, simple and bold, high contrast, "
-            "easily recognizable at small size (thumbnail). "
-            "Visual: use a clear, literal metaphor. No brains, no nodes, no robots in logos.No scales of justice, no gravel. "
-            "Constraints: no text, no letters, no numbers, no logos, no realistic faces, "
-            "no photorealism, no complex background. "
-            "Tone: clean, polished, modern tech editorial icon."
+            "Style: refined editorial illustration in the style of The Atlantic, "
+            "The New York Times Magazine, or Foreign Affairs. Conceptual rather than literal. "
+            "Restrained, sophisticated, serious tone — not cute or playful. "
+            "Palette: warm cream/off-white background (#FBF7EE). Primary accent color "
+            "is cardinal red (#8C1515). Secondary dark warm ink for line work. "
+            "No additional colors, no rainbow palettes, no pastel gradients. "
+            "Composition: single conceptual symbol or metaphor, centered, simple. "
+            "Abstract geometric shapes preferred over narrative scenes. "
+            "Strict constraints: no characters, no faces, no human figures, no mascots, "
+            "no text, no letters, no numbers, no logos, no national flags, "
+            "no scales of justice, no gavels, no brains, no robots, no nodes, "
+            "no photorealism, no 3D rendering, no shiny tech aesthetic. "
+            "The illustration should look at home next to a Stanford Law publication."
         )
 
         try:
@@ -233,15 +218,59 @@ class HeadlineAgent:
             enriched.append({**pick, "summary": summary})
         return enriched
 
-    def _select_headline_stories(self) -> list[dict[str, Any]]:
+    def _select_headline_stories(
+        self,
+        preferred_titles: list[str] | None = None,
+    ) -> list[dict[str, Any]]:
         ranked_stories = self._rank_eligible_stories()
-        by_url = {story["url"]: story for story in ranked_stories}
+        manual_stories = self._match_preferred_titles(ranked_stories, preferred_titles or [])
+        remaining_count = self.HEADLINE_COUNT - len(manual_stories)
+        if remaining_count <= 0:
+            return manual_stories[: self.HEADLINE_COUNT]
 
-        selected_urls = self._select_urls_with_llm(ranked_stories)
+        used_urls = {story["url"] for story in manual_stories}
+        remaining_stories = [
+            story for story in ranked_stories if story["url"] not in used_urls
+        ]
+        by_url = {story["url"]: story for story in remaining_stories}
+
+        selected_urls = self._select_urls_with_llm(
+            remaining_stories,
+            selection_count=remaining_count,
+        )
         if selected_urls is None:
-            return ranked_stories[: self.HEADLINE_COUNT]
+            return manual_stories + remaining_stories[:remaining_count]
 
-        return [by_url[url] for url in selected_urls]
+        return manual_stories + [by_url[url] for url in selected_urls]
+
+    def _match_preferred_titles(
+        self,
+        ranked_stories: list[dict[str, Any]],
+        preferred_titles: list[str],
+    ) -> list[dict[str, Any]]:
+        if not preferred_titles:
+            return []
+
+        stories_by_title: dict[str, dict[str, Any]] = {}
+        for story in ranked_stories:
+            normalized_title = self._normalize_title_key(story["title"])
+            stories_by_title.setdefault(normalized_title, story)
+
+        selected_stories: list[dict[str, Any]] = []
+        seen_urls: set[str] = set()
+        for raw_title in preferred_titles[: self.HEADLINE_COUNT]:
+            normalized_title = self._normalize_title_key(raw_title)
+            if not normalized_title:
+                continue
+            story = stories_by_title.get(normalized_title)
+            if story is None:
+                LOGGER.warning("Preferred headline title not found in candidates: %s", raw_title)
+                continue
+            if story["url"] in seen_urls:
+                continue
+            selected_stories.append(story)
+            seen_urls.add(story["url"])
+        return selected_stories
 
     def _rank_eligible_stories(self) -> list[dict[str, Any]]:
         eligible_stories = [
@@ -261,17 +290,27 @@ class HeadlineAgent:
     def _select_urls_with_llm(
         self,
         ranked_stories: list[dict[str, Any]],
+        selection_count: int,
     ) -> list[str] | None:
+        if selection_count <= 0:
+            return []
+
         client = self._get_selection_client()
         response = client.chat.completions.create(
             model=self.HEADLINE_SELECTION_MODEL,
             response_format={"type": "json_object"},
             temperature=self.SELECTION_TEMPERATURE,
             messages=[
-                {"role": "system", "content": HEADLINE_SELECTION_SYSTEM_PROMPT},
+                {
+                    "role": "system",
+                    "content": self._build_selection_system_prompt(selection_count),
+                },
                 {
                     "role": "user",
-                    "content": self._build_selection_user_prompt(ranked_stories),
+                    "content": self._build_selection_user_prompt(
+                        ranked_stories,
+                        selection_count,
+                    ),
                 },
             ],
         )
@@ -306,13 +345,40 @@ class HeadlineAgent:
             selected_urls.append(url)
             seen.add(url)
 
-        if len(selected_urls) != self.HEADLINE_COUNT:
+        if len(selected_urls) != selection_count:
             LOGGER.warning("Headline selection returned %s URLs. Using fallback.", len(selected_urls))
             return None
 
         return selected_urls
 
-    def _build_selection_user_prompt(self, ranked_stories: list[dict[str, Any]]) -> str:
+    def _build_selection_system_prompt(self, selection_count: int) -> str:
+        story_label = "story" if selection_count == 1 else "stories"
+        headline_phrase = "headline" if selection_count == 1 else "headline"
+        return f"""You are the lead editor for an AI news newsletter.
+
+Your job is to choose exactly {selection_count} {headline_phrase} {story_label} from the candidate list. Think like a human editor, not a deterministic ranking script.
+
+Prioritize:
+- highly popular product launches from the current week
+- stories that feel broadly important, conversation-driving, and genuinely headline-worthy
+- big company moments, public failures, business risk, strategy shocks, executive conflict, or market-moving news
+- lawsuits, regulatory action, copyright disputes, security incidents, or other high-stakes AI controversies
+
+Avoid selecting stories that feel too repetitive unless the week is clearly dominated by that topic. Aim for variety across the final {selection_count} picks when possible.
+
+Respond with ONLY a JSON object in this shape:
+{{
+  "selected_headlines": [
+    {{"url": "https://example.com/1"}}
+  ]
+}}
+"""
+
+    def _build_selection_user_prompt(
+        self,
+        ranked_stories: list[dict[str, Any]],
+        selection_count: int,
+    ) -> str:
         candidates = [
             {
                 "title": story["title"],
@@ -329,7 +395,9 @@ class HeadlineAgent:
         ]
         return json.dumps(
             {
-                "instructions": "Choose the three strongest headline stories in ranked order.",
+                "instructions": (
+                    f"Choose the {selection_count} strongest headline stories in ranked order."
+                ),
                 "candidate_stories": candidates,
             },
             ensure_ascii=False,
@@ -411,6 +479,9 @@ class HeadlineAgent:
 
     def _normalize_text(self, value: Any) -> str:
         return " ".join(html.unescape("" if value is None else str(value)).split())
+
+    def _normalize_title_key(self, value: Any) -> str:
+        return self._normalize_text(value).casefold()
 
     def _normalize_story_payload(self, payload: dict[str, Any]) -> dict[str, Any]:
         scored_story = dict(payload.get("scored_story", {}))

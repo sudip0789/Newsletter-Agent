@@ -55,6 +55,43 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def prompt_for_preferred_titles(candidates: list[dict[str, object]]) -> list[str]:
+    print("Optional: choose up to 3 headline candidates by number.")
+    print("Leave blank to let the current headline selection system choose all 3.")
+    for index, candidate in enumerate(candidates, start=1):
+        print(f"{index:02d}. {candidate['title']}")
+
+    try:
+        raw_selection = input("Headline numbers (comma-separated, e.g. 2,6,12): ").strip()
+    except EOFError:
+        print("\nNo manual headline titles provided. Continuing with automatic selection.")
+        return []
+
+    if not raw_selection:
+        return []
+
+    preferred_titles: list[str] = []
+    seen_indexes: set[int] = set()
+    for token in raw_selection.split(","):
+        cleaned = token.strip()
+        if not cleaned:
+            continue
+        if not cleaned.isdigit():
+            print(f"Ignoring invalid headline choice: {cleaned}")
+            continue
+        candidate_index = int(cleaned)
+        if candidate_index < 1 or candidate_index > len(candidates):
+            print(f"Ignoring out-of-range headline choice: {cleaned}")
+            continue
+        if candidate_index in seen_indexes:
+            continue
+        seen_indexes.add(candidate_index)
+        preferred_titles.append(str(candidates[candidate_index - 1]["title"]))
+        if len(preferred_titles) == 3:
+            break
+    return preferred_titles
+
+
 def main() -> None:
     args = parse_args()
     setup_logging(logging.INFO)
@@ -63,7 +100,8 @@ def main() -> None:
     if args.images_only:
         headlines = agent.attach_summaries(agent.load_saved_picks())
     else:
-        headlines = agent.run()
+        preferred_titles = prompt_for_preferred_titles(agent.list_headline_candidates())
+        headlines = agent.run(preferred_titles=preferred_titles)
 
     if args.blurbs_only:
         headlines = agent.preserve_existing_image_paths(headlines)

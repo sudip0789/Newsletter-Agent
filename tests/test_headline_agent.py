@@ -140,6 +140,60 @@ class TestHeadlineAgent(unittest.TestCase):
             ["Story launch", "Story lawsuit", "Story risk"],
         )
 
+    def test_run_uses_all_matching_manual_titles_without_llm_selection(self) -> None:
+        input_path = self._write_input(
+            [
+                self._story_payload("launch", "ai_products", 0.98, "Launch summary"),
+                self._story_payload("lawsuit", "legal_intelligence", 0.95, "Lawsuit summary"),
+                self._story_payload("risk", "enterprise_ai", 0.94, "Risk summary"),
+                self._story_payload("research", "research", 0.93, "Research summary"),
+            ]
+        )
+        agent = HeadlineAgent(input_path=str(input_path))
+        agent._select_urls_with_llm = MagicMock()
+        agent.generate_blurb = MagicMock(side_effect=lambda story: story["title"])
+
+        picks = agent.run(
+            preferred_titles=["Story risk", "Story launch", "Story lawsuit"]
+        )
+
+        self.assertEqual(
+            [pick["title"] for pick in picks],
+            ["Story risk", "Story launch", "Story lawsuit"],
+        )
+        agent._select_urls_with_llm.assert_not_called()
+
+    def test_run_uses_manual_titles_and_fills_remaining_slots_from_current_selection(self) -> None:
+        input_path = self._write_input(
+            [
+                self._story_payload("launch", "ai_products", 0.98, "Launch summary"),
+                self._story_payload("lawsuit", "legal_intelligence", 0.95, "Lawsuit summary"),
+                self._story_payload("risk", "enterprise_ai", 0.94, "Risk summary"),
+                self._story_payload("research", "research", 0.93, "Research summary"),
+            ]
+        )
+        agent = HeadlineAgent(input_path=str(input_path))
+        agent._select_urls_with_llm = MagicMock(
+            return_value=[
+                "https://example.com/launch",
+                "https://example.com/lawsuit",
+            ]
+        )
+        agent.generate_blurb = MagicMock(side_effect=lambda story: story["title"])
+
+        picks = agent.run(preferred_titles=["Story risk"])
+
+        self.assertEqual(
+            [pick["title"] for pick in picks],
+            ["Story risk", "Story launch", "Story lawsuit"],
+        )
+        remaining_candidates = agent._select_urls_with_llm.call_args.args[0]
+        self.assertEqual(
+            [story["title"] for story in remaining_candidates],
+            ["Story launch", "Story lawsuit", "Story research"],
+        )
+        self.assertEqual(agent._select_urls_with_llm.call_args.kwargs["selection_count"], 2)
+
     def test_run_rewrites_long_headline_titles_before_returning_picks(self) -> None:
         long_title = (
             "Microsoft lays out a sweeping new enterprise AI rollout across "
@@ -466,10 +520,18 @@ class TestRunHeadlineAgent(unittest.TestCase):
             "assets/generated/headline_2.png",
             None,
         ]
+        agent.list_headline_candidates.return_value = [
+            {"title": "Story 1"},
+            {"title": "Story 2"},
+            {"title": "Story 3"},
+            {"title": "Story 4"},
+        ]
 
-        with patch.object(sys, "argv", ["run_headline_agent.py"]):
-            main()
+        with patch("builtins.input", return_value="1,3"):
+            with patch.object(sys, "argv", ["run_headline_agent.py"]):
+                main()
 
+        agent.run.assert_called_once_with(preferred_titles=["Story 1", "Story 3"])
         self.assertEqual(agent.generate_headline_image.call_count, 3)
         self.assertEqual(mock_sleep.call_args_list, [call(10), call(10)])
         agent.save_picks.assert_called_once_with(
@@ -491,6 +553,63 @@ class TestRunHeadlineAgent(unittest.TestCase):
                     "summary": "Summary 3",
                     "blurb": "Blurb 3",
                     "image_path": None,
+                },
+            ]
+        )
+
+    @patch("scripts.run_headline_agent.setup_logging")
+    @patch("scripts.run_headline_agent.time.sleep")
+    @patch("scripts.run_headline_agent.HeadlineAgent")
+    def test_main_images_only_skips_title_prompts(
+        self,
+        mock_agent_cls: MagicMock,
+        mock_sleep: MagicMock,
+        _mock_setup_logging: MagicMock,
+    ) -> None:
+        agent = mock_agent_cls.return_value
+        agent.load_saved_picks.return_value = [
+            {"title": "Story 1", "blurb": "Blurb 1"},
+            {"title": "Story 2", "blurb": "Blurb 2"},
+            {"title": "Story 3", "blurb": "Blurb 3"},
+        ]
+        agent.attach_summaries.return_value = [
+            {"title": "Story 1", "summary": "Summary 1", "blurb": "Blurb 1"},
+            {"title": "Story 2", "summary": "Summary 2", "blurb": "Blurb 2"},
+            {"title": "Story 3", "summary": "Summary 3", "blurb": "Blurb 3"},
+        ]
+        agent.generate_headline_image.side_effect = [
+            "assets/generated/headline_1.png",
+            None,
+            "assets/generated/headline_3.png",
+        ]
+
+        with patch("builtins.input") as mock_input:
+            with patch.object(sys, "argv", ["run_headline_agent.py", "--images-only"]):
+                main()
+
+        mock_input.assert_not_called()
+        agent.list_headline_candidates.assert_not_called()
+        agent.run.assert_not_called()
+        self.assertEqual(mock_sleep.call_args_list, [call(10), call(10)])
+        agent.save_picks.assert_called_once_with(
+            [
+                {
+                    "title": "Story 1",
+                    "summary": "Summary 1",
+                    "blurb": "Blurb 1",
+                    "image_path": "assets/generated/headline_1.png",
+                },
+                {
+                    "title": "Story 2",
+                    "summary": "Summary 2",
+                    "blurb": "Blurb 2",
+                    "image_path": None,
+                },
+                {
+                    "title": "Story 3",
+                    "summary": "Summary 3",
+                    "blurb": "Blurb 3",
+                    "image_path": "assets/generated/headline_3.png",
                 },
             ]
         )
@@ -532,10 +651,18 @@ class TestRunHeadlineAgent(unittest.TestCase):
         ]
         agent.run.return_value = generated_headlines
         agent.preserve_existing_image_paths.return_value = preserved_headlines
+        agent.list_headline_candidates.return_value = [
+            {"title": "Story 1"},
+            {"title": "Story 2"},
+            {"title": "Story 3"},
+            {"title": "Story 4"},
+        ]
 
-        with patch.object(sys, "argv", ["run_headline_agent.py", "--blurbs-only"]):
-            main()
+        with patch("builtins.input", return_value=""):
+            with patch.object(sys, "argv", ["run_headline_agent.py", "--blurbs-only"]):
+                main()
 
+        agent.run.assert_called_once_with(preferred_titles=[])
         agent.generate_headline_image.assert_not_called()
         mock_sleep.assert_not_called()
         agent.preserve_existing_image_paths.assert_called_once_with(generated_headlines)
@@ -544,56 +671,32 @@ class TestRunHeadlineAgent(unittest.TestCase):
     @patch("scripts.run_headline_agent.setup_logging")
     @patch("scripts.run_headline_agent.time.sleep")
     @patch("scripts.run_headline_agent.HeadlineAgent")
-    def test_main_images_only_refreshes_saved_picks(
+    def test_main_maps_numbered_choices_to_candidate_titles(
         self,
         mock_agent_cls: MagicMock,
-        mock_sleep: MagicMock,
+        _mock_sleep: MagicMock,
         _mock_setup_logging: MagicMock,
     ) -> None:
         agent = mock_agent_cls.return_value
-        agent.load_saved_picks.return_value = [
-            {"title": "Story 1", "blurb": "Blurb 1"},
-            {"title": "Story 2", "blurb": "Blurb 2"},
-            {"title": "Story 3", "blurb": "Blurb 3"},
+        agent.list_headline_candidates.return_value = [
+            {"title": "Story 1"},
+            {"title": "Story 2"},
+            {"title": "Story 3"},
+            {"title": "Story 4"},
         ]
-        agent.attach_summaries.return_value = [
-            {"title": "Story 1", "summary": "Summary 1", "blurb": "Blurb 1"},
+        agent.run.return_value = [
             {"title": "Story 2", "summary": "Summary 2", "blurb": "Blurb 2"},
-            {"title": "Story 3", "summary": "Summary 3", "blurb": "Blurb 3"},
+            {"title": "Story 4", "summary": "Summary 4", "blurb": "Blurb 4"},
+            {"title": "Story 1", "summary": "Summary 1", "blurb": "Blurb 1"},
         ]
-        agent.generate_headline_image.side_effect = [
-            "assets/generated/headline_1.png",
-            None,
-            "assets/generated/headline_3.png",
-        ]
+        agent.generate_headline_image.side_effect = [None, None, None]
 
-        with patch.object(sys, "argv", ["run_headline_agent.py", "--images-only"]):
-            main()
+        with patch("builtins.input", return_value="2,4,2,99,abc"):
+            with patch.object(sys, "argv", ["run_headline_agent.py"]):
+                main()
 
-        agent.run.assert_not_called()
-        self.assertEqual(mock_sleep.call_args_list, [call(10), call(10)])
-        agent.save_picks.assert_called_once_with(
-            [
-                {
-                    "title": "Story 1",
-                    "summary": "Summary 1",
-                    "blurb": "Blurb 1",
-                    "image_path": "assets/generated/headline_1.png",
-                },
-                {
-                    "title": "Story 2",
-                    "summary": "Summary 2",
-                    "blurb": "Blurb 2",
-                    "image_path": None,
-                },
-                {
-                    "title": "Story 3",
-                    "summary": "Summary 3",
-                    "blurb": "Blurb 3",
-                    "image_path": "assets/generated/headline_3.png",
-                },
-            ]
-        )
+        agent.run.assert_called_once_with(preferred_titles=["Story 2", "Story 4"])
+
 
 
 if __name__ == "__main__":
