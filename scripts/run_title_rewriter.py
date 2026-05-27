@@ -3,7 +3,7 @@ Rewrite newsletter titles for summarized stories in place.
 
 Usage:
     python3 scripts/run_title_rewriter.py
-    python3 scripts/run_title_rewriter.py --top 30
+    python3 scripts/run_title_rewriter.py --top 25
     python3 scripts/run_title_rewriter.py --input data/output/summarized_stories.json
     python3 scripts/run_title_rewriter.py --model gpt-5.4
 """
@@ -41,7 +41,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--top",
         type=int,
-        default=30,
+        default=25,
         help="Number of stories to rewrite titles for.",
     )
     parser.add_argument(

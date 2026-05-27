@@ -4,11 +4,17 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from src.issue_publisher import publish_issue
 
 
 class TestIssuePublisher(unittest.TestCase):
+    def setUp(self) -> None:
+        self.render_pdf_patcher = patch("src.public_site_builder.render_html_to_pdf")
+        self.mock_render_pdf = self.render_pdf_patcher.start()
+        self.addCleanup(self.render_pdf_patcher.stop)
+
     def _story_payload(self, title: str, url: str) -> dict:
         return {
             "scored_story": {
@@ -63,8 +69,9 @@ class TestIssuePublisher(unittest.TestCase):
             )
 
             for name in [
-                "newsletter_logo.png",
-                "news_brief.png",
+                "RBG_RCLL_vrt.png",
+                "Podcast_edition.png",
+                "Video_Overview.png",
                 "security.svg",
             ]:
                 (project_root / "assets" / "logos" / name).write_bytes(b"logo")
@@ -122,6 +129,197 @@ class TestIssuePublisher(unittest.TestCase):
             self.assertNotIn("Latest headline", archive_html)
             self.assertNotIn("Older headline", archive_html)
             self.assertIn("Latest story", current_issue_html)
+
+    def test_publish_issue_uses_current_day_for_snapshot_and_archive(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir_name:
+            tmpdir = Path(tmpdir_name)
+            project_root = tmpdir / "project"
+            (project_root / "assets" / "generated").mkdir(parents=True)
+            (project_root / "assets" / "logos").mkdir(parents=True)
+            (project_root / "data" / "output").mkdir(parents=True)
+            (project_root / "templates").mkdir(parents=True)
+
+            repo_root = Path(__file__).resolve().parent.parent
+            (project_root / "templates" / "newsletter.html").write_text(
+                (repo_root / "templates" / "newsletter.html").read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+            (project_root / "templates" / "archive_index.html").write_text(
+                (repo_root / "templates" / "archive_index.html").read_text(
+                    encoding="utf-8"
+                ),
+                encoding="utf-8",
+            )
+
+            for name in [
+                "RBG_RCLL_vrt.png",
+                "Podcast_edition.png",
+                "Video_Overview.png",
+                "security.svg",
+            ]:
+                (project_root / "assets" / "logos" / name).write_bytes(b"logo")
+            (project_root / "assets" / "generated" / "headline_1.png").write_bytes(b"png")
+
+            self._write_json(
+                project_root / "data" / "output" / "summarized_stories.json",
+                [self._story_payload("Latest story", "https://example.com/latest")],
+            )
+            self._write_json(
+                project_root / "data" / "output" / "headline_picks.json",
+                [self._headline_payload("Latest headline", "https://example.com/latest-headline")],
+            )
+
+            publish_issue(project_root=project_root, publish_date="2026-05-26")
+
+            current_issue_root = project_root / "issue_snapshots" / "2026-05-26"
+            self.assertTrue(current_issue_root.exists())
+            self.assertFalse((project_root / "issue_snapshots" / "2026-05-27").exists())
+
+            archive_html = (project_root / "public" / "issues" / "index.html").read_text(
+                encoding="utf-8"
+            )
+            self.assertIn("The AI Newsletter for May 26th, 2026", archive_html)
+
+    def test_publish_issue_uses_weekly_media_input_urls_for_audio_and_video(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir_name:
+            tmpdir = Path(tmpdir_name)
+            project_root = tmpdir / "project"
+            (project_root / "assets" / "generated").mkdir(parents=True)
+            (project_root / "assets" / "logos").mkdir(parents=True)
+            (project_root / "data" / "output").mkdir(parents=True)
+            (project_root / "templates").mkdir(parents=True)
+
+            repo_root = Path(__file__).resolve().parent.parent
+            (project_root / "templates" / "newsletter.html").write_text(
+                (repo_root / "templates" / "newsletter.html").read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+            (project_root / "templates" / "archive_index.html").write_text(
+                (repo_root / "templates" / "archive_index.html").read_text(
+                    encoding="utf-8"
+                ),
+                encoding="utf-8",
+            )
+
+            for name in [
+                "RBG_RCLL_vrt.png",
+                "Podcast_edition.png",
+                "Video_Overview.png",
+                "security.svg",
+            ]:
+                (project_root / "assets" / "logos" / name).write_bytes(b"logo")
+            (project_root / "assets" / "generated" / "headline_1.png").write_bytes(b"png")
+
+            self._write_json(
+                project_root / "data" / "output" / "summarized_stories.json",
+                [self._story_payload("Latest story", "https://example.com/latest")],
+            )
+            self._write_json(
+                project_root / "data" / "output" / "headline_picks.json",
+                [self._headline_payload("Latest headline", "https://example.com/latest-headline")],
+            )
+            (project_root / "data" / "output" / "media_inputs.json").write_text(
+                json.dumps(
+                    {
+                        "audio_url": "https://drive.google.com/file/d/audio-file-id/view?usp=sharing",
+                        "video_url": "https://drive.google.com/file/d/video-file-id/view?usp=sharing",
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            publish_issue(project_root=project_root, publish_date="2026-05-06")
+
+            issue_root = project_root / "issue_snapshots" / "2026-05-06"
+            media = json.loads((issue_root / "media.json").read_text(encoding="utf-8"))
+
+            self.assertEqual(
+                media["podcast_embed_url"],
+                "https://drive.google.com/file/d/audio-file-id/preview",
+            )
+            self.assertEqual(
+                media["podcast_audio_url"],
+                "https://drive.usercontent.google.com/download?id=audio-file-id&export=download",
+            )
+            self.assertEqual(
+                media["video_embed_url"],
+                "https://drive.google.com/file/d/video-file-id/preview",
+            )
+
+            latest_html = (project_root / "public" / "index.html").read_text(encoding="utf-8")
+            self.assertIn(
+                "https://drive.usercontent.google.com/download?id=audio-file-id&amp;export=download",
+                latest_html,
+            )
+            self.assertIn(
+                "https://drive.google.com/file/d/video-file-id/preview",
+                latest_html,
+            )
+
+    def test_publish_issue_snapshots_local_podcast_audio_file(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir_name:
+            tmpdir = Path(tmpdir_name)
+            project_root = tmpdir / "project"
+            (project_root / "assets" / "generated").mkdir(parents=True)
+            (project_root / "assets" / "logos").mkdir(parents=True)
+            (project_root / "data" / "output").mkdir(parents=True)
+            (project_root / "templates").mkdir(parents=True)
+
+            repo_root = Path(__file__).resolve().parent.parent
+            (project_root / "templates" / "newsletter.html").write_text(
+                (repo_root / "templates" / "newsletter.html").read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+            (project_root / "templates" / "archive_index.html").write_text(
+                (repo_root / "templates" / "archive_index.html").read_text(
+                    encoding="utf-8"
+                ),
+                encoding="utf-8",
+            )
+
+            for name in [
+                "RBG_RCLL_vrt.png",
+                "Podcast_edition.png",
+                "Video_Overview.png",
+                "security.svg",
+            ]:
+                (project_root / "assets" / "logos" / name).write_bytes(b"logo")
+            (project_root / "assets" / "generated" / "headline_1.png").write_bytes(b"png")
+            (project_root / "data" / "output" / "audio.mp3").write_bytes(b"mp3")
+
+            self._write_json(
+                project_root / "data" / "output" / "summarized_stories.json",
+                [self._story_payload("Latest story", "https://example.com/latest")],
+            )
+            self._write_json(
+                project_root / "data" / "output" / "headline_picks.json",
+                [self._headline_payload("Latest headline", "https://example.com/latest-headline")],
+            )
+
+            publish_issue(project_root=project_root, publish_date="2026-05-06")
+
+            issue_root = project_root / "issue_snapshots" / "2026-05-06"
+            media = json.loads((issue_root / "media.json").read_text(encoding="utf-8"))
+            latest_html = (project_root / "public" / "index.html").read_text(encoding="utf-8")
+
+            self.assertNotIn("podcast_embed_url", media)
+            self.assertEqual(
+                media["podcast_audio_url"],
+                "assets/media/podcast-2026-05-06.mp3",
+            )
+            self.assertTrue(
+                (issue_root / "assets" / "media" / "podcast-2026-05-06.mp3").exists()
+            )
+            self.assertTrue(
+                (
+                    project_root
+                    / "public"
+                    / "assets"
+                    / "media"
+                    / "podcast-2026-05-06.mp3"
+                ).exists()
+            )
+            self.assertIn('src="assets/media/podcast-2026-05-06.mp3"', latest_html)
 
 
 if __name__ == "__main__":

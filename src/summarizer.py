@@ -21,7 +21,7 @@ SUMMARIZER_SYSTEM_PROMPT = """You are a newsletter blurb writer for "The AI Uplo
 
 Your job is to produce a short AI news blurb from the article text provided. You do NOT speculate, add outside context, or editorialize. You stick strictly to facts from the provided text.
 
-Write 1 to 3 short paragraphs. Total length: 100-200 words. Cover what happened, why it matters, and who it affects. Clear, concise, original prose. Mildly persuasive — make the reader want to click through. Stick ONLY to facts from the provided article text. No speculation, no outside context, no editorial additions. No cliché openings, no hype language, no restating the headline at the end. Third person. No bullet points. No formatting — just plain text paragraphs."""
+Write 1 to 3 short paragraphs. Total length: 100-200 words. Cover what happened, why it matters, and who it affects. Clear, concise, original prose. Mildly persuasive — make the reader want to click through. Stick ONLY to facts from the provided article text. No speculation, no outside context, no editorial additions. No cliché openings, no hype language, no restating the headline at the end. Third person. No bullet points. No em dashes.No formatting — just plain text paragraphs."""
 
 USER_MESSAGE_TEMPLATE = """Title: {title}
 Source: {source_name}

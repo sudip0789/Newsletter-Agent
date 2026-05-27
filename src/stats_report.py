@@ -17,7 +17,7 @@ def format_count_line(label: str, count: int) -> str:
 
 def format_selected_stories_by_section(
     stories: Sequence[ScoredStory],
-    requested_total: int = 30,
+    requested_total: int = 25,
 ) -> str:
     grouped_titles: OrderedDict[str, list[str]] = OrderedDict()
     for story in stories:

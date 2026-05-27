@@ -71,7 +71,7 @@ class TestPipelineReporting(unittest.TestCase):
             format_selected_stories_by_section(stories),
             "\n".join(
                 [
-                    "Top 30 articles selected:",
+                    "Top 25 articles selected:",
                     "Policy:",
                     "- OpenAI policy shift",
                     "- Campus AI rollout",

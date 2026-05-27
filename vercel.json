@@ -1,7 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "git": {
-    "deploymentEnabled": false
+    "deploymentEnabled": {
+      "main": true
+    }
   },
   "installCommand": "python3 -m pip install --break-system-packages Jinja2",
   "buildCommand": "python3 scripts/build_public_site.py",

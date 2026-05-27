@@ -4,7 +4,7 @@ Score and rank story clusters for newsletter selection.
 Usage:
     python scripts/run_scorer.py
     python scripts/run_scorer.py --input data/output/clustered_stories.json
-    python scripts/run_scorer.py --top 30
+    python scripts/run_scorer.py --top 25
     python scripts/run_scorer.py --show-all-scores
 """
 
@@ -41,7 +41,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--top",
         type=int,
-        default=30,
+        default=25,
         help="Number of stories to select after scoring.",
     )
     parser.add_argument(

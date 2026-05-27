@@ -54,7 +54,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--date",
         default=None,
-        help="Optional publish date override, ideally in YYYY-MM-DD format.",
+        help="Optional issue date override in YYYY-MM-DD format; output uses that same day as the publish date.",
     )
     return parser.parse_args()
 

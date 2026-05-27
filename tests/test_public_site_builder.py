@@ -4,11 +4,17 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from src.public_site_builder import build_public_site
 
 
 class TestPublicSiteBuilder(unittest.TestCase):
+    def setUp(self) -> None:
+        self.render_pdf_patcher = patch("src.public_site_builder.render_html_to_pdf")
+        self.mock_render_pdf = self.render_pdf_patcher.start()
+        self.addCleanup(self.render_pdf_patcher.stop)
+
     def _story_payload(self) -> dict:
         return {
             "scored_story": {
@@ -55,8 +61,9 @@ class TestPublicSiteBuilder(unittest.TestCase):
 
     def _write_shared_logos(self, project_root: Path) -> None:
         for name in [
-            "newsletter_logo.png",
-            "news_brief.png",
+            "RBG_RCLL_vrt.png",
+            "Podcast_edition.png",
+            "Video_Overview.png",
             "security.svg",
         ]:
             (project_root / "assets" / "logos" / name).write_bytes(b"logo")
@@ -133,12 +140,17 @@ class TestPublicSiteBuilder(unittest.TestCase):
             public_index = project_root / "public" / "index.html"
             self.assertTrue(public_index.exists())
             self.assertEqual(public_index.read_text(encoding="utf-8"), html)
-            self.assertIn("May 1st, 2026", html)
             self.assertNotIn("{{ publish_date }}", html)
             self.assertTrue((project_root / "public" / "assets" / "generated" / "headline_1.png").exists())
-            self.assertTrue((project_root / "public" / "assets" / "logos" / "newsletter_logo.png").exists())
+            self.assertTrue((project_root / "public" / "assets" / "logos" / "RBG_RCLL_vrt.png").exists())
+            self.assertIn("ISSUE 01", html)
             self.assertIn("src=\"assets/generated/headline_1.png\"", html)
-            self.assertIn("src=\"assets/logos/security.svg\"", html)
+            self.assertIn("Download PDF", html)
+            self.assertNotIn("Past Issues", html)
+            self.mock_render_pdf.assert_called_once_with(
+                (project_root / "public" / "index.html").resolve(),
+                (project_root / "public" / "newsletter.pdf").resolve(),
+            )
 
     def test_build_public_site_uses_generated_headline_images_when_metadata_is_missing(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir_name:
@@ -168,8 +180,45 @@ class TestPublicSiteBuilder(unittest.TestCase):
 
             self.assertIn("src=\"assets/generated/headline_1.png\"", html)
             self.assertNotIn(
-                '<img src="assets/logos/newsletter_logo.png" alt="Other headline">',
+                '<img src="assets/logos/RBG_RCLL_vrt.png" alt="Other headline">',
                 html,
+            )
+
+    def test_build_public_site_prefers_local_podcast_audio_file(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir_name:
+            tmpdir = Path(tmpdir_name)
+            project_root = tmpdir / "project"
+            (project_root / "assets" / "generated").mkdir(parents=True)
+            (project_root / "assets" / "logos").mkdir(parents=True)
+            (project_root / "data" / "output").mkdir(parents=True)
+            (project_root / "templates").mkdir(parents=True)
+            (project_root / "public").mkdir(parents=True)
+
+            self._write_shared_template(project_root)
+            self._write_shared_logos(project_root)
+
+            self._write_json(
+                project_root / "data" / "output" / "summarized_stories.json",
+                [self._story_payload()],
+            )
+            self._write_json(
+                project_root / "data" / "output" / "headline_picks.json",
+                [self._headline_payload()],
+            )
+            (project_root / "assets" / "generated" / "headline_1.png").write_bytes(b"png")
+            (project_root / "data" / "output" / "audio.mp3").write_bytes(b"mp3")
+
+            html = build_public_site(project_root=project_root, publish_date="2026-05-01")
+
+            self.assertIn('src="assets/media/podcast-2026-05-01.mp3"', html)
+            self.assertTrue(
+                (
+                    project_root
+                    / "public"
+                    / "assets"
+                    / "media"
+                    / "podcast-2026-05-01.mp3"
+                ).exists()
             )
 
     def test_build_public_site_renders_archive_index_and_issue_pages(self) -> None:
@@ -248,6 +297,39 @@ class TestPublicSiteBuilder(unittest.TestCase):
             self.assertIn("src=\"assets/generated/headline_1.png\"", archived_html)
             self.assertIn("href=\"../../\"", archived_html)
             self.assertIn("href=\"../\"", archived_html)
+            self.assertNotIn("Download PDF", archived_html)
+            self.mock_render_pdf.assert_called_once_with(
+                (project_root / "public" / "index.html").resolve(),
+                (project_root / "public" / "newsletter.pdf").resolve(),
+            )
+
+    def test_build_public_site_uses_current_issue_date(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir_name:
+            tmpdir = Path(tmpdir_name)
+            project_root = tmpdir / "project"
+            (project_root / "assets" / "generated").mkdir(parents=True)
+            (project_root / "assets" / "logos").mkdir(parents=True)
+            (project_root / "data" / "output").mkdir(parents=True)
+            (project_root / "templates").mkdir(parents=True)
+            (project_root / "public").mkdir(parents=True)
+
+            self._write_shared_template(project_root)
+            self._write_shared_logos(project_root)
+            (project_root / "assets" / "generated" / "headline_1.png").write_bytes(b"png")
+
+            self._write_json(
+                project_root / "data" / "output" / "summarized_stories.json",
+                [self._story_payload()],
+            )
+            self._write_json(
+                project_root / "data" / "output" / "headline_picks.json",
+                [self._headline_payload()],
+            )
+
+            html = build_public_site(project_root=project_root, publish_date="2026-05-26")
+
+            self.assertIn("TUESDAY", html)
+            self.assertIn("MAY 26", html)
 
 
 if __name__ == "__main__":
