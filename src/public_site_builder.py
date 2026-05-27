@@ -13,7 +13,6 @@ from src.media_config import (
     build_local_podcast_audio_path,
     load_media_inputs,
 )
-from src.pdf_renderer import render_html_to_pdf
 from src.publish_dates import normalize_issue_date, resolve_publication_date
 from src.template_assembler import TemplateAssembler
 
@@ -250,7 +249,11 @@ def build_public_site(
         pdf_download_name=latest_pdf_name,
         publish_date_is_resolved=publish_date_is_resolved,
     )
-    render_html_to_pdf(root / "public" / "index.html", latest_pdf_path)
+    try:
+        from src.pdf_renderer import render_html_to_pdf
+        render_html_to_pdf(root / "public" / "index.html", latest_pdf_path)
+    except ModuleNotFoundError:
+        pass
 
     for issue in issue_snapshots:
         issue_source_dir = Path(issue["source_dir"])
