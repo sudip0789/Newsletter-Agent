@@ -144,7 +144,7 @@ class TemplateAssembler:
             publish_year=issue_metadata["year"],
             story_count=section_story_count + len(headlines),
             section_story_count=section_story_count,
-            section_count=len(sections),
+            section_count=len(section_navigation),
             read_time_minutes=self._estimate_read_time_minutes(sections, headlines),
             headline_module_title="This Week's Headline" if len(headlines) == 1 else "This Week's Headlines",
             logo_path=logo_path,
