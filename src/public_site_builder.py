@@ -7,7 +7,12 @@ from pathlib import Path
 from typing import Any
 
 from jinja2 import Environment, select_autoescape
-from src.media_config import MEDIA_INPUTS_FILENAME, load_media_inputs
+from src.media_config import (
+    LOCAL_PODCAST_AUDIO_FILENAME,
+    MEDIA_INPUTS_FILENAME,
+    build_local_podcast_audio_path,
+    load_media_inputs,
+)
 from src.publish_dates import normalize_issue_date, resolve_publication_date
 from src.template_assembler import TemplateAssembler
 
@@ -78,6 +83,14 @@ def _copy_generated_assets(source_dir: Path, target_dir: Path) -> None:
     shutil.copytree(source_dir, target_dir)
 
 
+def _copy_optional_directory(source_dir: Path, target_dir: Path) -> None:
+    if target_dir.exists():
+        shutil.rmtree(target_dir)
+    if not source_dir.exists():
+        return
+    shutil.copytree(source_dir, target_dir)
+
+
 def _build_archive_index(root: Path, issues: list[dict[str, str]]) -> None:
     template_path = root / "templates" / "archive_index.html"
     env = Environment(
@@ -99,6 +112,21 @@ def _load_media(path: Path) -> dict | None:
     return None
 
 
+def _copy_local_podcast_audio(
+    source_path: Path,
+    target_root: Path,
+    issue_date: str,
+) -> str | None:
+    if not source_path.exists():
+        return None
+
+    relative_path = Path(build_local_podcast_audio_path(issue_date, source_path.suffix))
+    target_path = target_root / relative_path
+    target_path.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(source_path, target_path)
+    return relative_path.as_posix()
+
+
 def build_public_site(
     project_root: Path | None = None,
     publish_date: date | datetime | str | None = None,
@@ -107,6 +135,11 @@ def build_public_site(
     root = (project_root or Path(__file__).resolve().parent.parent).resolve()
     source_assets = root / "assets"
     target_assets = root / "public" / "assets"
+    latest_issue_date = (
+        normalize_issue_date(publish_date)
+        if publish_date is not None and publish_date_is_resolved
+        else normalize_issue_date(resolve_publication_date(publish_date))
+    )
 
     if target_assets.exists():
         shutil.rmtree(target_assets)
@@ -133,6 +166,16 @@ def build_public_site(
             _load_media(root / "data" / "output" / "media.json")
             or load_media_inputs(root / "data" / "output" / MEDIA_INPUTS_FILENAME)
         )
+    current_media = dict(current_media or {})
+
+    latest_audio_path = _copy_local_podcast_audio(
+        root / "data" / "output" / LOCAL_PODCAST_AUDIO_FILENAME,
+        root / "public",
+        latest_issue_date,
+    )
+    if latest_audio_path:
+        current_media["podcast_audio_url"] = latest_audio_path
+        current_media.pop("podcast_embed_url", None)
 
     assembler = TemplateAssembler(
         stories_path=str(root / "data" / "output" / "summarized_stories.json"),
@@ -158,6 +201,10 @@ def build_public_site(
                 issue_source_dir / "assets" / "generated",
                 issue_output_dir / "assets" / "generated",
             )
+        _copy_optional_directory(
+            issue_source_dir / "assets" / "media",
+            issue_output_dir / "assets" / "media",
+        )
 
         issue_assembler = TemplateAssembler(
             stories_path=str(issue_source_dir / "summarized_stories.json"),

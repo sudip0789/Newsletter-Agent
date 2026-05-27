@@ -7,7 +7,12 @@ from datetime import date, datetime
 from pathlib import Path
 from typing import Any
 
-from src.media_config import MEDIA_INPUTS_FILENAME, load_media_inputs
+from src.media_config import (
+    LOCAL_PODCAST_AUDIO_FILENAME,
+    MEDIA_INPUTS_FILENAME,
+    build_local_podcast_audio_path,
+    load_media_inputs,
+)
 from src.publish_dates import normalize_issue_date, resolve_publication_date
 from src.public_site_builder import build_public_site
 
@@ -57,6 +62,24 @@ def _build_drive_media(
     }
 
 
+def _snapshot_local_podcast_audio(
+    root: Path,
+    issue_root: Path,
+    issue_date: str,
+) -> dict[str, str]:
+    source_path = root / "data" / "output" / LOCAL_PODCAST_AUDIO_FILENAME
+    if not source_path.exists():
+        return {}
+
+    target_relative_path = Path(
+        build_local_podcast_audio_path(issue_date, source_path.suffix)
+    )
+    target_path = issue_root / target_relative_path
+    target_path.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(source_path, target_path)
+    return {"podcast_audio_url": target_relative_path.as_posix()}
+
+
 def publish_issue(
     project_root: Path | None = None,
     publish_date: date | datetime | str | None = None,
@@ -86,7 +109,10 @@ def publish_issue(
     media_inputs_path = root / "data" / "output" / MEDIA_INPUTS_FILENAME
     manual_media = load_media_inputs(media_inputs_path)
     drive_media = _build_drive_media(issue_root, issue_date, headlines)
-    media = {**(drive_media or {}), **manual_media}
+    local_audio_media = _snapshot_local_podcast_audio(root, issue_root, issue_date)
+    media = {**(drive_media or {}), **manual_media, **local_audio_media}
+    if local_audio_media:
+        media.pop("podcast_embed_url", None)
 
     if media:
         media_json = json.dumps(media, indent=2, ensure_ascii=False)

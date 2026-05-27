@@ -553,8 +553,8 @@
 
     .media-embed-grid {
       display: grid;
-      grid-template-columns: 2.2fr 0.82fr;
-      gap: 72px;
+      grid-template-columns: 1.7fr 0.65fr;
+      gap: 64px;
       margin-top: 16px;
       align-items: stretch;
     }
@@ -586,7 +586,7 @@
 
     /* Video card */
     .media-card--video .media-card-cover {
-      background: #231810;
+      background: #e8dcc8;
       padding: 24px 26px 22px 32px;
     }
 
@@ -599,8 +599,8 @@
 
     .media-card-brand {
       font-family: "IBM Plex Mono", monospace;
-      font-size: 0.9rem;
-      font-weight: 500;
+      font-size: 1.08rem;
+      font-weight: 700;
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--brand-red);
@@ -611,7 +611,7 @@
       font-size: 0.8rem;
       letter-spacing: 0.13em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.38);
+      color: rgba(22, 18, 15, 0.35);
       text-align: right;
       line-height: 1.7;
     }
@@ -621,25 +621,34 @@
       font-size: 0.75rem;
       letter-spacing: 0.11em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.62);
+      color: var(--page-muted);
       margin-bottom: 14px;
     }
 
-    .media-card-title {
+    .media-card-title-row {
       flex: 1;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-end;
+    }
+
+    .media-card-title-inner {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .media-card-title {
       font-family: var(--serif-display);
-      font-size: clamp(1.70rem, 2.1vw, 2.0rem);
+      font-size: clamp(1.75rem, 2.1vw, 2.0rem);
       font-weight: 400;
-      color: #fff;
-      line-height: 1.18;
+      color: var(--page-ink);
+      line-height: 1.28;
       letter-spacing: -0.02em;
     }
 
     .media-card-title em {
-      color: #b83a3a;
+      color: var(--brand-red);
       font-style: italic;
     }
 
@@ -649,7 +658,7 @@
       font-size: 0.66rem;
       letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.45);
+      color: var(--page-muted);
       margin-top: 10px;
     }
 
@@ -661,7 +670,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-top: 16px;
       flex-shrink: 0;
       transition: background 0.15s;
     }
@@ -763,6 +771,7 @@
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      cursor: pointer;
     }
 
     .podcast-waveform {
@@ -1141,9 +1150,14 @@
                   <span class="media-card-type">VIDEO<br>BRIEFING</span>
                 </div>
                 <div class="media-card-dateline">ISSUE 01 · MAY 27 · 2026</div>
-                <div class="media-card-title">This week in <em>AI &amp; Law</em><span class="media-card-subtitle">— video edition</span></div>
-                <div class="media-play-btn" aria-hidden="true">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="6,3 20,12 6,21"/></svg>
+                <div class="media-card-title-row">
+                  <div class="media-card-title-inner">
+                    <div class="media-card-title">This week in <em>AI &amp; Law</em></div>
+                    <div class="media-play-btn" aria-hidden="true">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="6,3 20,12 6,21"/></svg>
+                    </div>
+                  </div>
+                  <span class="media-card-subtitle">— video edition</span>
                 </div>
               </div>
               <iframe class="media-card-iframe" src="https://drive.google.com/file/d/1P2jT-S_obkaMtQwBsgg2ICGja9eCtMlE/preview" allow="autoplay" allowfullscreen></iframe>
@@ -1151,7 +1165,7 @@
             
             
             <div class="media-card media-card--podcast">
-              <div class="media-card-cover" onclick="this.style.display='none'; this.nextElementSibling.style.display='block'">
+              <div class="media-card-cover">
                 <div class="podcast-inner-card">
                   <span class="podcast-inner-brand">The AI Upload</span>
                   <div class="podcast-inner-title">Podcast<br>Edition</div>
@@ -1161,17 +1175,22 @@
                   <span class="podcast-ep-label">EPISODE 01</span>
                   <div class="podcast-show-title">This week in <em>AI &amp; Law</em></div>
                   <div class="podcast-player-row">
-                    <div class="podcast-play-btn" aria-hidden="true">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><polygon points="6,3 20,12 6,21"/></svg>
+                    <div class="podcast-play-btn" id="podcast-play-btn" onclick="togglePodcast()" role="button" aria-label="Play podcast">
+                      <svg id="podcast-icon-play" width="12" height="12" viewBox="0 0 24 24" fill="white"><polygon points="6,3 20,12 6,21"/></svg>
+                      <svg id="podcast-icon-pause" width="12" height="12" viewBox="0 0 24 24" fill="white" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
                     </div>
-                    <div class="podcast-waveform" aria-hidden="true">
+                    <div class="podcast-waveform" id="podcast-waveform" aria-hidden="true">
                       <span style="height:8px"></span><span style="height:14px"></span><span style="height:10px"></span><span style="height:17px"></span><span style="height:8px"></span><span style="height:13px"></span><span style="height:18px"></span><span style="height:9px"></span><span style="height:15px"></span><span style="height:11px"></span><span style="height:17px"></span><span style="height:7px"></span><span style="height:14px"></span><span style="height:10px"></span><span style="height:16px"></span><span style="height:9px"></span><span style="height:13px"></span><span style="height:18px"></span><span style="height:8px"></span><span style="height:12px"></span>
                     </div>
-                    <span class="podcast-timecode">00:00</span>
+                    <span class="podcast-timecode" id="podcast-timecode">00:00</span>
                   </div>
                 </div>
               </div>
-              <iframe class="media-card-iframe" src="https://drive.google.com/file/d/1asUrmGtV0D0KfBSYbpimIIDli4ZVqRMC/preview" allow="autoplay"></iframe>
+              
+              <audio id="podcast-audio" preload="none">
+                <source src="assets/media/podcast-2026-05-27.mp3">
+              </audio>
+              
             </div>
             
           </div>
@@ -1884,5 +1903,77 @@
       <span>This newsletter contains AI-generated content that may contain inaccuracies. For research or citation purposes, please read and cite the original source article, not this newsletter.</span>
     </footer>
   </div>
+  <script>
+    (function () {
+      var audio = document.getElementById('podcast-audio');
+      if (!audio) return;
+
+      var iconPlay  = document.getElementById('podcast-icon-play');
+      var iconPause = document.getElementById('podcast-icon-pause');
+      var timecode  = document.getElementById('podcast-timecode');
+      var waveform  = document.getElementById('podcast-waveform');
+      var bars      = waveform ? Array.from(waveform.querySelectorAll('span')) : [];
+      var origH     = bars.map(function (b) { return parseFloat(b.style.height) || 8; });
+      var rafId, isPlaying = false;
+
+      function fmt(s) {
+        var m = Math.floor(s / 60), sec = Math.floor(s % 60);
+        return (m < 10 ? '0' : '') + m + ':' + (sec < 10 ? '0' : '') + sec;
+      }
+
+      function animateWave() {
+        bars.forEach(function (b, i) {
+          b.style.height = (origH[i] * 0.3 + Math.random() * origH[i] * 1.5).toFixed(0) + 'px';
+        });
+        rafId = requestAnimationFrame(animateWave);
+      }
+
+      function stopAnim() {
+        cancelAnimationFrame(rafId);
+        bars.forEach(function (b, i) { b.style.height = origH[i] + 'px'; });
+      }
+
+      function showPause() {
+        isPlaying = true;
+        iconPlay.style.display  = 'none';
+        iconPause.style.display = '';
+        animateWave();
+      }
+
+      function showPlay() {
+        isPlaying = false;
+        iconPlay.style.display  = '';
+        iconPause.style.display = 'none';
+        stopAnim();
+      }
+
+      window.togglePodcast = function () {
+        if (!isPlaying) {
+          audio.play().then(showPause).catch(function (err) {
+            console.error('[podcast] play() rejected —', err.name + ':', err.message, '| src:', audio.currentSrc || audio.src);
+            showPlay();
+          });
+        } else {
+          audio.pause();
+          showPlay();
+        }
+      };
+
+      audio.addEventListener('error', function () {
+        var e = audio.error;
+        console.error('[podcast] audio load error — code:', e && e.code, 'message:', e && e.message);
+        showPlay();
+      });
+
+      audio.addEventListener('timeupdate', function () {
+        if (timecode) timecode.textContent = fmt(audio.currentTime);
+      });
+
+      audio.addEventListener('ended', function () {
+        showPlay();
+        if (timecode) timecode.textContent = '00:00';
+      });
+    })();
+  </script>
 </body>
 </html>

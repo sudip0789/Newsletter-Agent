@@ -172,6 +172,43 @@ class TestPublicSiteBuilder(unittest.TestCase):
                 html,
             )
 
+    def test_build_public_site_prefers_local_podcast_audio_file(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir_name:
+            tmpdir = Path(tmpdir_name)
+            project_root = tmpdir / "project"
+            (project_root / "assets" / "generated").mkdir(parents=True)
+            (project_root / "assets" / "logos").mkdir(parents=True)
+            (project_root / "data" / "output").mkdir(parents=True)
+            (project_root / "templates").mkdir(parents=True)
+            (project_root / "public").mkdir(parents=True)
+
+            self._write_shared_template(project_root)
+            self._write_shared_logos(project_root)
+
+            self._write_json(
+                project_root / "data" / "output" / "summarized_stories.json",
+                [self._story_payload()],
+            )
+            self._write_json(
+                project_root / "data" / "output" / "headline_picks.json",
+                [self._headline_payload()],
+            )
+            (project_root / "assets" / "generated" / "headline_1.png").write_bytes(b"png")
+            (project_root / "data" / "output" / "audio.mp3").write_bytes(b"mp3")
+
+            html = build_public_site(project_root=project_root, publish_date="2026-05-01")
+
+            self.assertIn('src="assets/media/podcast-2026-05-02.mp3"', html)
+            self.assertTrue(
+                (
+                    project_root
+                    / "public"
+                    / "assets"
+                    / "media"
+                    / "podcast-2026-05-02.mp3"
+                ).exists()
+            )
+
     def test_build_public_site_renders_archive_index_and_issue_pages(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir_name:
             tmpdir = Path(tmpdir_name)

@@ -7,6 +7,7 @@ from typing import Any, Mapping
 from urllib.parse import parse_qs, urlparse
 
 MEDIA_INPUTS_FILENAME = "media_inputs.json"
+LOCAL_PODCAST_AUDIO_FILENAME = "audio.mp3"
 
 _DRIVE_FILE_PATH_RE = re.compile(r"/file/d/([^/]+)")
 _DRIVE_FILE_ID_RE = re.compile(r"^[A-Za-z0-9_-]{10,}$")
@@ -41,6 +42,9 @@ def normalize_media_payload(payload: Mapping[str, Any] | None) -> dict[str, Any]
 
     if audio_url:
         media["podcast_embed_url"] = normalize_embed_url(audio_url)
+        audio_file_id = _extract_google_drive_file_id(audio_url)
+        if audio_file_id:
+            media["podcast_audio_url"] = build_drive_audio_url(audio_file_id)
     if video_url:
         media["video_embed_url"] = normalize_embed_url(video_url)
 
@@ -70,6 +74,16 @@ def normalize_embed_url(value: str) -> str:
     if file_id:
         return f"https://drive.google.com/file/d/{file_id}/preview"
     return raw
+
+
+def build_drive_audio_url(file_id: str) -> str:
+    """Return a media-element friendly public download URL for Drive audio files."""
+    return f"https://drive.usercontent.google.com/download?id={file_id}&export=download"
+
+
+def build_local_podcast_audio_path(issue_date: str, suffix: str) -> str:
+    normalized_suffix = suffix if suffix.startswith(".") else f".{suffix}"
+    return (Path("assets/media") / f"podcast-{issue_date}{normalized_suffix.lower()}").as_posix()
 
 
 def _extract_google_drive_file_id(value: str) -> str | None:

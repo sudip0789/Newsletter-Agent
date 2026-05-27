@@ -144,6 +144,7 @@ class TemplateAssembler:
             archive_url=archive_url,
             latest_issue_url=latest_issue_url,
             podcast_embed_url=self.media.get("podcast_embed_url"),
+            podcast_audio_url=self.media.get("podcast_audio_url"),
             video_embed_url=self.media.get("video_embed_url"),
         )
         output_file.write_text(html, encoding="utf-8")
