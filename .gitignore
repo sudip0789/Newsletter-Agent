@@ -16,6 +16,8 @@ data/output/*
 !data/output/summarized_stories.json
 !data/output/headline_picks.json
 !data/output/media.json
+!data/output/media_inputs.json
+!data/output/audio.mp3
 .vercel
 node_modules/
 package-lock.json

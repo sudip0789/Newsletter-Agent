@@ -216,10 +216,16 @@ def build_public_site(
 
     mp3_path = root / "data" / "output" / "audio.mp3"
     m4a_path = root / "data" / "output" / LOCAL_PODCAST_AUDIO_FILENAME
+    snapshot_audio = next(
+        (root / "issue_snapshots" / latest_issue_date / "assets" / "media").glob("podcast-*.mp3"),
+        None,
+    ) if (root / "issue_snapshots" / latest_issue_date / "assets" / "media").exists() else None
     if mp3_path.exists():
         audio_source = mp3_path
     elif m4a_path.exists():
         audio_source = _convert_to_mp3(m4a_path)
+    elif snapshot_audio:
+        audio_source = snapshot_audio
     else:
         audio_source = mp3_path
     latest_audio_path = _copy_local_podcast_audio(
