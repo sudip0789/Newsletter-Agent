@@ -4,11 +4,17 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from src.public_site_builder import build_public_site
 
 
 class TestPublicSiteBuilder(unittest.TestCase):
+    def setUp(self) -> None:
+        self.render_pdf_patcher = patch("src.public_site_builder.render_html_to_pdf")
+        self.mock_render_pdf = self.render_pdf_patcher.start()
+        self.addCleanup(self.render_pdf_patcher.stop)
+
     def _story_payload(self) -> dict:
         return {
             "scored_story": {
@@ -139,6 +145,12 @@ class TestPublicSiteBuilder(unittest.TestCase):
             self.assertTrue((project_root / "public" / "assets" / "logos" / "RBG_RCLL_vrt.png").exists())
             self.assertIn("ISSUE 01", html)
             self.assertIn("src=\"assets/generated/headline_1.png\"", html)
+            self.assertIn("Download PDF", html)
+            self.assertNotIn("Past Issues", html)
+            self.mock_render_pdf.assert_called_once_with(
+                (project_root / "public" / "index.html").resolve(),
+                (project_root / "public" / "newsletter.pdf").resolve(),
+            )
 
     def test_build_public_site_uses_generated_headline_images_when_metadata_is_missing(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir_name:
@@ -198,14 +210,14 @@ class TestPublicSiteBuilder(unittest.TestCase):
 
             html = build_public_site(project_root=project_root, publish_date="2026-05-01")
 
-            self.assertIn('src="assets/media/podcast-2026-05-02.mp3"', html)
+            self.assertIn('src="assets/media/podcast-2026-05-01.mp3"', html)
             self.assertTrue(
                 (
                     project_root
                     / "public"
                     / "assets"
                     / "media"
-                    / "podcast-2026-05-02.mp3"
+                    / "podcast-2026-05-01.mp3"
                 ).exists()
             )
 
@@ -285,8 +297,13 @@ class TestPublicSiteBuilder(unittest.TestCase):
             self.assertIn("src=\"assets/generated/headline_1.png\"", archived_html)
             self.assertIn("href=\"../../\"", archived_html)
             self.assertIn("href=\"../\"", archived_html)
+            self.assertNotIn("Download PDF", archived_html)
+            self.mock_render_pdf.assert_called_once_with(
+                (project_root / "public" / "index.html").resolve(),
+                (project_root / "public" / "newsletter.pdf").resolve(),
+            )
 
-    def test_build_public_site_shifts_latest_issue_date_forward_one_day(self) -> None:
+    def test_build_public_site_uses_current_issue_date(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir_name:
             tmpdir = Path(tmpdir_name)
             project_root = tmpdir / "project"
@@ -311,8 +328,8 @@ class TestPublicSiteBuilder(unittest.TestCase):
 
             html = build_public_site(project_root=project_root, publish_date="2026-05-26")
 
-            self.assertIn("WEDNESDAY", html)
-            self.assertIn("MAY 27", html)
+            self.assertIn("TUESDAY", html)
+            self.assertIn("MAY 26", html)
 
 
 if __name__ == "__main__":

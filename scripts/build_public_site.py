@@ -23,7 +23,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--date",
         default=None,
-        help="Optional prep date override in YYYY-MM-DD format; the built site shows the next day as the publish date.",
+        help="Optional issue date override in YYYY-MM-DD format; the built site uses that same day as the publish date.",
     )
     return parser.parse_args()
 

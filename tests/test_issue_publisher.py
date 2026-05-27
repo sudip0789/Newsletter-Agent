@@ -4,11 +4,17 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from src.issue_publisher import publish_issue
 
 
 class TestIssuePublisher(unittest.TestCase):
+    def setUp(self) -> None:
+        self.render_pdf_patcher = patch("src.public_site_builder.render_html_to_pdf")
+        self.mock_render_pdf = self.render_pdf_patcher.start()
+        self.addCleanup(self.render_pdf_patcher.stop)
+
     def _story_payload(self, title: str, url: str) -> dict:
         return {
             "scored_story": {
@@ -94,7 +100,7 @@ class TestIssuePublisher(unittest.TestCase):
 
             publish_issue(project_root=project_root, publish_date="2026-05-06")
 
-            new_issue_root = project_root / "issue_snapshots" / "2026-05-07"
+            new_issue_root = project_root / "issue_snapshots" / "2026-05-06"
             self.assertTrue((new_issue_root / "summarized_stories.json").exists())
             self.assertTrue((new_issue_root / "headline_picks.json").exists())
             self.assertTrue((new_issue_root / "assets" / "generated" / "headline_1.png").exists())
@@ -111,20 +117,20 @@ class TestIssuePublisher(unittest.TestCase):
                 encoding="utf-8"
             )
             current_issue_html = (
-                project_root / "public" / "issues" / "2026-05-07" / "index.html"
+                project_root / "public" / "issues" / "2026-05-06" / "index.html"
             ).read_text(encoding="utf-8")
 
-            self.assertIn("The AI Newsletter for May 7th, 2026", archive_html)
+            self.assertIn("The AI Newsletter for May 6th, 2026", archive_html)
             self.assertIn("The AI Newsletter for April 24th, 2026", archive_html)
             self.assertLess(
-                archive_html.index("The AI Newsletter for May 7th, 2026"),
+                archive_html.index("The AI Newsletter for May 6th, 2026"),
                 archive_html.index("The AI Newsletter for April 24th, 2026"),
             )
             self.assertNotIn("Latest headline", archive_html)
             self.assertNotIn("Older headline", archive_html)
             self.assertIn("Latest story", current_issue_html)
 
-    def test_publish_issue_uses_next_day_for_snapshot_and_archive(self) -> None:
+    def test_publish_issue_uses_current_day_for_snapshot_and_archive(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir_name:
             tmpdir = Path(tmpdir_name)
             project_root = tmpdir / "project"
@@ -165,14 +171,14 @@ class TestIssuePublisher(unittest.TestCase):
 
             publish_issue(project_root=project_root, publish_date="2026-05-26")
 
-            shifted_issue_root = project_root / "issue_snapshots" / "2026-05-27"
-            self.assertTrue(shifted_issue_root.exists())
-            self.assertFalse((project_root / "issue_snapshots" / "2026-05-26").exists())
+            current_issue_root = project_root / "issue_snapshots" / "2026-05-26"
+            self.assertTrue(current_issue_root.exists())
+            self.assertFalse((project_root / "issue_snapshots" / "2026-05-27").exists())
 
             archive_html = (project_root / "public" / "issues" / "index.html").read_text(
                 encoding="utf-8"
             )
-            self.assertIn("The AI Newsletter for May 27th, 2026", archive_html)
+            self.assertIn("The AI Newsletter for May 26th, 2026", archive_html)
 
     def test_publish_issue_uses_weekly_media_input_urls_for_audio_and_video(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir_name:
@@ -224,7 +230,7 @@ class TestIssuePublisher(unittest.TestCase):
 
             publish_issue(project_root=project_root, publish_date="2026-05-06")
 
-            issue_root = project_root / "issue_snapshots" / "2026-05-07"
+            issue_root = project_root / "issue_snapshots" / "2026-05-06"
             media = json.loads((issue_root / "media.json").read_text(encoding="utf-8"))
 
             self.assertEqual(
@@ -292,17 +298,17 @@ class TestIssuePublisher(unittest.TestCase):
 
             publish_issue(project_root=project_root, publish_date="2026-05-06")
 
-            issue_root = project_root / "issue_snapshots" / "2026-05-07"
+            issue_root = project_root / "issue_snapshots" / "2026-05-06"
             media = json.loads((issue_root / "media.json").read_text(encoding="utf-8"))
             latest_html = (project_root / "public" / "index.html").read_text(encoding="utf-8")
 
             self.assertNotIn("podcast_embed_url", media)
             self.assertEqual(
                 media["podcast_audio_url"],
-                "assets/media/podcast-2026-05-07.mp3",
+                "assets/media/podcast-2026-05-06.mp3",
             )
             self.assertTrue(
-                (issue_root / "assets" / "media" / "podcast-2026-05-07.mp3").exists()
+                (issue_root / "assets" / "media" / "podcast-2026-05-06.mp3").exists()
             )
             self.assertTrue(
                 (
@@ -310,10 +316,10 @@ class TestIssuePublisher(unittest.TestCase):
                     / "public"
                     / "assets"
                     / "media"
-                    / "podcast-2026-05-07.mp3"
+                    / "podcast-2026-05-06.mp3"
                 ).exists()
             )
-            self.assertIn('src="assets/media/podcast-2026-05-07.mp3"', latest_html)
+            self.assertIn('src="assets/media/podcast-2026-05-06.mp3"', latest_html)
 
 
 if __name__ == "__main__":

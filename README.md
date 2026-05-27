@@ -48,7 +48,13 @@ To regenerate the static site bundle locally:
 python3 scripts/build_public_site.py
 ```
 
-This command syncs `assets/` into `public/assets/` and renders `public/index.html`.
+This command syncs `assets/` into `public/assets/`, renders `public/index.html`, and generates `public/newsletter.pdf` for the latest issue.
+
+PDF generation uses Playwright + Chromium. After installing Python dependencies, run:
+
+```bash
+python -m playwright install chromium
+```
 
 
 ### Publish an Issue and Update the Archive

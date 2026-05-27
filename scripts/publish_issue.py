@@ -27,7 +27,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--date",
         required=True,
-        help="Prep date for the issue snapshot in YYYY-MM-DD format; the published issue uses the next day.",
+        help="Issue date for the snapshot in YYYY-MM-DD format; the published issue uses that same day.",
     )
     return parser.parse_args()
 

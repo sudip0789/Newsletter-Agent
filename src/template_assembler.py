@@ -67,6 +67,8 @@ class TemplateAssembler:
         output_path: str | None = None,
         archive_url: str | None = None,
         latest_issue_url: str | None = None,
+        pdf_url: str | None = None,
+        pdf_download_name: str | None = None,
         publish_date_is_resolved: bool = False,
     ) -> str:
         output_file = (
@@ -84,8 +86,10 @@ class TemplateAssembler:
                 "key": key,
                 "name": name,
                 "icon_path": self._resolve_section_icon_path(output_file, key),
+                "index": index,
+                "story_count": len(grouped[key]),
             }
-            for key, name in active_sections
+            for index, (key, name) in enumerate(active_sections, start=1)
         ]
         sections = [
             {
@@ -125,13 +129,15 @@ class TemplateAssembler:
             headlines.append({**headline, "image_path": image_path})
 
         template = self.jinja.from_string(self.template_path.read_text(encoding="utf-8"))
+        section_story_count = sum(len(section["articles"]) for section in sections)
         html = template.render(
             publish_date=self._format_publish_date(issue_date),
             issue_label=issue_metadata["issue_label"],
             publish_weekday=issue_metadata["weekday"],
             publish_month_day=issue_metadata["month_day"],
             publish_year=issue_metadata["year"],
-            story_count=sum(len(section["articles"]) for section in sections) + len(headlines),
+            story_count=section_story_count + len(headlines),
+            section_story_count=section_story_count,
             section_count=len(sections),
             read_time_minutes=self._estimate_read_time_minutes(sections, headlines),
             headline_module_title="This Week's Headline" if len(headlines) == 1 else "This Week's Headlines",
@@ -143,6 +149,8 @@ class TemplateAssembler:
             sections=sections,
             archive_url=archive_url,
             latest_issue_url=latest_issue_url,
+            pdf_url=pdf_url,
+            pdf_download_name=pdf_download_name,
             podcast_embed_url=self.media.get("podcast_embed_url"),
             podcast_audio_url=self.media.get("podcast_audio_url"),
             video_embed_url=self.media.get("video_embed_url"),

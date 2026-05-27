@@ -13,6 +13,7 @@ from src.media_config import (
     build_local_podcast_audio_path,
     load_media_inputs,
 )
+from src.pdf_renderer import render_html_to_pdf
 from src.publish_dates import normalize_issue_date, resolve_publication_date
 from src.template_assembler import TemplateAssembler
 
@@ -149,6 +150,8 @@ def build_public_site(
     if issues_public_root.exists():
         shutil.rmtree(issues_public_root)
 
+    issue_snapshots = _collect_issue_snapshots(root)
+
     # Load media.json for the latest issue: prefer the issue snapshot (when publish_date
     # is known), fall back to data/output/media.json (committed alongside headline_picks.json).
     if publish_date is not None:
@@ -183,14 +186,19 @@ def build_public_site(
         template_path=str(root / "templates" / "newsletter.html"),
         media=current_media,
     )
+    latest_pdf_path = root / "public" / "newsletter.pdf"
+    latest_pdf_name = f"ai-upload-weekly-digest-{latest_issue_date}.pdf"
     latest_html = assembler.run(
         publish_date=publish_date,
         output_path=str(root / "public" / "index.html"),
-        archive_url="issues/",
+        archive_url="issues/" if len(issue_snapshots) > 1 else None,
+        pdf_url="newsletter.pdf",
+        pdf_download_name=latest_pdf_name,
         publish_date_is_resolved=publish_date_is_resolved,
     )
+    render_html_to_pdf(root / "public" / "index.html", latest_pdf_path)
 
-    for issue in _collect_issue_snapshots(root):
+    for issue in issue_snapshots:
         issue_source_dir = Path(issue["source_dir"])
         issue_output_dir = issues_public_root / issue["issue_date"]
         issue_media = _load_media(issue_source_dir / "media.json")
@@ -221,5 +229,5 @@ def build_public_site(
             publish_date_is_resolved=True,
         )
 
-    _build_archive_index(root, _collect_issue_snapshots(root))
+    _build_archive_index(root, issue_snapshots)
     return latest_html

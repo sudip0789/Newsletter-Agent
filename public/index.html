@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,6 +18,8 @@
       --page-line: rgba(124, 103, 82, 0.28);
       --brand-red: #a11a17;
       --brand-red-deep: #8e1411;
+      --desktop-canvas-min: 980px;
+      --mobile-canvas-width: 390px;
       --serif-display: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", "Baskerville", Georgia, serif;
       --serif-body: "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
       --sans-ui: "Avenir Next", "Helvetica Neue", Arial, sans-serif;
@@ -35,6 +38,7 @@
       background: linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-alt) 100%);
       color: var(--page-ink);
       font-family: var(--serif-body);
+      overflow-x: auto;
     }
 
     a {
@@ -45,21 +49,28 @@
       max-width: 100%;
     }
 
+    .page-viewport {
+      width: 100%;
+      overflow: visible;
+    }
+
     .page {
-      width: min(100%, 1300px);
+      width: 100%;
+      max-width: 1300px;
+      min-width: var(--desktop-canvas-min);
       margin: 0 auto;
       padding: 30px 36px 68px;
     }
 
     .site-header {
-      padding-top: 6px;
+      padding-top: 0;
     }
 
     .masthead-top {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 40px;
-      align-items: start;
+      align-items: center;
     }
 
     .brand-mark {
@@ -72,13 +83,18 @@
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      gap: 22px;
-      padding-top: 10px;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .issue-links {
+      display: none;
     }
 
     .archive-link,
-    .latest-issue-link {
-      display: inline-flex;
+    .latest-issue-link,
+    .pdf-download-link {
+      display: none;
       align-items: center;
       gap: 8px;
       color: var(--page-ink);
@@ -92,6 +108,7 @@
 
     .archive-link:hover,
     .latest-issue-link:hover,
+    .pdf-download-link:hover,
     .section-nav-link:hover,
     .article-source a:hover,
     .article-title a:hover {
@@ -113,14 +130,14 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 46px;
-      padding: 0 22px;
+      min-height: 36px;
+      padding: 0 16px;
       border-radius: 4px;
       background: var(--brand-red);
       color: #fffdf9;
-      font-size: 0.94rem;
+      font-size: 0.78rem;
       font-weight: 700;
-      letter-spacing: 0.22em;
+      letter-spacing: 0.18em;
       white-space: nowrap;
     }
 
@@ -168,7 +185,7 @@
     .hero-title-main {
       display: block;
       font-family: var(--serif-display);
-      font-size: clamp(3.55rem, 7vw, 6.6rem);
+      font-size: clamp(4.2rem, 8vw, 6.6rem);
       font-weight: 400;
       letter-spacing: -0.06em;
     }
@@ -279,8 +296,8 @@
 
     .layout {
       display: grid;
-      grid-template-columns: 270px minmax(0, 1fr);
-      gap: 42px;
+      grid-template-columns: 310px minmax(0, 1fr);
+      gap: 36px;
       margin-top: 38px;
       align-items: start;
     }
@@ -290,80 +307,269 @@
       top: 24px;
       margin-top: 28px;
       border: 1px solid rgba(124, 103, 82, 0.16);
-      border-radius: 18px;
+      border-radius: 34px;
       background: linear-gradient(180deg, #fbf7ee 0%, #f6f0e6 100%);
       overflow: hidden;
+      box-shadow: 0 18px 42px rgba(88, 62, 33, 0.08);
     }
 
     .sidebar-header {
-      padding: 16px 18px 18px;
-      background: var(--brand-red-deep);
+      padding: 18px 20px 16px;
+    }
+
+    .sidebar-kicker {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .sidebar-kicker-text {
+      color: var(--brand-red);
+      font-family: "IBM Plex Mono", var(--sans-ui);
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
     }
 
     .sidebar-label {
       margin: 0;
-      color: #fffaf4;
       font-family: var(--serif-display);
-      font-size: 1.35rem;
+      font-size: 2.8rem;
       font-weight: 600;
-      letter-spacing: -0.02em;
-      text-align: center;
+      letter-spacing: -0.05em;
+      line-height: 0.96;
+    }
+
+    .sidebar-meta {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 4px 8px;
+      margin-top: 10px;
+      color: var(--page-subtle);
+      font-family: "IBM Plex Mono", var(--sans-ui);
+      font-size: 0.68rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+    }
+
+    .sidebar-meta-strong {
+      color: var(--page-ink);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+    }
+
+    .sidebar-meta-separator {
+      letter-spacing: 0;
     }
 
     .sidebar-nav {
       display: flex;
       flex-direction: column;
+      border-top: 1px solid rgba(124, 103, 82, 0.2);
     }
 
     .sidebar-link {
-      display: flex;
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr) 14px;
       align-items: center;
-      gap: 12px;
-      min-height: 76px;
-      padding: 14px 24px;
-      border-bottom: 1px solid rgba(124, 103, 82, 0.14);
+      gap: 10px;
+      min-height: 68px;
+      padding: 14px 20px;
+      border-top: 1px solid rgba(124, 103, 82, 0.16);
       color: var(--page-ink);
-      font-family: var(--sans-ui);
-      font-size: 0.84rem;
-      font-weight: 600;
-      letter-spacing: 0.02em;
       text-decoration: none;
       background: transparent;
+      transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
     }
 
-    .sidebar-link:last-child {
-      border-bottom: none;
+    .sidebar-link:first-child {
+      border-top: none;
     }
 
     .sidebar-link:hover {
+      background: rgba(244, 233, 212, 0.72);
+    }
+
+    .sidebar-link:focus-visible {
+      outline: 2px solid rgba(161, 26, 23, 0.7);
+      outline-offset: -2px;
+      background: rgba(244, 233, 212, 0.82);
+    }
+
+    .sidebar-link:hover .sidebar-link-title,
+    .sidebar-link:focus-visible .sidebar-link-title,
+    .sidebar-link:hover .sidebar-link-arrow,
+    .sidebar-link:focus-visible .sidebar-link-arrow {
       color: var(--brand-red);
-      background: rgba(246, 240, 230, 0.9);
     }
 
-    .sidebar-icon {
-      width: 28px;
-      height: 28px;
-      flex: 0 0 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .sidebar-link-number {
+      color: var(--brand-red);
+      font-family: var(--serif-display);
+      font-size: 1.75rem;
+      font-style: italic;
+      letter-spacing: -0.06em;
+      line-height: 0.85;
     }
 
-    .sidebar-icon img {
-      width: 22px;
-      height: 22px;
-      object-fit: contain;
+    .sidebar-link-body {
+      min-width: 0;
+    }
+
+    .sidebar-link-title {
       display: block;
+      font-family: var(--serif-display);
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      transition: color 0.18s ease;
     }
 
-    .sidebar-link-label {
-      font-size: 0.82rem;
-      font-weight: 600;
-      line-height: 1.2;
+    .sidebar-link-count {
+      display: block;
+      margin-top: 5px;
+      color: var(--page-subtle);
+      font-family: "IBM Plex Mono", var(--sans-ui);
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .sidebar-link-arrow {
+      color: var(--page-subtle);
+      font-family: var(--sans-ui);
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.18s ease;
     }
 
     .content {
       min-width: 0;
+    }
+
+    .mobile-issue-nav {
+      display: none;
+    }
+
+    .mobile-issue-nav-card {
+      border: 1px solid rgba(124, 103, 82, 0.16);
+      border-radius: 34px;
+      background: linear-gradient(180deg, #fbf7ee 0%, #f6f0e6 100%);
+      padding: 26px 22px 28px;
+      box-shadow: 0 18px 42px rgba(88, 62, 33, 0.08);
+    }
+
+    .mobile-issue-nav-header {
+      padding: 0;
+    }
+
+    .mobile-issue-nav-kicker {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .mobile-issue-nav-kicker-text {
+      color: var(--brand-red);
+      font-family: "IBM Plex Mono", var(--sans-ui);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+    }
+
+    .mobile-issue-nav-title {
+      margin: 0;
+      font-family: var(--serif-display);
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: -0.05em;
+      line-height: 0.94;
+    }
+
+    .mobile-issue-nav-meta {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 4px 8px;
+      margin-top: 12px;
+      color: var(--page-subtle);
+      font-family: "IBM Plex Mono", var(--sans-ui);
+      font-size: 0.68rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+    }
+
+    .mobile-issue-nav-meta-strong {
+      color: var(--page-ink);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+    }
+
+    .mobile-issue-nav-meta-separator {
+      letter-spacing: 0;
+    }
+
+    .mobile-issue-nav-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 26px;
+    }
+
+    .mobile-issue-nav-link {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      min-height: 105px;
+      padding: 11px 10px 10px;
+      border: 1px solid rgba(124, 103, 82, 0.18);
+      border-radius: 18px;
+      color: var(--page-ink);
+      text-decoration: none;
+      background: linear-gradient(180deg, rgba(247, 237, 218, 0.7) 0%, rgba(244, 233, 212, 0.98) 100%);
+      transition: transform 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .mobile-issue-nav-link:hover {
+      color: var(--brand-red);
+      border-color: rgba(161, 26, 23, 0.24);
+      box-shadow: 0 10px 24px rgba(88, 62, 33, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .mobile-issue-nav-link:focus-visible {
+      outline: 2px solid rgba(161, 26, 23, 0.7);
+      outline-offset: 2px;
+      color: var(--brand-red);
+      border-color: rgba(161, 26, 23, 0.24);
+    }
+
+    .mobile-issue-nav-index {
+      color: var(--brand-red);
+      font-family: var(--serif-display);
+      font-size: 1.35rem;
+      font-style: italic;
+      letter-spacing: -0.07em;
+      line-height: 0.84;
+    }
+
+    .mobile-issue-nav-label {
+      color: var(--page-ink);
+      font-family: var(--sans-ui);
+      font-size: 0.67rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      line-height: 1.22;
     }
 
     .content-section {
@@ -398,13 +604,13 @@
       margin-top: 12px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
     }
 
     .headline-section-title {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
       margin: 0 0 28px;
       padding-bottom: 14px;
       border-bottom: 1px solid rgba(124, 103, 82, 0.28);
@@ -758,7 +964,7 @@
     .podcast-player-row {
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 10px;
       margin-top: 10px;
     }
 
@@ -774,27 +980,104 @@
       cursor: pointer;
     }
 
-    .podcast-waveform {
+    .podcast-progress {
       flex: 1;
-      height: 18px;
       display: flex;
       align-items: center;
-      gap: 2px;
+      gap: 8px;
+      min-width: 0;
     }
 
-    .podcast-waveform span {
-      display: block;
-      width: 2px;
-      background: var(--page-line);
-      border-radius: 1px;
-      flex-shrink: 0;
+    .podcast-seek {
+      --seek-progress: 0%;
+      flex: 1;
+      min-width: 0;
+      height: 18px;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
     }
 
-    .podcast-timecode {
+    .podcast-seek:focus-visible {
+      outline: none;
+    }
+
+    .podcast-seek::-webkit-slider-runnable-track {
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(
+        to right,
+        var(--brand-red) 0%,
+        var(--brand-red) var(--seek-progress),
+        rgba(124, 103, 82, 0.24) var(--seek-progress),
+        rgba(124, 103, 82, 0.24) 100%
+      );
+    }
+
+    .podcast-seek::-webkit-slider-thumb {
+      appearance: none;
+      width: 12px;
+      height: 12px;
+      margin-top: -4.5px;
+      border: 2px solid #fffdf9;
+      border-radius: 50%;
+      background: var(--brand-red);
+      box-shadow: 0 0 0 1px rgba(124, 103, 82, 0.18);
+    }
+
+    .podcast-seek::-moz-range-track {
+      height: 3px;
+      border: none;
+      border-radius: 999px;
+      background: rgba(124, 103, 82, 0.24);
+    }
+
+    .podcast-seek::-moz-range-progress {
+      height: 3px;
+      border-radius: 999px;
+      background: var(--brand-red);
+    }
+
+    .podcast-seek::-moz-range-thumb {
+      width: 12px;
+      height: 12px;
+      border: 2px solid #fffdf9;
+      border-radius: 50%;
+      background: var(--brand-red);
+      box-shadow: 0 0 0 1px rgba(124, 103, 82, 0.18);
+    }
+
+    .podcast-seek:focus-visible::-webkit-slider-thumb,
+    .podcast-seek:focus-visible::-moz-range-thumb {
+      box-shadow: 0 0 0 3px rgba(161, 26, 23, 0.18);
+    }
+
+    .podcast-timecode,
+    .podcast-duration {
       font-family: "IBM Plex Mono", monospace;
       font-size: 0.68rem;
       color: var(--page-muted);
       flex-shrink: 0;
+    }
+
+    @media (min-width: 1101px) {
+      .podcast-details {
+        justify-content: flex-end;
+        padding-top: 12px;
+        padding-bottom: 6px;
+      }
+
+      .podcast-ep-label {
+        margin-bottom: 14px;
+      }
+
+      .podcast-show-title {
+        flex: 0;
+      }
+
+      .podcast-player-row {
+        margin-top: 6px;
+      }
     }
 
     .newsletter-disclaimer {
@@ -815,140 +1098,431 @@
       margin-top: 2px;
     }
 
-    @media (max-width: 860px) {
+    @page {
+      size: Letter;
+      margin: 0.55in;
+    }
+
+    @media print {
+      html,
+      body {
+        background: #ffffff;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      body {
+        overflow: visible;
+      }
+
+      .pdf-download-link {
+        display: none;
+      }
+
       .page {
-        padding-inline: 24px;
+        max-width: none;
+        min-width: 0;
+        padding: 0;
       }
 
-      .hero {
+      .page-viewport {
+        overflow: visible;
+      }
+
+      .masthead-top,
+      .hero,
+      .layout,
+      .media-embed-grid,
+      .newsletter-disclaimer {
         grid-template-columns: 1fr;
-        gap: 34px;
       }
 
+      .masthead-top,
+      .hero,
       .layout {
-        grid-template-columns: 1fr;
-        gap: 28px;
+        gap: 24px;
+      }
+
+      .issue-panel,
+      .issue-links {
+        align-items: flex-start;
+      }
+
+      .issue-row,
+      .issue-date {
+        justify-content: flex-start;
       }
 
       .sidebar {
-        position: static;
-        margin-top: 0;
+        display: none;
       }
 
-      .section-title {
-        max-width: 10ch;
+      .mobile-issue-nav {
+        display: block;
       }
 
-      .article {
-        grid-template-columns: 1fr;
-        gap: 16px;
+      .mobile-issue-nav-card {
+        padding: 20px 18px 22px;
+      }
+
+      .mobile-issue-nav-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .mobile-issue-nav-link {
+        min-height: 100px;
+        gap: 8px;
+        padding: 12px 10px;
+      }
+
+      .mobile-issue-nav-index {
+        font-size: 1.65rem;
+      }
+
+      .mobile-issue-nav-label {
+        font-size: 0.7rem;
+      }
+
+      .headline-card {
+        grid-template-columns: 120px minmax(0, 1fr);
+        gap: 14px;
+        padding: 16px;
+      }
+
+      .headline-card img {
+        width: 120px;
+        height: 120px;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+      }
+
+      .headline-copy h3,
+      .article-title {
+        font-size: 1.2rem;
+        line-height: 1.18;
+      }
+
+      .headline-blurb,
+      .article-summary p {
+        font-size: 0.92rem;
+        line-height: 1.48;
+      }
+
+      .media-card--podcast .media-card-cover {
+        flex-direction: row;
+        align-items: stretch;
+      }
+
+      .headline-card,
+      .media-card,
+      .article,
+      .newsletter-disclaimer {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .page {
+        padding-inline: 28px;
+      }
+
+      .layout {
+        grid-template-columns: 286px minmax(0, 1fr);
+        gap: 28px;
+      }
+
+      .sidebar-header {
+        padding-inline: 24px;
+      }
+
+      .sidebar-link {
+        grid-template-columns: 54px minmax(0, 1fr) 14px;
+        min-height: 98px;
+        padding-inline: 24px;
+      }
+
+      .sidebar-label {
+        font-size: 2.35rem;
+      }
+
+      .sidebar-link-number {
+        font-size: 2.5rem;
+      }
+
+      .sidebar-link-title {
+        font-size: 1.18rem;
       }
     }
 
     @media (max-width: 760px) {
       .page {
-        padding: 24px 16px 48px;
+        width: var(--mobile-canvas-width);
+        max-width: none;
+        min-width: var(--mobile-canvas-width);
+        margin: 0 auto;
+        padding: 24px 18px 48px;
       }
 
       .masthead-top {
         grid-template-columns: 1fr;
-        gap: 20px;
+        gap: 0;
       }
 
-      .issue-panel,
-      .issue-row,
-      .issue-date {
-        align-items: flex-start;
+      .masthead-top > div:first-child {
+        border-bottom: 1px solid var(--page-line);
+        padding-bottom: 10px;
+      }
+
+      .issue-panel {
+        flex-direction: row;
+        align-items: center;
         justify-content: flex-start;
+        gap: 10px;
+        padding: 10px 0;
+        border-top: none;
+      }
+
+      .issue-links {
+        display: none;
       }
 
       .issue-row {
-        gap: 14px;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 10px;
+        flex-wrap: nowrap;
       }
 
       .issue-date {
-        gap: 10px;
-        font-size: 0.77rem;
-        letter-spacing: 0.18em;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 5px;
+        font-size: 0.58rem;
+        letter-spacing: 0.06em;
+        flex-wrap: nowrap;
+      }
+
+      .masthead-divider {
+        display: none;
+      }
+
+      .issue-pill {
+        min-height: 24px;
+        padding: 0 7px;
+        font-size: 0.56rem;
+        letter-spacing: 0.1em;
       }
 
       .hero {
-        padding-top: 10px;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding-top: 14px;
         padding-bottom: 16px;
+        border-bottom: 1px solid var(--page-line);
+      }
+
+      .brand-mark {
+        width: 210px;
+        max-width: 100%;
       }
 
       .hero-title-main {
-        font-size: clamp(3.2rem, 18vw, 5.2rem);
+        font-size: 3.2rem;
+        white-space: nowrap;
       }
 
       .hero-title-sub {
-        gap: 14px;
-        font-size: clamp(2rem, 9vw, 3.2rem);
+        gap: 10px;
+        font-size: 1.45rem;
+        margin-top: 12px;
       }
 
-      .eyebrow {
-        gap: 12px;
-        font-size: 0.72rem;
-        letter-spacing: 0.22em;
-      }
-
-      .eyebrow::before {
-        width: 28px;
+      .hero .eyebrow {
+        display: none;
       }
 
       .hero-summary {
-        font-size: 1.15rem;
+        display: none;
       }
 
       .stats-strip {
         justify-content: flex-start;
-        gap: 8px 12px;
+        gap: 8px 10px;
       }
 
       .stat {
-        gap: 10px;
+        gap: 8px;
+      }
+
+      .stat-value {
+        font-size: 1.02rem;
       }
 
       .stat-label {
-        letter-spacing: 0.22em;
+        font-size: 0.72rem;
+        letter-spacing: 0.18em;
       }
 
       .stat-separator {
         display: none;
       }
 
+      .layout {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        margin-top: 28px;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .mobile-issue-nav {
+        display: block;
+      }
+
+      .mobile-issue-nav-card {
+        padding: 24px 18px 24px;
+      }
+
+      .mobile-issue-nav-title {
+        font-size: 2.75rem;
+      }
+
+      .mobile-issue-nav-grid {
+        gap: 12px;
+      }
+
       .section-title {
         max-width: none;
-        font-size: clamp(1.8rem, 9vw, 2.9rem);
+        font-size: 2.4rem;
       }
 
       .section-dek {
-        font-size: 1.15rem;
+        font-size: 1.02rem;
+      }
+
+      .content-section {
+        padding: 24px 0 8px;
+      }
+
+      .headline-section-title {
+        font-size: 0.9rem;
+        letter-spacing: 0.16em;
+        margin-bottom: 18px;
+        gap: 10px;
+      }
+
+      .headline-section-title::before {
+        width: 18px;
       }
 
       .headline-card {
-        grid-template-columns: 1fr;
-        gap: 16px;
-        padding: 20px;
+        grid-template-columns: 110px minmax(0, 1fr);
+        gap: 14px;
+        padding: 16px;
       }
 
       .headline-card img {
-        width: min(100%, 220px);
-        order: -1;
+        width: 110px;
+        height: 110px;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        order: 0;
       }
 
       .headline-copy h3,
       .article-title {
-        font-size: 1.8rem;
+        font-size: 1.2rem;
+        line-height: 1.2;
+      }
+
+      .headline-meta {
+        font-size: 0.64rem;
+        letter-spacing: 0.12em;
+        margin: 10px 0 8px;
       }
 
       .headline-blurb,
       .article-summary p {
-        font-size: 1.04rem;
+        font-size: 0.84rem;
+        line-height: 1.50;
       }
 
       .media-embed-grid {
         grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .media-card {
+        min-height: 300px;
+      }
+
+      .media-card--podcast {
+        min-height: 140px;
+      }
+
+      .media-card--podcast .media-card-cover {
+        flex-direction: row;
+        align-items: stretch;
+        gap: 12px;
+        padding: 12px;
+      }
+
+      .podcast-inner-card {
+        width: 100px;
+        flex-shrink: 0;
+        aspect-ratio: 1 / 1;
+        margin-bottom: 0;
+      }
+
+      .podcast-inner-title {
+        font-size: 1.1rem;
+      }
+
+      .podcast-inner-ep {
+        display: none;
+      }
+
+      .podcast-details {
+        justify-content: center;
+      }
+
+      .podcast-show-title {
+        font-size: 1.2rem;
+      }
+
+      .mobile-issue-nav-link {
+        min-height: 118px;
+        gap: 10px;
+        padding: 13px 12px 11px;
+      }
+
+      .mobile-issue-nav-index {
+        font-size: 1.65rem;
+      }
+
+      .mobile-issue-nav-label {
+        font-size: 0.76rem;
+      }
+
+      .media-card--video .media-card-cover,
+      .media-card--podcast .media-card-cover {
+        padding: 18px;
+      }
+
+      .media-card-title {
+        font-size: 1.68rem;
+      }
+
+      .podcast-inner-title {
+        font-size: 1.48rem;
+      }
+
+      .podcast-show-title {
+        font-size: 1.2rem;
       }
 
       .newsletter-disclaimer {
@@ -959,6 +1533,7 @@
   </style>
 </head>
 <body>
+  <div class="page-viewport">
   <div class="page">
     <header class="site-header">
       <div class="masthead-top">
@@ -967,10 +1542,15 @@
         </div>
         <div class="issue-panel" aria-label="Issue details">
           
-          <a class="archive-link" href="issues/">
-            Past Issues
-            <span aria-hidden="true">↗</span>
-          </a>
+          <div class="issue-links">
+            
+            
+            <a class="pdf-download-link" href="newsletter.pdf" download="ai-upload-weekly-digest-2026-05-27.pdf">
+              Download PDF
+              <span aria-hidden="true">↗</span>
+            </a>
+            
+          </div>
           
           <div class="issue-row">
             <span class="issue-pill">ISSUE 01</span>
@@ -1031,71 +1611,98 @@
     <div class="layout">
       <aside class="sidebar" aria-label="Issue sections">
         <div class="sidebar-header">
-          <h2 class="sidebar-label">In This Issue</h2>
+          <div class="sidebar-kicker">
+            <span class="sidebar-kicker-text">— In This Issue</span>
+          </div>
+          <div class="sidebar-meta" aria-label="Issue section totals">
+            <span class="sidebar-meta-strong">09</span>
+            <span>Sections</span>
+            <span class="sidebar-meta-separator" aria-hidden="true">·</span>
+            <span class="sidebar-meta-strong">27</span>
+            <span>Stories</span>
+          </div>
         </div>
         <nav class="sidebar-nav">
           
           <a class="sidebar-link" href="#enterprise_ai">
-            <span class="sidebar-icon">
-              <img src="assets/logos/enterprise_ai.svg" alt="">
+            <span class="sidebar-link-number">01</span>
+            <span class="sidebar-link-body">
+              <span class="sidebar-link-title">Enterprise AI</span>
+              <span class="sidebar-link-count">6 Stories</span>
             </span>
-            <span class="sidebar-link-label">Enterprise AI</span>
+            <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
           </a>
           
           <a class="sidebar-link" href="#legal_intelligence">
-            <span class="sidebar-icon">
-              <img src="assets/logos/legal_intelligence.svg" alt="">
+            <span class="sidebar-link-number">02</span>
+            <span class="sidebar-link-body">
+              <span class="sidebar-link-title">Legal Intelligence</span>
+              <span class="sidebar-link-count">4 Stories</span>
             </span>
-            <span class="sidebar-link-label">Legal Intelligence</span>
+            <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
           </a>
           
           <a class="sidebar-link" href="#ai_products">
-            <span class="sidebar-icon">
-              <img src="assets/logos/ai_products.svg" alt="">
+            <span class="sidebar-link-number">03</span>
+            <span class="sidebar-link-body">
+              <span class="sidebar-link-title">AI Products</span>
+              <span class="sidebar-link-count">3 Stories</span>
             </span>
-            <span class="sidebar-link-label">AI Products</span>
+            <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
           </a>
           
           <a class="sidebar-link" href="#security">
-            <span class="sidebar-icon">
-              <img src="assets/logos/security.svg" alt="">
+            <span class="sidebar-link-number">04</span>
+            <span class="sidebar-link-body">
+              <span class="sidebar-link-title">Security</span>
+              <span class="sidebar-link-count">3 Stories</span>
             </span>
-            <span class="sidebar-link-label">Security</span>
+            <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
           </a>
           
           <a class="sidebar-link" href="#policy">
-            <span class="sidebar-icon">
-              <img src="assets/logos/policy.svg" alt="">
+            <span class="sidebar-link-number">05</span>
+            <span class="sidebar-link-body">
+              <span class="sidebar-link-title">Policy</span>
+              <span class="sidebar-link-count">3 Stories</span>
             </span>
-            <span class="sidebar-link-label">Policy</span>
+            <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
           </a>
           
           <a class="sidebar-link" href="#responsible_ai">
-            <span class="sidebar-icon">
-              <img src="assets/logos/responsible_ai.svg" alt="">
+            <span class="sidebar-link-number">06</span>
+            <span class="sidebar-link-body">
+              <span class="sidebar-link-title">Responsible AI</span>
+              <span class="sidebar-link-count">4 Stories</span>
             </span>
-            <span class="sidebar-link-label">Responsible AI</span>
+            <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
           </a>
           
           <a class="sidebar-link" href="#ai_sustainability">
-            <span class="sidebar-icon">
-              <img src="assets/logos/ai_sustainability.svg" alt="">
+            <span class="sidebar-link-number">07</span>
+            <span class="sidebar-link-body">
+              <span class="sidebar-link-title">AI Sustainability</span>
+              <span class="sidebar-link-count">1 Story</span>
             </span>
-            <span class="sidebar-link-label">AI Sustainability</span>
+            <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
           </a>
           
           <a class="sidebar-link" href="#creative_ai">
-            <span class="sidebar-icon">
-              <img src="assets/logos/creative_ai.svg" alt="">
+            <span class="sidebar-link-number">08</span>
+            <span class="sidebar-link-body">
+              <span class="sidebar-link-title">Creative AI</span>
+              <span class="sidebar-link-count">2 Stories</span>
             </span>
-            <span class="sidebar-link-label">Creative AI</span>
+            <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
           </a>
           
           <a class="sidebar-link" href="#higher_education">
-            <span class="sidebar-icon">
-              <img src="assets/logos/higher_education.svg" alt="">
+            <span class="sidebar-link-number">09</span>
+            <span class="sidebar-link-body">
+              <span class="sidebar-link-title">Higher Education</span>
+              <span class="sidebar-link-count">1 Story</span>
             </span>
-            <span class="sidebar-link-label">Higher Education</span>
+            <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
           </a>
           
         </nav>
@@ -1135,6 +1742,7 @@
             
           </div>
         </section>
+        
 
         
         <section class="content-section" id="listen-watch">
@@ -1179,10 +1787,11 @@
                       <svg id="podcast-icon-play" width="12" height="12" viewBox="0 0 24 24" fill="white"><polygon points="6,3 20,12 6,21"/></svg>
                       <svg id="podcast-icon-pause" width="12" height="12" viewBox="0 0 24 24" fill="white" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
                     </div>
-                    <div class="podcast-waveform" id="podcast-waveform" aria-hidden="true">
-                      <span style="height:8px"></span><span style="height:14px"></span><span style="height:10px"></span><span style="height:17px"></span><span style="height:8px"></span><span style="height:13px"></span><span style="height:18px"></span><span style="height:9px"></span><span style="height:15px"></span><span style="height:11px"></span><span style="height:17px"></span><span style="height:7px"></span><span style="height:14px"></span><span style="height:10px"></span><span style="height:16px"></span><span style="height:9px"></span><span style="height:13px"></span><span style="height:18px"></span><span style="height:8px"></span><span style="height:12px"></span>
+                    <div class="podcast-progress">
+                      <span class="podcast-timecode" id="podcast-timecode">00:00</span>
+                      <input class="podcast-seek" id="podcast-seek" type="range" min="0" max="0" value="0" step="0.1" aria-label="Seek podcast position">
+                      <span class="podcast-duration" id="podcast-duration">00:00</span>
                     </div>
-                    <span class="podcast-timecode" id="podcast-timecode">00:00</span>
                   </div>
                 </div>
               </div>
@@ -1195,6 +1804,75 @@
             
           </div>
         </section>
+        
+        
+<section class="content-section mobile-issue-nav" aria-label="Issue sections for mobile">
+  <div class="mobile-issue-nav-card">
+    <div class="mobile-issue-nav-header">
+      <div class="mobile-issue-nav-kicker">
+        <span class="mobile-issue-nav-kicker-text">— In This Issue</span>
+      </div>
+      <h2 class="mobile-issue-nav-title">Sections</h2>
+      <div class="mobile-issue-nav-meta" aria-label="Issue section totals">
+        <span class="mobile-issue-nav-meta-strong">09</span>
+        <span class="mobile-issue-nav-meta-label">Sections</span>
+        <span class="mobile-issue-nav-meta-separator" aria-hidden="true">·</span>
+        <span class="mobile-issue-nav-meta-strong">27</span>
+        <span class="mobile-issue-nav-meta-label">Stories</span>
+      </div>
+    </div>
+    <nav class="mobile-issue-nav-grid">
+      
+      <a class="mobile-issue-nav-link" href="#enterprise_ai">
+        <span class="mobile-issue-nav-index">01</span>
+        <span class="mobile-issue-nav-label">Enterprise AI</span>
+      </a>
+      
+      <a class="mobile-issue-nav-link" href="#legal_intelligence">
+        <span class="mobile-issue-nav-index">02</span>
+        <span class="mobile-issue-nav-label">Legal Intelligence</span>
+      </a>
+      
+      <a class="mobile-issue-nav-link" href="#ai_products">
+        <span class="mobile-issue-nav-index">03</span>
+        <span class="mobile-issue-nav-label">AI Products</span>
+      </a>
+      
+      <a class="mobile-issue-nav-link" href="#security">
+        <span class="mobile-issue-nav-index">04</span>
+        <span class="mobile-issue-nav-label">Security</span>
+      </a>
+      
+      <a class="mobile-issue-nav-link" href="#policy">
+        <span class="mobile-issue-nav-index">05</span>
+        <span class="mobile-issue-nav-label">Policy</span>
+      </a>
+      
+      <a class="mobile-issue-nav-link" href="#responsible_ai">
+        <span class="mobile-issue-nav-index">06</span>
+        <span class="mobile-issue-nav-label">Responsible AI</span>
+      </a>
+      
+      <a class="mobile-issue-nav-link" href="#ai_sustainability">
+        <span class="mobile-issue-nav-index">07</span>
+        <span class="mobile-issue-nav-label">AI Sustainability</span>
+      </a>
+      
+      <a class="mobile-issue-nav-link" href="#creative_ai">
+        <span class="mobile-issue-nav-index">08</span>
+        <span class="mobile-issue-nav-label">Creative AI</span>
+      </a>
+      
+      <a class="mobile-issue-nav-link" href="#higher_education">
+        <span class="mobile-issue-nav-index">09</span>
+        <span class="mobile-issue-nav-label">Higher Education</span>
+      </a>
+      
+    </nav>
+  </div>
+</section>
+
+        
         
 
         
@@ -1903,6 +2581,7 @@
       <span>This newsletter contains AI-generated content that may contain inaccuracies. For research or citation purposes, please read and cite the original source article, not this newsletter.</span>
     </footer>
   </div>
+  </div>
   <script>
     (function () {
       var audio = document.getElementById('podcast-audio');
@@ -1911,40 +2590,51 @@
       var iconPlay  = document.getElementById('podcast-icon-play');
       var iconPause = document.getElementById('podcast-icon-pause');
       var timecode  = document.getElementById('podcast-timecode');
-      var waveform  = document.getElementById('podcast-waveform');
-      var bars      = waveform ? Array.from(waveform.querySelectorAll('span')) : [];
-      var origH     = bars.map(function (b) { return parseFloat(b.style.height) || 8; });
-      var rafId, isPlaying = false;
+      var duration  = document.getElementById('podcast-duration');
+      var seek      = document.getElementById('podcast-seek');
+      var isPlaying = false;
+      var isSeeking = false;
 
       function fmt(s) {
+        if (!isFinite(s) || s < 0) return '00:00';
         var m = Math.floor(s / 60), sec = Math.floor(s % 60);
         return (m < 10 ? '0' : '') + m + ':' + (sec < 10 ? '0' : '') + sec;
       }
 
-      function animateWave() {
-        bars.forEach(function (b, i) {
-          b.style.height = (origH[i] * 0.3 + Math.random() * origH[i] * 1.5).toFixed(0) + 'px';
-        });
-        rafId = requestAnimationFrame(animateWave);
-      }
-
-      function stopAnim() {
-        cancelAnimationFrame(rafId);
-        bars.forEach(function (b, i) { b.style.height = origH[i] + 'px'; });
+      function updateSeekVisual(value) {
+        if (!seek) return;
+        var max = Number(seek.max) || 0;
+        var safeValue = Math.min(Math.max(Number(value) || 0, 0), max || 0);
+        var progress = max > 0 ? (safeValue / max) * 100 : 0;
+        seek.style.setProperty('--seek-progress', progress + '%');
       }
 
       function showPause() {
         isPlaying = true;
         iconPlay.style.display  = 'none';
         iconPause.style.display = '';
-        animateWave();
       }
 
       function showPlay() {
         isPlaying = false;
         iconPlay.style.display  = '';
         iconPause.style.display = 'none';
-        stopAnim();
+      }
+
+      function syncPlayer(timeValue) {
+        if (timecode) timecode.textContent = fmt(timeValue);
+        if (!seek) return;
+
+        if (!isSeeking) seek.value = String(timeValue || 0);
+        updateSeekVisual(isSeeking ? seek.value : timeValue);
+      }
+
+      function applySeekValue() {
+        if (!seek) return;
+        var nextTime = Number(seek.value) || 0;
+        audio.currentTime = nextTime;
+        isSeeking = false;
+        syncPlayer(nextTime);
       }
 
       window.togglePodcast = function () {
@@ -1965,14 +2655,40 @@
         showPlay();
       });
 
+      audio.addEventListener('loadedmetadata', function () {
+        if (seek) {
+          seek.max = String(audio.duration || 0);
+          seek.value = String(audio.currentTime || 0);
+        }
+        if (duration) duration.textContent = fmt(audio.duration);
+        syncPlayer(audio.currentTime || 0);
+      });
+
       audio.addEventListener('timeupdate', function () {
-        if (timecode) timecode.textContent = fmt(audio.currentTime);
+        if (!isSeeking) syncPlayer(audio.currentTime);
       });
 
       audio.addEventListener('ended', function () {
+        isSeeking = false;
         showPlay();
-        if (timecode) timecode.textContent = '00:00';
+        audio.currentTime = 0;
+        syncPlayer(0);
       });
+
+      if (seek) {
+        seek.addEventListener('pointerdown', function () {
+          isSeeking = true;
+        });
+
+        seek.addEventListener('input', function () {
+          isSeeking = true;
+          syncPlayer(Number(seek.value) || 0);
+        });
+
+        seek.addEventListener('change', applySeekValue);
+        seek.addEventListener('pointerup', applySeekValue);
+        updateSeekVisual(0);
+      }
     })();
   </script>
 </body>

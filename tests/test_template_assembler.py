@@ -233,8 +233,8 @@ class TestTemplateAssembler(unittest.TestCase):
             self.assertEqual(output_path.read_text(encoding="utf-8"), html)
             self.assertIn("The AI Upload", html)
             self.assertIn("WEEKLY DIGEST", html.upper())
-            self.assertIn("SATURDAY", html)
-            self.assertIn("MAY 02", html)
+            self.assertIn("FRIDAY", html)
+            self.assertIn("MAY 01", html)
             self.assertIn("2026", html)
             self.assertIn("ISSUE 01", html)
             self.assertIn("This Week&#39;s Headlines", html)
@@ -322,19 +322,193 @@ class TestTemplateAssembler(unittest.TestCase):
             self.assertEqual(output_path.read_text(encoding="utf-8"), html)
             self.assertNotIn("{{ publish_date }}", html)
             self.assertIn("ISSUE 01", html)
-            self.assertIn("SATURDAY", html)
-            self.assertIn("MAY 02", html)
+            self.assertIn("FRIDAY", html)
+            self.assertIn("MAY 01", html)
             self.assertIn("src=\"assets/logos/RBG_RCLL_vrt.png\"", html)
             self.assertIn("src=\"assets/generated/headline_1.png\"", html)
             self.assertNotIn("news_brief.png", html)
             self.assertIn('class="brand-mark"', html)
             self.assertIn('class="stats-strip"', html)
             self.assertIn('class="sidebar"', html)
+            self.assertIn("In This Issue", html)
             self.assertIn('class="content-section"', html)
             self.assertIn("This Week&#39;s Briefing", html)
             self.assertIn("Stanford Law School Robert Crown Law Library", html)
 
-    def test_run_shifts_publish_date_forward_one_day(self) -> None:
+    def test_run_renders_seekable_podcast_player_for_local_audio(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir_name:
+            tmpdir = Path(tmpdir_name)
+            project_root = tmpdir / "project"
+            project_root.mkdir()
+            (project_root / "assets" / "generated").mkdir(parents=True)
+            (project_root / "assets" / "logos").mkdir(parents=True)
+            (project_root / "templates").mkdir()
+            (project_root / "data" / "output").mkdir(parents=True)
+
+            stories_path = project_root / "data" / "output" / "summarized_stories.json"
+            headlines_path = project_root / "data" / "output" / "headline_picks.json"
+            template_path = project_root / "templates" / "newsletter.html"
+            output_path = project_root / "data" / "output" / "newsletter.html"
+            repo_template_path = (
+                Path(__file__).resolve().parent.parent / "templates" / "newsletter.html"
+            )
+
+            self._write_json(
+                stories_path,
+                [
+                    self._story_payload(
+                        "security_story",
+                        "security",
+                        0.94,
+                        "Paragraph one.\n\nParagraph two.",
+                        title="Security story",
+                        newsletter_title="Rewritten security story",
+                    ),
+                ],
+            )
+            self._write_json(
+                headlines_path,
+                [
+                    self._headline_payload(
+                        "https://example.com/other_headline",
+                        "Other headline",
+                        "assets/generated/headline_1.png",
+                    ),
+                ],
+            )
+            template_path.write_text(repo_template_path.read_text(encoding="utf-8"))
+
+            assembler = TemplateAssembler(
+                stories_path=str(stories_path),
+                headlines_path=str(headlines_path),
+                template_path=str(template_path),
+                media={"podcast_audio_url": "assets/media/podcast-2026-05-01.mp3"},
+            )
+
+            html = assembler.run(publish_date="2026-05-01", output_path=str(output_path))
+
+            self.assertIn('id="podcast-seek"', html)
+            self.assertIn('id="podcast-timecode"', html)
+            self.assertIn('id="podcast-duration"', html)
+            self.assertIn('src="assets/media/podcast-2026-05-01.mp3"', html)
+            self.assertIn("togglePodcast()", html)
+
+    def test_run_renders_pdf_download_link_when_pdf_url_is_provided(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir_name:
+            tmpdir = Path(tmpdir_name)
+            project_root = tmpdir / "project"
+            project_root.mkdir()
+            (project_root / "assets" / "generated").mkdir(parents=True)
+            (project_root / "assets" / "logos").mkdir(parents=True)
+            (project_root / "templates").mkdir()
+            (project_root / "data" / "output").mkdir(parents=True)
+
+            stories_path = project_root / "data" / "output" / "summarized_stories.json"
+            headlines_path = project_root / "data" / "output" / "headline_picks.json"
+            template_path = project_root / "templates" / "newsletter.html"
+            output_path = project_root / "data" / "output" / "newsletter.html"
+            repo_template_path = (
+                Path(__file__).resolve().parent.parent / "templates" / "newsletter.html"
+            )
+
+            self._write_json(
+                stories_path,
+                [
+                    self._story_payload(
+                        "security_story",
+                        "security",
+                        0.94,
+                        "Paragraph one.\n\nParagraph two.",
+                    ),
+                ],
+            )
+            self._write_json(
+                headlines_path,
+                [
+                    self._headline_payload(
+                        "https://example.com/other_headline",
+                        "Other headline",
+                        "assets/generated/headline_1.png",
+                    ),
+                ],
+            )
+            template_path.write_text(repo_template_path.read_text(encoding="utf-8"))
+
+            assembler = TemplateAssembler(
+                stories_path=str(stories_path),
+                headlines_path=str(headlines_path),
+                template_path=str(template_path),
+            )
+
+            html = assembler.run(
+                publish_date="2026-05-01",
+                output_path=str(output_path),
+                archive_url="issues/",
+                pdf_url="newsletter.pdf",
+                pdf_download_name="ai-upload-weekly-digest-2026-05-01.pdf",
+            )
+
+            self.assertIn("Download PDF", html)
+            self.assertIn('href="newsletter.pdf"', html)
+            self.assertIn('download="ai-upload-weekly-digest-2026-05-01.pdf"', html)
+
+    def test_run_omits_pdf_download_link_when_pdf_url_is_absent(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir_name:
+            tmpdir = Path(tmpdir_name)
+            project_root = tmpdir / "project"
+            project_root.mkdir()
+            (project_root / "assets" / "generated").mkdir(parents=True)
+            (project_root / "assets" / "logos").mkdir(parents=True)
+            (project_root / "templates").mkdir()
+            (project_root / "data" / "output").mkdir(parents=True)
+
+            stories_path = project_root / "data" / "output" / "summarized_stories.json"
+            headlines_path = project_root / "data" / "output" / "headline_picks.json"
+            template_path = project_root / "templates" / "newsletter.html"
+            output_path = project_root / "data" / "output" / "newsletter.html"
+            repo_template_path = (
+                Path(__file__).resolve().parent.parent / "templates" / "newsletter.html"
+            )
+
+            self._write_json(
+                stories_path,
+                [
+                    self._story_payload(
+                        "security_story",
+                        "security",
+                        0.94,
+                        "Paragraph one.\n\nParagraph two.",
+                    ),
+                ],
+            )
+            self._write_json(
+                headlines_path,
+                [
+                    self._headline_payload(
+                        "https://example.com/other_headline",
+                        "Other headline",
+                        "assets/generated/headline_1.png",
+                    ),
+                ],
+            )
+            template_path.write_text(repo_template_path.read_text(encoding="utf-8"))
+
+            assembler = TemplateAssembler(
+                stories_path=str(stories_path),
+                headlines_path=str(headlines_path),
+                template_path=str(template_path),
+            )
+
+            html = assembler.run(
+                publish_date="2026-05-01",
+                output_path=str(output_path),
+                archive_url="../",
+                latest_issue_url="../../",
+            )
+
+            self.assertNotIn("Download PDF", html)
+
+    def test_run_uses_current_issue_date(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir_name:
             tmpdir = Path(tmpdir_name)
             project_root = tmpdir / "project"
@@ -383,8 +557,121 @@ class TestTemplateAssembler(unittest.TestCase):
 
             html = assembler.run(publish_date="2026-05-26", output_path=str(output_path))
 
-            self.assertIn("WEDNESDAY", html)
-            self.assertIn("MAY 27", html)
+            self.assertIn("TUESDAY", html)
+            self.assertIn("MAY 26", html)
+
+    def test_run_renders_mobile_issue_nav_after_listen_and_watch_when_media_exists(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir_name:
+            tmpdir = Path(tmpdir_name)
+            project_root = tmpdir / "project"
+            project_root.mkdir()
+            (project_root / "assets" / "generated").mkdir(parents=True)
+            (project_root / "assets" / "logos").mkdir(parents=True)
+            (project_root / "templates").mkdir()
+            (project_root / "data" / "output").mkdir(parents=True)
+
+            stories_path = project_root / "data" / "output" / "summarized_stories.json"
+            headlines_path = project_root / "data" / "output" / "headline_picks.json"
+            template_path = project_root / "templates" / "newsletter.html"
+            output_path = project_root / "data" / "output" / "newsletter.html"
+            repo_template_path = (
+                Path(__file__).resolve().parent.parent / "templates" / "newsletter.html"
+            )
+
+            self._write_json(
+                stories_path,
+                [
+                    self._story_payload("security_story", "security", 0.94, "Security summary."),
+                    self._story_payload("policy_story", "policy", 0.91, "Policy summary."),
+                ],
+            )
+            self._write_json(
+                headlines_path,
+                [
+                    self._headline_payload(
+                        "https://example.com/other_headline",
+                        "Other headline",
+                        "assets/generated/headline_1.png",
+                    ),
+                ],
+            )
+            template_path.write_text(repo_template_path.read_text(encoding="utf-8"))
+
+            assembler = TemplateAssembler(
+                stories_path=str(stories_path),
+                headlines_path=str(headlines_path),
+                template_path=str(template_path),
+                media={"podcast_embed_url": "https://example.com/podcast"},
+            )
+
+            html = assembler.run(publish_date="2026-05-01", output_path=str(output_path))
+
+            self.assertIn('class="page-viewport"', html)
+            self.assertIn("mobile-issue-nav", html)
+            self.assertIn("In This Issue", html)
+            self.assertIn(">Sections<", html)
+            self.assertIn('href="#security"', html)
+            self.assertIn('href="#policy"', html)
+            self.assertIn(">01<", html)
+            self.assertIn("1 Story", html)
+            mobile_nav_index = html.index('aria-label="Issue sections for mobile"')
+            self.assertLess(html.index('id="listen-watch"'), mobile_nav_index)
+            self.assertLess(mobile_nav_index, html.index('id="security"'))
+
+    def test_run_renders_mobile_issue_nav_after_headlines_when_media_absent(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir_name:
+            tmpdir = Path(tmpdir_name)
+            project_root = tmpdir / "project"
+            project_root.mkdir()
+            (project_root / "assets" / "generated").mkdir(parents=True)
+            (project_root / "assets" / "logos").mkdir(parents=True)
+            (project_root / "templates").mkdir()
+            (project_root / "data" / "output").mkdir(parents=True)
+
+            stories_path = project_root / "data" / "output" / "summarized_stories.json"
+            headlines_path = project_root / "data" / "output" / "headline_picks.json"
+            template_path = project_root / "templates" / "newsletter.html"
+            output_path = project_root / "data" / "output" / "newsletter.html"
+            repo_template_path = (
+                Path(__file__).resolve().parent.parent / "templates" / "newsletter.html"
+            )
+
+            self._write_json(
+                stories_path,
+                [
+                    self._story_payload("security_story", "security", 0.94, "Security summary."),
+                    self._story_payload("policy_story", "policy", 0.91, "Policy summary."),
+                ],
+            )
+            self._write_json(
+                headlines_path,
+                [
+                    self._headline_payload(
+                        "https://example.com/other_headline",
+                        "Other headline",
+                        "assets/generated/headline_1.png",
+                    ),
+                ],
+            )
+            template_path.write_text(repo_template_path.read_text(encoding="utf-8"))
+
+            assembler = TemplateAssembler(
+                stories_path=str(stories_path),
+                headlines_path=str(headlines_path),
+                template_path=str(template_path),
+            )
+
+            html = assembler.run(publish_date="2026-05-01", output_path=str(output_path))
+
+            self.assertNotIn('id="listen-watch"', html)
+            mobile_nav_index = html.index('aria-label="Issue sections for mobile"')
+            self.assertLess(html.index('id="headlines"'), mobile_nav_index)
+            self.assertLess(mobile_nav_index, html.index('id="security"'))
+            self.assertIn(".page-viewport {", html)
+            self.assertIn("overflow: visible;", html)
+            self.assertIn("@media (max-width: 760px)", html)
+            self.assertIn("display: none;", html)
+            self.assertIn("margin: 0 auto;", html)
 
     def test_story_to_article_prefers_newsletter_title(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir_name:
