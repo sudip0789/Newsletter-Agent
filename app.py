@@ -52,17 +52,10 @@ SCORE_DIMENSIONS = [
 
 SUMMARY_STATUS_OPTIONS = [
     "all",
-    "has both summaries",
-    "has GPT-5.4 only",
-    "has Sonnet 4.6 only",
+    "has summary",
     "needs summary",
     "needs manual review",
 ]
-
-MODEL_LABELS = {
-    "gpt": "GPT-5.4",
-    "sonnet": "Claude Sonnet 4.6",
-}
 
 
 def inject_styles() -> None:
@@ -239,18 +232,13 @@ def normalize_summary_lookup(items: list[dict[str, Any]]) -> dict[str, dict[str,
 
 
 def get_summary_status(article: dict[str, Any]) -> str:
-    has_gpt = bool(article.get("gpt_summary"))
-    has_sonnet = bool(article.get("sonnet_summary"))
+    has_summary = bool((article.get("summary") or "").strip())
     manual_review = article.get("needs_manual_review", False)
 
     if manual_review:
         return "needs manual review"
-    if has_gpt and has_sonnet:
-        return "has both summaries"
-    if has_gpt:
-        return "has GPT-5.4 only"
-    if has_sonnet:
-        return "has Sonnet 4.6 only"
+    if has_summary:
+        return "has summary"
     return "needs summary"
 
 
@@ -293,8 +281,7 @@ def render_section_chart(section_counts: Counter[str], total_articles: int) -> N
         )
 
 
-def render_summary(model_key: str, summary: str | None) -> None:
-    st.markdown(f"**{MODEL_LABELS[model_key]}**")
+def render_summary(summary: str | None) -> None:
     if summary:
         st.markdown(
             f'<div class="summary-box">{to_safe_html_text(summary)}</div>',
@@ -309,8 +296,7 @@ def render_summary(model_key: str, summary: str | None) -> None:
 
 def build_article_records(
     scored_stories: list[dict[str, Any]],
-    gpt_lookup: dict[str, dict[str, Any]],
-    sonnet_lookup: dict[str, dict[str, Any]],
+    summary_lookup: dict[str, dict[str, Any]],
 ) -> list[dict[str, Any]]:
     articles: list[dict[str, Any]] = []
 
@@ -320,16 +306,15 @@ def build_article_records(
     ):
         primary = story.get("cluster", {}).get("primary_article", {})
         url = primary.get("url", "")
-        gpt_item = gpt_lookup.get(url, {})
-        sonnet_item = sonnet_lookup.get(url, {})
+        summary_item = summary_lookup.get(url, {})
         sources = story.get("cluster", {}).get("sources_involved", [])
         coverage_count = story.get("cluster", {}).get("coverage_count", len(sources))
         source_name = primary.get("source_name") or (sources[0] if sources else "Unknown source")
         newsletter_title = (
-            gpt_item.get("newsletter_title")
-            or sonnet_item.get("newsletter_title")
+            summary_item.get("newsletter_title")
             or primary.get("title", "Untitled article")
         )
+        summary = summary_item.get("summary") or ""
 
         article = {
             "rank": rank,
@@ -344,10 +329,9 @@ def build_article_records(
             "rationale": story.get("rationale", ""),
             "coverage_count": coverage_count,
             "sources": sources,
-            "gpt_summary": gpt_item.get("summary"),
-            "sonnet_summary": sonnet_item.get("summary"),
+            "summary": summary,
             "needs_manual_review": bool(
-                gpt_item.get("needs_manual_review") or sonnet_item.get("needs_manual_review")
+                summary_item.get("needs_manual_review") or not summary.strip()
             ),
         }
         article["summary_status"] = get_summary_status(article)
@@ -389,15 +373,15 @@ def render_sidebar() -> tuple[str, str, Any]:
 
 def render_overview(articles: list[dict[str, Any]]) -> None:
     section_counts = Counter(article.get("section", "unassigned") for article in articles)
-    gpt_count = sum(1 for article in articles if article.get("gpt_summary"))
-    sonnet_count = sum(1 for article in articles if article.get("sonnet_summary"))
+    summary_count = sum(1 for article in articles if (article.get("summary") or "").strip())
+    missing_summary_count = len(articles) - summary_count
     manual_review_count = sum(1 for article in articles if article.get("needs_manual_review"))
 
     col1, col2, col3, col4 = st.columns(4)
     stats = [
         ("Total articles", str(len(articles))),
-        ("Summaries from GPT-5.4", str(gpt_count)),
-        ("Summaries from Claude Sonnet 4.6", str(sonnet_count)),
+        ("Summaries available", str(summary_count)),
+        ("Missing summaries", str(missing_summary_count)),
         ("Needs manual review", str(manual_review_count)),
     ]
     for col, (label, value) in zip((col1, col2, col3, col4), stats):
@@ -467,8 +451,7 @@ def render_article_card(article: dict[str, Any]) -> None:
                 st.warning("⚠️ Needs manual review before publication")
 
             st.markdown("**Summary**")
-            render_summary("gpt", article.get("gpt_summary"))
-            render_summary("sonnet", article.get("sonnet_summary"))
+            render_summary(article.get("summary"))
 
 
 def main() -> None:
@@ -480,18 +463,14 @@ def main() -> None:
         st.info("No scored stories found. Run the pipeline first: python run_pipeline.py")
         return
 
-    gpt_items, gpt_path = load_optional_json("summarized_stories_openai_gpt_5_4.json")
-    sonnet_items, sonnet_path = load_optional_json("summarized_stories_anthropic_sonnet_4_6.json")
+    summary_items, summary_path = load_optional_json("summarized_stories.json")
 
-    if not gpt_path:
-        st.info("GPT-5.4 summaries not found")
-    if not sonnet_path:
-        st.info("Claude Sonnet 4.6 summaries not found")
+    if not summary_path:
+        st.info("Summaries not found. Articles without summaries will be flagged for manual review.")
 
     articles = build_article_records(
         scored_stories,
-        normalize_summary_lookup(gpt_items),
-        normalize_summary_lookup(sonnet_items),
+        normalize_summary_lookup(summary_items),
     )
 
     default_section = "show all"

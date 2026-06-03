@@ -62,12 +62,70 @@ def _build_drive_media(
     }
 
 
+def refresh_drive_headline_images(
+    project_root: Path | None = None,
+    publish_date: date | datetime | str | None = None,
+) -> dict[str, Any]:
+    """Refresh Drive-hosted headline images for an existing issue snapshot."""
+    from src import drive_publisher
+
+    root = (project_root or Path(__file__).resolve().parent.parent).resolve()
+    issue_date = normalize_issue_date(resolve_publication_date(publish_date))
+    issue_root = root / "issue_snapshots" / issue_date
+    if not issue_root.exists():
+        raise FileNotFoundError(f"Issue snapshot does not exist for {issue_date}")
+
+    media_path = issue_root / "media.json"
+    output_media_path = root / "data" / "output" / "media.json"
+    media: dict[str, Any] = {}
+    if media_path.exists():
+        media = json.loads(media_path.read_text(encoding="utf-8"))
+    elif output_media_path.exists():
+        media = json.loads(output_media_path.read_text(encoding="utf-8"))
+
+    if not drive_publisher.is_configured():
+        LOGGER.info("Drive is not configured; skipping headline image refresh.")
+        return media
+
+    folder_id = media.get("folder_id")
+    if not folder_id:
+        parent_folder_id = drive_publisher.get_parent_folder_id()
+        folder_id = drive_publisher.create_week_folder(issue_date, parent_folder_id)
+        media["folder_id"] = folder_id
+        media["folder_url"] = f"https://drive.google.com/drive/folders/{folder_id}"
+
+    headlines = _load_json(root / "data" / "output" / "headline_picks.json")
+    refreshed_urls: list[str] = []
+    for index, headline in enumerate(headlines, start=1):
+        image_path = headline.get("image_path") or f"assets/generated/headline_{index}.png"
+        local_image = root / image_path
+        if not local_image.exists():
+            local_image = issue_root / image_path
+        if not local_image.exists():
+            LOGGER.warning("Image not found at %s, skipping Drive refresh.", image_path)
+            refreshed_urls.append("")
+            continue
+
+        display_name = f"headline_{index}.png"
+        urls = drive_publisher.replace_file(folder_id, local_image, display_name)
+        refreshed_urls.append(urls["direct_url"])
+
+    media["headline_images"] = refreshed_urls
+    media_json = json.dumps(media, indent=2, ensure_ascii=False)
+    media_path.write_text(media_json, encoding="utf-8")
+    output_media_path.write_text(media_json, encoding="utf-8")
+    return media
+
+
 def _snapshot_local_podcast_audio(
     root: Path,
     issue_root: Path,
     issue_date: str,
 ) -> dict[str, str]:
-    source_path = root / "data" / "output" / LOCAL_PODCAST_AUDIO_FILENAME
+    output_dir = root / "data" / "output"
+    mp3_path = output_dir / "audio.mp3"
+    m4a_path = output_dir / LOCAL_PODCAST_AUDIO_FILENAME
+    source_path = mp3_path if mp3_path.exists() else m4a_path
     if not source_path.exists():
         return {}
 

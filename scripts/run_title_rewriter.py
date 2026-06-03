@@ -24,7 +24,6 @@ else:
 
 configure_script_environment()
 
-from src.stats_report import append_stage_report
 from src.title_rewriter import TitleRewriter
 from src.utils import setup_logging
 
@@ -73,8 +72,6 @@ def main() -> None:
     rewriter.save_results(stories)
     report_text = format_title_rewrite_summary(stories[: args.top])
     print(report_text)
-    report_path = append_stage_report("run_title_rewriter.py", report_text)
-    print(f"Stats report updated: {report_path}")
     print(
         f"Saved {min(len(stories), args.top)} rewritten titles using {args.model} "
         f"to {rewriter.output_path}"

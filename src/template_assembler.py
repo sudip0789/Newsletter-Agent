@@ -82,6 +82,15 @@ class TemplateAssembler:
         grouped_all = self.group_by_section(self.stories, exclude_urls=[])
         grouped = self.group_by_section(self.stories, exclude_urls=exclude_urls)
         active_sections = self.get_active_sections(grouped)
+        # Body sections first (they get the numbered section bodies), then any
+        # headline-only sections pushed to the bottom — this keeps the sidebar
+        # index aligned with the body section numbering (loop.index).
+        body_section_keys = [(k, n) for k, n in self.ALL_SECTIONS if grouped.get(k)]
+        headline_only_keys = [
+            (k, n)
+            for k, n in self.ALL_SECTIONS
+            if not grouped.get(k) and grouped_all.get(k)
+        ]
         section_navigation = [
             {
                 "key": key,
@@ -93,7 +102,7 @@ class TemplateAssembler:
                 "in_headlines": bool(not grouped.get(key) and grouped_all.get(key)),
             }
             for index, (key, name) in enumerate(
-                [(k, n) for k, n in self.ALL_SECTIONS if grouped_all.get(k)],
+                body_section_keys + headline_only_keys,
                 start=1,
             )
         ]
@@ -127,10 +136,15 @@ class TemplateAssembler:
         headlines = []
         for i, headline in enumerate(self.headlines):
             drive_url = drive_images[i] if i < len(drive_images) and drive_images[i] else None
-            image_path = drive_url or self._resolve_headline_image_path(
+            local_image_path = self._resolve_headline_image_path(
                 output_file,
                 headline,
                 index=i + 1,
+            )
+            image_path = (
+                local_image_path
+                if self._headline_local_image_exists(headline, index=i + 1)
+                else drive_url or local_image_path
             )
             headlines.append({**headline, "image_path": image_path})
 
@@ -249,6 +263,24 @@ class TemplateAssembler:
             output_file,
             Path("assets/logos/newsletter_logo.png"),
         )
+
+    def _headline_local_image_exists(
+        self,
+        headline: dict[str, Any],
+        index: int | None = None,
+    ) -> bool:
+        raw_path = headline.get("image_path")
+        candidate_root = (
+            self.headline_asset_root
+            if self.headline_asset_root is not None
+            else self.project_root
+        )
+        if raw_path:
+            return (candidate_root / Path(raw_path)).exists()
+        if index is None:
+            return False
+        conventional_path = Path("assets/generated") / f"headline_{index}.png"
+        return (candidate_root / conventional_path).exists()
 
     def _resolve_section_icon_path(self, output_file: Path, section_key: str) -> str:
         filename = self.SECTION_ICON_FILENAMES.get(section_key, "newsletter_logo.png")

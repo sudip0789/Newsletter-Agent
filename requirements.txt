@@ -9,6 +9,8 @@ pydantic>=2.0
 python-dotenv
 pyyaml
 numpy
+scipy
+Pillow
 scikit-learn
 streamlit
 Jinja2

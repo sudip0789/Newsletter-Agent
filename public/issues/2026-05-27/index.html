@@ -10,12 +10,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --page-bg: #fbf7ee;
-      --page-bg-alt: #f6f0e6;
+      --page-bg: #FAF9F8;
+      --page-bg-alt: #FAF9F8;
       --page-ink: #16120f;
       --page-muted: #6c6259;
       --page-subtle: #988d83;
-      --page-line: rgba(124, 103, 82, 0.28);
+      --page-line: #E8E5E0;
       --brand-red: #a11a17;
       --brand-red-deep: #8e1411;
       --desktop-canvas-min: 980px;
@@ -309,9 +309,9 @@
       max-height: calc(100vh - 48px);
       display: flex;
       flex-direction: column;
-      border: 1px solid rgba(124, 103, 82, 0.16);
+      border: 1px solid #E8E5E0;
       border-radius: 34px;
-      background: linear-gradient(180deg, #fbf7ee 0%, #f6f0e6 100%);
+      background: #FAF9F8;
       overflow: hidden;
       box-shadow: 0 18px 42px rgba(88, 62, 33, 0.08);
     }
@@ -372,7 +372,7 @@
     .sidebar-nav {
       display: flex;
       flex-direction: column;
-      border-top: 1px solid rgba(124, 103, 82, 0.2);
+      border-top: 1px solid #E8E5E0;
       overflow-y: auto;
       flex: 1;
       min-height: 0;
@@ -385,7 +385,7 @@
       gap: 10px;
       min-height: 68px;
       padding: 14px 20px;
-      border-top: 1px solid rgba(124, 103, 82, 0.16);
+      border-top: 1px solid #E8E5E0;
       color: var(--page-ink);
       text-decoration: none;
       background: transparent;
@@ -463,9 +463,9 @@
     }
 
     .mobile-issue-nav-card {
-      border: 1px solid rgba(124, 103, 82, 0.16);
+      border: 1px solid #E8E5E0;
       border-radius: 34px;
-      background: linear-gradient(180deg, #fbf7ee 0%, #f6f0e6 100%);
+      background: #FAF9F8;
       padding: 26px 22px 28px;
       box-shadow: 0 18px 42px rgba(88, 62, 33, 0.08);
     }
@@ -538,11 +538,11 @@
       gap: 8px;
       min-height: 105px;
       padding: 11px 10px 10px;
-      border: 1px solid rgba(124, 103, 82, 0.18);
+      border: 1px solid #E8E5E0;
       border-radius: 18px;
       color: var(--page-ink);
       text-decoration: none;
-      background: linear-gradient(180deg, rgba(247, 237, 218, 0.7) 0%, rgba(244, 233, 212, 0.98) 100%);
+      background: #F2F0EC;
       transition: transform 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
     }
 
@@ -636,7 +636,7 @@
     }
 
     .article {
-      border-top: 1px solid rgba(124, 103, 82, 0.18);
+      border-top: 1px solid #E8E5E0;
     }
 
     .headline-card {
@@ -647,10 +647,10 @@
       color: inherit;
       text-decoration: none;
       align-items: start;
-      border: 1px solid rgba(124, 103, 82, 0.18);
+      border: 1px solid #E8E5E0;
       border-radius: 18px;
-      background: rgba(255, 252, 247, 0.58);
-      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+      background: #F6F4F1;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
     }
 
     .headline-card:first-child,
@@ -660,9 +660,8 @@
 
     .headline-card:hover {
       border-color: rgba(161, 26, 23, 0.35);
-      background: rgba(255, 252, 247, 0.94);
       transform: translateY(-3px);
-      box-shadow: 0 6px 24px rgba(124, 103, 82, 0.13);
+      box-shadow: 0 10px 28px rgba(124, 103, 82, 0.16);
     }
 
     .headline-card:hover .headline-copy h3 {
@@ -796,7 +795,7 @@
 
     /* Video card */
     .media-card--video .media-card-cover {
-      background: #e8dcc8;
+      background: #F2F0EC;
       padding: 24px 26px 22px 32px;
     }
 
@@ -888,7 +887,7 @@
 
     /* Podcast card */
     .media-card--podcast .media-card-cover {
-      background: #e8dcc8;
+      background: #F2F0EC;
       border: none;
       border-radius: 14px;
       padding: 18px 18px 18px 24px;
@@ -1540,6 +1539,8 @@
     }
   </script>
   <style>
+    /* Embed mode (?embed=1): compact layout for the Google Sites iframe —
+       hides the full masthead/logo and shows a slim issue/date bar instead. */
     .embed-issue-meta { display: none; }
     .embed-mode .masthead-top,
     .embed-mode .masthead-divider { display: none; }
@@ -1712,19 +1713,8 @@
             <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
           </a>
           
-          <a class="sidebar-link" href="#headlines">
-            <span class="sidebar-link-number">06</span>
-            <span class="sidebar-link-body">
-              <span class="sidebar-link-title">Responsible AI</span>
-              
-              <span class="sidebar-link-count">In Headlines</span>
-              
-            </span>
-            <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
-          </a>
-          
           <a class="sidebar-link" href="#ai_sustainability">
-            <span class="sidebar-link-number">07</span>
+            <span class="sidebar-link-number">06</span>
             <span class="sidebar-link-body">
               <span class="sidebar-link-title">AI Sustainability</span>
               
@@ -1735,7 +1725,7 @@
           </a>
           
           <a class="sidebar-link" href="#creative_ai">
-            <span class="sidebar-link-number">08</span>
+            <span class="sidebar-link-number">07</span>
             <span class="sidebar-link-body">
               <span class="sidebar-link-title">Creative AI</span>
               
@@ -1746,11 +1736,22 @@
           </a>
           
           <a class="sidebar-link" href="#higher_education">
-            <span class="sidebar-link-number">09</span>
+            <span class="sidebar-link-number">08</span>
             <span class="sidebar-link-body">
               <span class="sidebar-link-title">Higher Education</span>
               
               <span class="sidebar-link-count">2 Stories</span>
+              
+            </span>
+            <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          
+          <a class="sidebar-link" href="#headlines">
+            <span class="sidebar-link-number">09</span>
+            <span class="sidebar-link-body">
+              <span class="sidebar-link-title">Responsible AI</span>
+              
+              <span class="sidebar-link-count">In Headlines</span>
               
             </span>
             <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
@@ -1765,7 +1766,7 @@
           <div class="headline-list">
             
             <a class="headline-card" href="https://www.kqed.org/news/12085144/california-judges-are-testing-a-new-ai-clerk-you-wont-know-if-its-looking-at-your-case" target="_blank" rel="noreferrer">
-              <img src="https://lh3.googleusercontent.com/d/1JipnzYOg6MUz7fnL_O-JutX9Pv5kJ2Fx" alt="California Courts Quietly Test AI Judicial Assistant Without Notifying Litigants">
+              <img src="assets/generated/headline_1.png" alt="California Courts Quietly Test AI Judicial Assistant Without Notifying Litigants">
               <div class="headline-copy">
                 <h3>California Courts Quietly Test AI Judicial Assistant Without Notifying Litigants</h3>
                 <p class="headline-meta">KQED</p>
@@ -1774,7 +1775,7 @@
             </a>
             
             <a class="headline-card" href="https://techcrunch.com/2026/05/27/youtube-will-now-automatically-label-ai-videos/" target="_blank" rel="noreferrer">
-              <img src="https://lh3.googleusercontent.com/d/1XGCBSmsxmLiH0tQnYK_oxjs6Z-oqlx0K" alt="YouTube Now Auto-Labels Videos Containing Significant AI-Generated Content">
+              <img src="assets/generated/headline_2.png" alt="YouTube Now Auto-Labels Videos Containing Significant AI-Generated Content">
               <div class="headline-copy">
                 <h3>YouTube Now Auto-Labels Videos Containing Significant AI-Generated Content</h3>
                 <p class="headline-meta">TechCrunch</p>
@@ -1783,7 +1784,7 @@
             </a>
             
             <a class="headline-card" href="https://www.axios.com/2026/05/20/anthropic-spacex-compute" target="_blank" rel="noreferrer">
-              <img src="https://lh3.googleusercontent.com/d/1idd04Q89KZNZt3UX8z-T51U3W41og6XH" alt="Anthropic Commits $15 Billion Annually to SpaceX for Computing Power">
+              <img src="assets/generated/headline_3.png" alt="Anthropic Commits $15 Billion Annually to SpaceX for Computing Power">
               <div class="headline-copy">
                 <h3>Anthropic Commits $15 Billion Annually to SpaceX for Computing Power</h3>
                 <p class="headline-meta">Axios</p>
@@ -1899,24 +1900,24 @@
         <span class="mobile-issue-nav-label">Policy</span>
       </a>
       
-      <a class="mobile-issue-nav-link" href="#headlines">
-        <span class="mobile-issue-nav-index">06</span>
-        <span class="mobile-issue-nav-label">Responsible AI</span>
-      </a>
-      
       <a class="mobile-issue-nav-link" href="#ai_sustainability">
-        <span class="mobile-issue-nav-index">07</span>
+        <span class="mobile-issue-nav-index">06</span>
         <span class="mobile-issue-nav-label">AI Sustainability</span>
       </a>
       
       <a class="mobile-issue-nav-link" href="#creative_ai">
-        <span class="mobile-issue-nav-index">08</span>
+        <span class="mobile-issue-nav-index">07</span>
         <span class="mobile-issue-nav-label">Creative AI</span>
       </a>
       
       <a class="mobile-issue-nav-link" href="#higher_education">
-        <span class="mobile-issue-nav-index">09</span>
+        <span class="mobile-issue-nav-index">08</span>
         <span class="mobile-issue-nav-label">Higher Education</span>
+      </a>
+      
+      <a class="mobile-issue-nav-link" href="#headlines">
+        <span class="mobile-issue-nav-index">09</span>
+        <span class="mobile-issue-nav-label">Responsible AI</span>
       </a>
       
     </nav>

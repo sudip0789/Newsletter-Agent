@@ -26,7 +26,6 @@ else:
 configure_script_environment()
 
 from src.headline_agent import HeadlineAgent
-from src.stats_report import append_stage_report, format_headline_selection
 from src.utils import setup_logging
 
 IMAGE_REQUEST_DELAY_SECONDS = 10
@@ -92,6 +91,19 @@ def prompt_for_preferred_titles(candidates: list[dict[str, object]]) -> list[str
     return preferred_titles
 
 
+def format_headline_selection(headlines: list[dict[str, object]]) -> str:
+    lines = [f"{len(headlines)} selected headline articles:"]
+    for index, headline in enumerate(headlines, start=1):
+        lines.append(f"{index}. {headline.get('title', '')}")
+        lines.append(f"Publisher: {headline.get('source_name', '')}")
+        lines.append(f"Blurb: {headline.get('blurb', '')}")
+        lines.append(
+            "Headline image generated: "
+            f"{headline.get('image_path') or 'None'}"
+        )
+    return "\n".join(lines)
+
+
 def main() -> None:
     args = parse_args()
     setup_logging(logging.INFO)
@@ -114,8 +126,6 @@ def main() -> None:
     agent.save_picks(headlines)
     report_text = format_headline_selection(headlines)
     print(report_text)
-    report_path = append_stage_report("run_headline_agent.py", report_text)
-    print(f"Stats report updated: {report_path}")
     print(f"Saved {len(headlines)} headline picks to {agent.output_path}")
 
 

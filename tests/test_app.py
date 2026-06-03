@@ -58,27 +58,48 @@ class TestAppArticleRecords(unittest.TestCase):
                 "rationale": "Example rationale.",
             }
         ]
-        gpt_lookup = {
+        summary_lookup = {
             "https://example.com/story": {
                 "newsletter_title": "Rewritten newsletter title",
                 "summary": "Generated summary",
                 "needs_manual_review": False,
             }
         }
-        sonnet_lookup = {
-            "https://example.com/story": {
-                "newsletter_title": "Alternate rewritten title",
-                "summary": "Alternate summary",
-                "needs_manual_review": False,
-            }
-        }
 
-        articles = build_article_records(scored_stories, gpt_lookup, sonnet_lookup)
+        articles = build_article_records(scored_stories, summary_lookup)
 
         self.assertEqual(len(articles), 1)
         self.assertEqual(articles[0]["title"], "Original source title")
         self.assertEqual(articles[0]["newsletter_title"], "Rewritten newsletter title")
-        self.assertEqual(articles[0]["summary_status"], "has both summaries")
+        self.assertEqual(articles[0]["summary"], "Generated summary")
+        self.assertEqual(articles[0]["summary_status"], "has summary")
+        self.assertFalse(articles[0]["needs_manual_review"])
+
+    def test_build_article_records_flags_missing_summary_for_manual_review(self) -> None:
+        scored_stories = [
+            {
+                "cluster": {
+                    "primary_article": {
+                        "title": "Story without summary",
+                        "url": "https://example.com/missing",
+                        "source_name": "Example Source",
+                        "published_date": "2026-05-01T00:00:00+00:00",
+                    },
+                    "sources_involved": ["Example Source"],
+                    "coverage_count": 1,
+                },
+                "composite_score": 0.81,
+                "section": "policy",
+                "scores": {},
+                "rationale": "Needs review.",
+            }
+        ]
+
+        articles = build_article_records(scored_stories, {})
+
+        self.assertEqual(articles[0]["summary"], "")
+        self.assertEqual(articles[0]["summary_status"], "needs manual review")
+        self.assertTrue(articles[0]["needs_manual_review"])
 
 
 if __name__ == "__main__":

@@ -34,7 +34,23 @@ ANTHROPIC_API_KEY=your_key
 ### Run the Full Pipeline
 
 ```bash
-python3 scripts/pipeline_runner.py
+python3 newsletter_pipeline
+python3 newsletter_pipeline --date YYYY-MM-DD
+```
+
+Run without `--date` to fetch, filter, deduplicate with recomputed embeddings, and score stories. Run with `--date` after review to summarize, rewrite titles, select headlines, and publish that issue date.
+
+To preview locally immediately after publishing:
+
+```bash
+python3 newsletter_pipeline --date YYYY-MM-DD --serve
+```
+
+If headline images were regenerated after publishing and the Drive folder should
+be refreshed too:
+
+```bash
+python3 scripts/build_public_site.py --date YYYY-MM-DD --refresh-drive-images
 ```
 ### Run Individual Stages
 

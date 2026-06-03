@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import logging
+from collections import OrderedDict
 
 if __package__ in (None, ""):
     import sys
@@ -24,7 +25,6 @@ else:
 
 configure_script_environment()
 
-from src.stats_report import append_stage_report, format_selected_stories_by_section
 from src.scorer import Scorer
 from src.utils import setup_logging
 
@@ -52,6 +52,21 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def format_selected_stories_by_section(stories: list, requested_total: int = 25) -> str:
+    grouped_titles: OrderedDict[str, list[str]] = OrderedDict()
+    for story in stories:
+        section_label = story.section.replace("_", " ").title()
+        grouped_titles.setdefault(section_label, []).append(
+            story.cluster.primary_article.title
+        )
+
+    lines = [f"Top {requested_total} articles selected:"]
+    for section_label, titles in grouped_titles.items():
+        lines.append(f"{section_label}:")
+        lines.extend(f"- {title}" for title in titles)
+    return "\n".join(lines)
+
+
 def main() -> None:
     args = parse_args()
     setup_logging(logging.INFO)
@@ -64,8 +79,6 @@ def main() -> None:
         requested_total=args.top,
     )
     print(report_text)
-    report_path = append_stage_report("run_scorer.py", report_text)
-    print(f"Stats report updated: {report_path}")
 
     if args.show_all_scores:
         print("\n=== All Scored Stories ===")

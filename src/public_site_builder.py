@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import shutil
 from datetime import date, datetime
 from pathlib import Path
@@ -15,6 +16,13 @@ from src.media_config import (
 )
 from src.publish_dates import normalize_issue_date, resolve_publication_date
 from src.template_assembler import TemplateAssembler
+
+LOGGER = logging.getLogger(__name__)
+
+# Background color the generated headline images are normalized to, so the square
+# DALL-E art blends seamlessly into the headline card. Keep this in sync with the
+# `.headline-card` background in templates/newsletter.html.
+HEADLINE_CARD_BG = (0xF6, 0xF4, 0xF1)
 
 
 def _load_json(path: Path) -> list[dict[str, Any]]:
@@ -91,6 +99,80 @@ def _copy_optional_directory(source_dir: Path, target_dir: Path) -> None:
     shutil.copytree(source_dir, target_dir)
 
 
+def _normalize_headline_image_backgrounds(
+    generated_dir: Path,
+    target_rgb: tuple[int, int, int] = HEADLINE_CARD_BG,
+    tolerance: float = 40.0,
+    skip_atol: int = 4,
+) -> None:
+    """Repaint the flat background of headline_{1,2,3}.png to ``target_rgb``.
+
+    DALL-E renders each headline image on a slightly different warm off-white, so
+    the square art shows a faint edge against the fixed headline-card color. This
+    recolors only the background — the region of near-background pixels connected
+    to the image border — leaving the foreground artwork untouched. It is
+    idempotent (images already on target are skipped via a cheap corner check)
+    and a no-op if the imaging libraries are unavailable (e.g. on a build host
+    without them — the committed images are already normalized).
+    """
+    try:
+        import numpy as np
+        from PIL import Image
+        from scipy import ndimage
+    except ImportError as exc:
+        LOGGER.warning("Skipping headline background normalization: %s", exc)
+        return
+
+    target = np.array(target_rgb)
+    for index in (1, 2, 3):
+        path = generated_dir / f"headline_{index}.png"
+        if not path.exists():
+            continue
+        try:
+            image = Image.open(path).convert("RGB")
+        except OSError as exc:
+            LOGGER.warning("Could not open %s for normalization: %s", path, exc)
+            continue
+
+        arr = np.asarray(image).astype(np.int16)
+        # Background reference = median of the four 8x8 corner patches.
+        corners = np.concatenate(
+            [
+                arr[:8, :8].reshape(-1, 3),
+                arr[:8, -8:].reshape(-1, 3),
+                arr[-8:, :8].reshape(-1, 3),
+                arr[-8:, -8:].reshape(-1, 3),
+            ]
+        )
+        reference = np.median(corners, axis=0)
+        # Cheap early-out: background already on target — nothing to do.
+        if np.all(np.abs(reference - target) <= skip_atol):
+            continue
+
+        # Pixels close to the background reference, then keep only the connected
+        # regions touching the border (the true outer background, never interior
+        # foreground shapes that happen to be light).
+        distance = np.sqrt(((arr - reference) ** 2).sum(axis=2))
+        close = distance <= tolerance
+        labels, _count = ndimage.label(close)
+        border_labels = (
+            set(labels[0, :].tolist())
+            | set(labels[-1, :].tolist())
+            | set(labels[:, 0].tolist())
+            | set(labels[:, -1].tolist())
+        )
+        border_labels.discard(0)
+        if not border_labels:
+            continue
+
+        background_mask = np.isin(labels, list(border_labels))
+        arr[background_mask] = target
+        Image.fromarray(arr.astype("uint8"), "RGB").save(path)
+        LOGGER.info(
+            "Normalized %s background to #%02X%02X%02X", path.name, *target_rgb
+        )
+
+
 def _build_archive_index(root: Path, issues: list[dict[str, str]]) -> None:
     template_path = root / "templates" / "archive_index.html"
     env = Environment(
@@ -144,9 +226,9 @@ def _sync_media_to_snapshot(
     root: Path,
     issue_date: str,
     audio_source: Path,
-    media_inputs: dict,
+    media_updates: dict,
 ) -> None:
-    """Sync local audio file and media_inputs.json back into the issue snapshot.
+    """Sync local audio file and media metadata back into the issue snapshot.
 
     Called by build_public_site so that adding audio/video after the initial
     publish_issue run keeps the snapshot up to date for future archive builds.
@@ -161,13 +243,32 @@ def _sync_media_to_snapshot(
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(audio_source, target)
 
-    if media_inputs:
+    if media_updates:
         media_json_path = snapshot_dir / "media.json"
         existing = _load_media(media_json_path) or {}
-        merged = {**existing, **media_inputs}
-        media_json_path.write_text(
-            json.dumps(merged, indent=2, ensure_ascii=False), encoding="utf-8"
-        )
+        merged = {**existing, **media_updates}
+        media_json = json.dumps(merged, indent=2, ensure_ascii=False)
+        media_json_path.write_text(media_json, encoding="utf-8")
+        output_media_path = root / "data" / "output" / "media.json"
+        output_media_path.parent.mkdir(parents=True, exist_ok=True)
+        output_media_path.write_text(media_json, encoding="utf-8")
+
+
+def _sync_current_issue_outputs_to_snapshot(root: Path, issue_date: str) -> None:
+    snapshot_dir = root / "issue_snapshots" / issue_date
+    if not snapshot_dir.exists():
+        return
+
+    output_dir = root / "data" / "output"
+    for filename in ("summarized_stories.json", "headline_picks.json"):
+        source = output_dir / filename
+        if source.exists():
+            shutil.copy2(source, snapshot_dir / filename)
+
+    generated_assets = root / "assets" / "generated"
+    snapshot_generated_assets = snapshot_dir / "assets" / "generated"
+    if generated_assets.exists():
+        _copy_generated_assets(generated_assets, snapshot_generated_assets)
 
 
 def build_public_site(
@@ -183,6 +284,14 @@ def build_public_site(
         if publish_date is not None and publish_date_is_resolved
         else normalize_issue_date(resolve_publication_date(publish_date))
     )
+
+    # Normalize the generated headline image backgrounds to the headline-card
+    # color before they are snapshotted and copied into public/, so the art
+    # blends seamlessly into the card.
+    _normalize_headline_image_backgrounds(source_assets / "generated")
+
+    if publish_date is not None:
+        _sync_current_issue_outputs_to_snapshot(root, latest_issue_date)
 
     if target_assets.exists():
         shutil.rmtree(target_assets)
@@ -237,7 +346,7 @@ def build_public_site(
         current_media["podcast_audio_url"] = latest_audio_path
         current_media.pop("podcast_embed_url", None)
 
-    _sync_media_to_snapshot(root, latest_issue_date, audio_source, media_inputs)
+    _sync_media_to_snapshot(root, latest_issue_date, audio_source, current_media)
 
     assembler = TemplateAssembler(
         stories_path=str(root / "data" / "output" / "summarized_stories.json"),
@@ -256,22 +365,22 @@ def build_public_site(
         publish_date_is_resolved=publish_date_is_resolved,
     )
     try:
-        from src.pdf_renderer import render_html_to_pdf
+        from src.pdf_renderer import PdfRenderError, render_html_to_pdf
         render_html_to_pdf(root / "public" / "index.html", latest_pdf_path)
     except ModuleNotFoundError:
         pass
+    except PdfRenderError as exc:
+        LOGGER.warning("Skipping PDF render: %s", exc)
 
     for issue in issue_snapshots:
         issue_source_dir = Path(issue["source_dir"])
         issue_output_dir = issues_public_root / issue["issue_date"]
         issue_media = _load_media(issue_source_dir / "media.json")
 
-        # Only copy local generated assets when there are no Drive image URLs for this issue.
-        if not (issue_media and issue_media.get("headline_images")):
-            _copy_generated_assets(
-                issue_source_dir / "assets" / "generated",
-                issue_output_dir / "assets" / "generated",
-            )
+        _copy_generated_assets(
+            issue_source_dir / "assets" / "generated",
+            issue_output_dir / "assets" / "generated",
+        )
         _copy_optional_directory(
             issue_source_dir / "assets" / "media",
             issue_output_dir / "assets" / "media",

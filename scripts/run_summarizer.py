@@ -25,7 +25,6 @@ else:
 
 configure_script_environment()
 
-from src.stats_report import append_stage_report, format_manual_review_summary
 from src.summarizer import Summarizer
 from src.utils import setup_logging
 
@@ -54,6 +53,20 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def format_manual_review_summary(stories: list) -> str:
+    flagged_titles = [
+        story.scored_story.cluster.primary_article.title
+        for story in stories
+        if story.needs_manual_review
+    ]
+    if not flagged_titles:
+        return "Manual review required: None"
+
+    lines = ["Manual review required:"]
+    lines.extend(f"- {title}" for title in flagged_titles)
+    return "\n".join(lines)
+
+
 def main() -> None:
     args = parse_args()
     setup_logging(logging.INFO)
@@ -67,8 +80,6 @@ def main() -> None:
     summarizer.save_results(stories)
     report_text = format_manual_review_summary(stories)
     print(report_text)
-    report_path = append_stage_report("run_summarizer.py", report_text)
-    print(f"Stats report updated: {report_path}")
     print(
         f"Saved {len(stories)} summarized stories using {args.model} "
         f"to {summarizer.output_path}"

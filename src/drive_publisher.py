@@ -63,6 +63,64 @@ def upload_file(
     return _build_urls(file_id)
 
 
+def replace_file(
+    folder_id: str,
+    local_path: str | Path,
+    display_name: str,
+) -> dict[str, str]:
+    """Replace a named Drive file in a folder, preserving its ID when possible."""
+    import mimetypes
+
+    from googleapiclient.http import MediaFileUpload
+
+    path = Path(local_path)
+    mime_type = mimetypes.guess_type(str(path))[0] or "application/octet-stream"
+    service = _get_service()
+    existing_file_id = find_file_id(folder_id, display_name)
+    if existing_file_id is None:
+        return upload_file(folder_id, path, display_name)
+
+    media = MediaFileUpload(str(path), mimetype=mime_type, resumable=False)
+    result = (
+        service.files()
+        .update(
+            fileId=existing_file_id,
+            body={"name": display_name},
+            media_body=media,
+            fields="id",
+            supportsAllDrives=True,
+        )
+        .execute()
+    )
+    file_id: str = result["id"]
+    _make_public(service, file_id)
+    return _build_urls(file_id)
+
+
+def find_file_id(folder_id: str, display_name: str) -> str | None:
+    service = _get_service()
+    safe_name = _escape_query_value(display_name)
+    safe_folder_id = _escape_query_value(folder_id)
+    result = (
+        service.files()
+        .list(
+            q=(
+                f"'{safe_folder_id}' in parents and "
+                f"name = '{safe_name}' and trashed = false"
+            ),
+            fields="files(id, name)",
+            pageSize=1,
+            supportsAllDrives=True,
+            includeItemsFromAllDrives=True,
+        )
+        .execute()
+    )
+    files = result.get("files", [])
+    if not files:
+        return None
+    return files[0]["id"]
+
+
 def _get_service() -> Any:
     global _SERVICE_CACHE
     if _SERVICE_CACHE is not None:
@@ -110,3 +168,7 @@ def _build_urls(file_id: str) -> dict[str, str]:
         "embed_url": f"https://drive.google.com/file/d/{file_id}/preview",
         "direct_url": f"https://lh3.googleusercontent.com/d/{file_id}",
     }
+
+
+def _escape_query_value(value: str) -> str:
+    return value.replace("\\", "\\\\").replace("'", "\\'")

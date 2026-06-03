@@ -4,16 +4,22 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import call, patch
 
-from src.issue_publisher import publish_issue
+from src.issue_publisher import publish_issue, refresh_drive_headline_images
 
 
 class TestIssuePublisher(unittest.TestCase):
     def setUp(self) -> None:
-        self.render_pdf_patcher = patch("src.public_site_builder.render_html_to_pdf")
+        self.render_pdf_patcher = patch("src.pdf_renderer.render_html_to_pdf")
         self.mock_render_pdf = self.render_pdf_patcher.start()
         self.addCleanup(self.render_pdf_patcher.stop)
+        self.drive_config_patcher = patch(
+            "src.drive_publisher.is_configured",
+            return_value=False,
+        )
+        self.mock_drive_configured = self.drive_config_patcher.start()
+        self.addCleanup(self.drive_config_patcher.stop)
 
     def _story_payload(self, title: str, url: str) -> dict:
         return {
@@ -320,6 +326,91 @@ class TestIssuePublisher(unittest.TestCase):
                 ).exists()
             )
             self.assertIn('src="assets/media/podcast-2026-05-06.mp3"', latest_html)
+
+    @patch("src.drive_publisher.replace_file")
+    def test_refresh_drive_headline_images_updates_existing_issue_media(
+        self,
+        mock_replace_file,
+    ) -> None:
+        self.mock_drive_configured.return_value = True
+        with tempfile.TemporaryDirectory() as tmpdir_name:
+            tmpdir = Path(tmpdir_name)
+            project_root = tmpdir / "project"
+            (project_root / "assets" / "generated").mkdir(parents=True)
+            (project_root / "data" / "output").mkdir(parents=True)
+            issue_root = project_root / "issue_snapshots" / "2026-05-06"
+            issue_root.mkdir(parents=True)
+
+            self._write_json(
+                project_root / "data" / "output" / "headline_picks.json",
+                [
+                    self._headline_payload(
+                        "Headline 1",
+                        "https://example.com/headline-1",
+                    ),
+                    {
+                        **self._headline_payload(
+                            "Headline 2",
+                            "https://example.com/headline-2",
+                        ),
+                        "image_path": "assets/generated/headline_2.png",
+                    },
+                ],
+            )
+            (project_root / "assets" / "generated" / "headline_1.png").write_bytes(b"new-1")
+            (project_root / "assets" / "generated" / "headline_2.png").write_bytes(b"new-2")
+            (issue_root / "media.json").write_text(
+                json.dumps(
+                    {
+                        "folder_id": "folder-123",
+                        "folder_url": "https://drive.google.com/drive/folders/folder-123",
+                        "headline_images": ["old-1", "old-2"],
+                        "video_embed_url": "https://drive.google.com/file/d/video/preview",
+                    }
+                ),
+                encoding="utf-8",
+            )
+            mock_replace_file.side_effect = [
+                {"direct_url": "new-url-1"},
+                {"direct_url": "new-url-2"},
+            ]
+
+            media = refresh_drive_headline_images(
+                project_root=project_root,
+                publish_date="2026-05-06",
+            )
+
+            self.assertEqual(media["headline_images"], ["new-url-1", "new-url-2"])
+            self.assertEqual(
+                media["video_embed_url"],
+                "https://drive.google.com/file/d/video/preview",
+            )
+            mock_replace_file.assert_has_calls(
+                [
+                    call(
+                        "folder-123",
+                        (project_root / "assets" / "generated" / "headline_1.png").resolve(),
+                        "headline_1.png",
+                    ),
+                    call(
+                        "folder-123",
+                        (project_root / "assets" / "generated" / "headline_2.png").resolve(),
+                        "headline_2.png",
+                    ),
+                ]
+            )
+            self.assertEqual(
+                json.loads((issue_root / "media.json").read_text(encoding="utf-8")),
+                media,
+            )
+            self.assertEqual(
+                json.loads(
+                    (project_root / "data" / "output" / "media.json").read_text(
+                        encoding="utf-8"
+                    )
+                ),
+                media,
+            )
 
 
 if __name__ == "__main__":

@@ -11,7 +11,7 @@ from src.public_site_builder import build_public_site
 
 class TestPublicSiteBuilder(unittest.TestCase):
     def setUp(self) -> None:
-        self.render_pdf_patcher = patch("src.public_site_builder.render_html_to_pdf")
+        self.render_pdf_patcher = patch("src.pdf_renderer.render_html_to_pdf")
         self.mock_render_pdf = self.render_pdf_patcher.start()
         self.addCleanup(self.render_pdf_patcher.stop)
 
@@ -184,6 +184,130 @@ class TestPublicSiteBuilder(unittest.TestCase):
                 html,
             )
 
+    def test_build_public_site_continues_when_pdf_rendering_is_unavailable(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir_name:
+            from src.pdf_renderer import PdfRenderError
+
+            tmpdir = Path(tmpdir_name)
+            project_root = tmpdir / "project"
+            (project_root / "assets" / "generated").mkdir(parents=True)
+            (project_root / "assets" / "logos").mkdir(parents=True)
+            (project_root / "data" / "output").mkdir(parents=True)
+            (project_root / "templates").mkdir(parents=True)
+            (project_root / "public").mkdir(parents=True)
+
+            self._write_shared_template(project_root)
+            self._write_shared_logos(project_root)
+            self._write_json(
+                project_root / "data" / "output" / "summarized_stories.json",
+                [self._story_payload()],
+            )
+            self._write_json(
+                project_root / "data" / "output" / "headline_picks.json",
+                [self._headline_payload()],
+            )
+            (project_root / "assets" / "generated" / "headline_1.png").write_bytes(b"png")
+            self.mock_render_pdf.side_effect = PdfRenderError("No browser")
+
+            html = build_public_site(project_root=project_root, publish_date="2026-05-01")
+
+            self.assertTrue((project_root / "public" / "index.html").exists())
+            self.assertIn("Other headline", html)
+
+    def test_build_public_site_prefers_local_headline_images_over_stale_drive_urls(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir_name:
+            tmpdir = Path(tmpdir_name)
+            project_root = tmpdir / "project"
+            (project_root / "assets" / "generated").mkdir(parents=True)
+            (project_root / "assets" / "logos").mkdir(parents=True)
+            (project_root / "data" / "output").mkdir(parents=True)
+            (project_root / "templates").mkdir(parents=True)
+            (project_root / "public").mkdir(parents=True)
+
+            self._write_shared_template(project_root)
+            self._write_shared_logos(project_root)
+
+            self._write_json(
+                project_root / "data" / "output" / "summarized_stories.json",
+                [self._story_payload()],
+            )
+            self._write_json(
+                project_root / "data" / "output" / "headline_picks.json",
+                [self._headline_payload()],
+            )
+            (project_root / "data" / "output" / "media.json").write_text(
+                json.dumps({"headline_images": ["https://example.com/stale.png"]}),
+                encoding="utf-8",
+            )
+            (project_root / "assets" / "generated" / "headline_1.png").write_bytes(b"new")
+
+            html = build_public_site(project_root=project_root, publish_date="2026-05-01")
+
+            self.assertIn('src="assets/generated/headline_1.png"', html)
+            self.assertNotIn("https://example.com/stale.png", html)
+
+    def test_build_public_site_refreshes_existing_issue_snapshot_headline_images(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir_name:
+            tmpdir = Path(tmpdir_name)
+            project_root = tmpdir / "project"
+            (project_root / "assets" / "generated").mkdir(parents=True)
+            (project_root / "assets" / "logos").mkdir(parents=True)
+            (project_root / "data" / "output").mkdir(parents=True)
+            (project_root / "templates").mkdir(parents=True)
+            (project_root / "public").mkdir(parents=True)
+
+            self._write_shared_template(project_root)
+            self._write_shared_logos(project_root)
+            self._write_json(
+                project_root / "data" / "output" / "summarized_stories.json",
+                [self._story_payload()],
+            )
+            self._write_json(
+                project_root / "data" / "output" / "headline_picks.json",
+                [self._headline_payload()],
+            )
+            (project_root / "assets" / "generated" / "headline_1.png").write_bytes(b"new")
+
+            self._write_issue_snapshot(
+                project_root=project_root,
+                issue_date="2026-05-01",
+                story_title="Old story title",
+                headline_title="Old headline",
+            )
+            snapshot_image = (
+                project_root
+                / "issue_snapshots"
+                / "2026-05-01"
+                / "assets"
+                / "generated"
+                / "headline_1.png"
+            )
+            snapshot_image.write_bytes(b"old")
+            (project_root / "issue_snapshots" / "2026-05-01" / "media.json").write_text(
+                json.dumps({"headline_images": ["https://example.com/stale.png"]}),
+                encoding="utf-8",
+            )
+
+            build_public_site(project_root=project_root, publish_date="2026-05-01")
+
+            self.assertEqual(snapshot_image.read_bytes(), b"new")
+            public_snapshot_image = (
+                project_root
+                / "public"
+                / "issues"
+                / "2026-05-01"
+                / "assets"
+                / "generated"
+                / "headline_1.png"
+            )
+            self.assertEqual(public_snapshot_image.read_bytes(), b"new")
+            archive_html = (
+                project_root / "public" / "issues" / "2026-05-01" / "index.html"
+            ).read_text(encoding="utf-8")
+            self.assertIn("Other headline", archive_html)
+            self.assertIn('src="assets/generated/headline_1.png"', archive_html)
+            self.assertNotIn("https://example.com/stale.png", archive_html)
+
     def test_build_public_site_prefers_local_podcast_audio_file(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir_name:
             tmpdir = Path(tmpdir_name)
@@ -220,6 +344,67 @@ class TestPublicSiteBuilder(unittest.TestCase):
                     / "podcast-2026-05-01.mp3"
                 ).exists()
             )
+
+    def test_build_public_site_syncs_local_audio_url_to_existing_issue_snapshot(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir_name:
+            tmpdir = Path(tmpdir_name)
+            project_root = tmpdir / "project"
+            (project_root / "assets" / "generated").mkdir(parents=True)
+            (project_root / "assets" / "logos").mkdir(parents=True)
+            (project_root / "data" / "output").mkdir(parents=True)
+            (project_root / "templates").mkdir(parents=True)
+            (project_root / "public").mkdir(parents=True)
+
+            self._write_shared_template(project_root)
+            self._write_shared_logos(project_root)
+            self._write_json(
+                project_root / "data" / "output" / "summarized_stories.json",
+                [self._story_payload()],
+            )
+            self._write_json(
+                project_root / "data" / "output" / "headline_picks.json",
+                [self._headline_payload()],
+            )
+            (project_root / "assets" / "generated" / "headline_1.png").write_bytes(b"png")
+            (project_root / "data" / "output" / "audio.mp3").write_bytes(b"new-audio")
+            self._write_issue_snapshot(
+                project_root=project_root,
+                issue_date="2026-05-01",
+                story_title="Archived story",
+                headline_title="Archived headline",
+            )
+            (project_root / "issue_snapshots" / "2026-05-01" / "media.json").write_text(
+                json.dumps(
+                    {
+                        "podcast_audio_url": "https://old.example/audio.mp3",
+                        "video_embed_url": "https://drive.google.com/file/d/video/preview",
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            build_public_site(project_root=project_root, publish_date="2026-05-01")
+
+            media = json.loads(
+                (
+                    project_root / "issue_snapshots" / "2026-05-01" / "media.json"
+                ).read_text(encoding="utf-8")
+            )
+            output_media = json.loads(
+                (project_root / "data" / "output" / "media.json").read_text(
+                    encoding="utf-8"
+                )
+            )
+            self.assertEqual(
+                media["podcast_audio_url"],
+                "assets/media/podcast-2026-05-01.mp3",
+            )
+            self.assertEqual(output_media["podcast_audio_url"], media["podcast_audio_url"])
+            archive_html = (
+                project_root / "public" / "issues" / "2026-05-01" / "index.html"
+            ).read_text(encoding="utf-8")
+            self.assertIn('src="assets/media/podcast-2026-05-01.mp3"', archive_html)
+            self.assertNotIn("https://old.example/audio.mp3", archive_html)
 
     def test_build_public_site_renders_archive_index_and_issue_pages(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir_name:

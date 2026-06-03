@@ -14,7 +14,6 @@ else:
 configure_script_environment()
 
 from src.AI_relevance_checker import AIRelevanceChecker
-from src.stats_report import append_stage_report, format_count_line
 
 
 def parse_args() -> argparse.Namespace:
@@ -43,13 +42,7 @@ def main() -> None:
     relevant, removed = checker.run()
     checker.save_results(relevant, removed)
     checker.print_summary(relevant, removed)
-    report_text = format_count_line(
-        "Total Number of high AI relevant articles found",
-        len(relevant),
-    )
-    print(report_text)
-    report_path = append_stage_report("run_ai_relevance_checker.py", report_text)
-    print(f"Stats report updated: {report_path}")
+    print(f"Total Number of high AI relevant articles found: {len(relevant)}")
 
     if args.show_removed:
         print("\n=== Removed Article Titles ===")
