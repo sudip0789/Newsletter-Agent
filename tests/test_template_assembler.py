@@ -5,6 +5,7 @@ import re
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from src.template_assembler import TemplateAssembler
 
@@ -334,6 +335,71 @@ class TestTemplateAssembler(unittest.TestCase):
             self.assertIn('class="content-section"', html)
             self.assertIn("This Week&#39;s Briefing", html)
             self.assertIn("Stanford Law School Robert Crown Law Library", html)
+
+    def test_run_renders_social_preview_meta_with_absolute_site_url(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir_name:
+            tmpdir = Path(tmpdir_name)
+            project_root = tmpdir / "project"
+            project_root.mkdir()
+            (project_root / "assets" / "generated").mkdir(parents=True)
+            (project_root / "assets" / "logos").mkdir(parents=True)
+            (project_root / "templates").mkdir()
+            (project_root / "data" / "output").mkdir(parents=True)
+            (project_root / "public" / "issues" / "2026-05-01").mkdir(parents=True)
+
+            stories_path = project_root / "data" / "output" / "summarized_stories.json"
+            headlines_path = project_root / "data" / "output" / "headline_picks.json"
+            template_path = project_root / "templates" / "newsletter.html"
+            output_path = project_root / "public" / "issues" / "2026-05-01" / "index.html"
+            repo_template_path = (
+                Path(__file__).resolve().parent.parent / "templates" / "newsletter.html"
+            )
+
+            self._write_json(
+                stories_path,
+                [
+                    self._story_payload(
+                        "security_story",
+                        "security",
+                        0.94,
+                        "Paragraph one.\n\nParagraph two.",
+                    ),
+                ],
+            )
+            self._write_json(
+                headlines_path,
+                [
+                    self._headline_payload(
+                        "https://example.com/other_headline",
+                        "Other headline",
+                        "assets/generated/headline_1.png",
+                    ),
+                ],
+            )
+            template_path.write_text(repo_template_path.read_text(encoding="utf-8"))
+
+            assembler = TemplateAssembler(
+                stories_path=str(stories_path),
+                headlines_path=str(headlines_path),
+                template_path=str(template_path),
+            )
+
+            with patch.dict("os.environ", {"SITE_URL": "https://example.vercel.app/"}, clear=True):
+                html = assembler.run(
+                    publish_date="2026-05-01",
+                    output_path=str(output_path),
+                )
+
+            expected_image = "https://example.vercel.app/assets/logos/ai-upload-social.png"
+            self.assertIn('<meta property="og:title" content="The AI Upload">', html)
+            self.assertIn(
+                '<meta property="og:image" content="https://example.vercel.app/assets/logos/ai-upload-social.png">',
+                html,
+            )
+            self.assertIn('<meta property="og:image:width" content="1200">', html)
+            self.assertIn('<meta property="og:image:height" content="630">', html)
+            self.assertIn('<meta name="twitter:card" content="summary_large_image">', html)
+            self.assertIn(f'<meta name="twitter:image" content="{expected_image}">', html)
 
     def test_run_renders_seekable_podcast_player_for_local_audio(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir_name:

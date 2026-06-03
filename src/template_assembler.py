@@ -14,6 +14,19 @@ from src.text_utils import normalize_markdown_escaped_text
 
 
 class TemplateAssembler:
+    SOCIAL_TITLE = "The AI Upload"
+    SOCIAL_DESCRIPTION = (
+        "A curated read on artificial intelligence: what shipped, what changed, "
+        "and what it means for the law."
+    )
+    SOCIAL_IMAGE_PATH = Path("assets/logos/ai-upload-social.png")
+    SITE_URL_ENV_KEYS = (
+        "SITE_URL",
+        "PUBLIC_SITE_URL",
+        "VERCEL_PROJECT_PRODUCTION_URL",
+        "VERCEL_URL",
+    )
+
     ALL_SECTIONS = [
         ("enterprise_ai", "Enterprise AI"),
         ("legal_intelligence", "Legal Intelligence"),
@@ -151,6 +164,12 @@ class TemplateAssembler:
         template = self.jinja.from_string(self.template_path.read_text(encoding="utf-8"))
         section_story_count = sum(len(section["articles"]) for section in sections)
         html = template.render(
+            social_title=self.SOCIAL_TITLE,
+            social_description=self.SOCIAL_DESCRIPTION,
+            social_image_url=self._resolve_public_asset_url(
+                output_file,
+                self.SOCIAL_IMAGE_PATH,
+            ),
             publish_date=self._format_publish_date(issue_date),
             issue_label=issue_metadata["issue_label"],
             publish_weekday=issue_metadata["weekday"],
@@ -296,6 +315,22 @@ class TemplateAssembler:
             else self.project_root
         )
         return self._to_relative_asset_path(output_file, asset_root / relative_asset_path)
+
+    def _resolve_public_asset_url(self, output_file: Path, relative_asset_path: Path) -> str:
+        site_base_url = self._site_base_url()
+        if site_base_url:
+            return f"{site_base_url}/{relative_asset_path.as_posix()}"
+        return self._resolve_project_asset_path(output_file, relative_asset_path)
+
+    def _site_base_url(self) -> str | None:
+        for key in self.SITE_URL_ENV_KEYS:
+            value = (os.environ.get(key) or "").strip().rstrip("/")
+            if not value:
+                continue
+            if not value.startswith(("http://", "https://")):
+                value = f"https://{value}"
+            return value
+        return None
 
     def _is_public_output(self, output_file: Path) -> bool:
         public_root = (self.project_root / "public").resolve()
