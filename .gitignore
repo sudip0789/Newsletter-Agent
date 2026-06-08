@@ -18,6 +18,7 @@ data/output/*
 !data/output/media.json
 !data/output/media_inputs.json
 !data/output/audio.mp3
+!data/output/archive.json
 .vercel
 node_modules/
 package-lock.json

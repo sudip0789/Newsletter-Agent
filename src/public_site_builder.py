@@ -43,12 +43,28 @@ def _format_issue_date(issue_date: str) -> str:
     return resolved_date.strftime("%B ") + f"{day}{suffix}, {resolved_date.year}"
 
 
-def _collect_issue_snapshots(root: Path) -> list[dict[str, str]]:
+def _load_archive_headlines(root: Path) -> dict[str, str]:
+    archive_path = root / "data" / "output" / "archive.json"
+    if not archive_path.exists():
+        return {}
+    try:
+        data = json.loads(archive_path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return {}
+    if isinstance(data, dict):
+        return {str(key): str(value) for key, value in data.items()}
+    return {}
+
+
+def _collect_issue_snapshots(root: Path) -> list[dict[str, Any]]:
     issues_root = root / "issue_snapshots"
     if not issues_root.exists():
         return []
 
-    issues: list[dict[str, str]] = []
+    archive_headlines = _load_archive_headlines(root)
+    template_path = str(root / "templates" / "newsletter.html")
+
+    issues: list[dict[str, Any]] = []
     for issue_dir in sorted(
         [path for path in issues_root.iterdir() if path.is_dir()],
         key=lambda path: path.name,
@@ -60,23 +76,35 @@ def _collect_issue_snapshots(root: Path) -> list[dict[str, str]]:
             continue
 
         headlines = _load_json(headlines_path)
-        stories = _load_json(stories_path)
         title = headlines[0]["title"] if headlines else issue_dir.name
-        story_title = (
-            stories[0]
-            .get("scored_story", {})
-            .get("cluster", {})
-            .get("primary_article", {})
-            .get("title", "")
-            if stories
-            else ""
-        )
+
+        # Same numbers the issue masthead shows (sections / stories / read time)
+        # plus the issue label and date parts, computed from the snapshot data.
+        try:
+            metadata = TemplateAssembler(
+                stories_path=str(stories_path),
+                headlines_path=str(headlines_path),
+                template_path=template_path,
+            ).compute_metadata(issue_dir.name, publish_date_is_resolved=True)
+        except Exception as exc:  # pragma: no cover - per-issue resilience
+            LOGGER.warning("Could not compute stats for %s: %s", issue_dir.name, exc)
+            metadata = {}
+
+        headline = archive_headlines.get(issue_dir.name) or title
+
         issues.append(
             {
                 "issue_date": issue_dir.name,
                 "display_date": _format_issue_date(issue_dir.name),
                 "title": title,
-                "story_title": story_title,
+                "headline": headline,
+                "issue_label": metadata.get("issue_label", ""),
+                "weekday": metadata.get("weekday", ""),
+                "month_day": metadata.get("month_day", ""),
+                "year": metadata.get("year", ""),
+                "section_count": metadata.get("section_count", 0),
+                "story_count": metadata.get("story_count", 0),
+                "read_time_minutes": metadata.get("read_time_minutes", 0),
                 "source_dir": str(issue_dir),
             }
         )
@@ -396,7 +424,6 @@ def build_public_site(
         issue_assembler.run(
             publish_date=issue["issue_date"],
             output_path=str(issue_output_dir / "index.html"),
-            archive_url="../",
             latest_issue_url="../../",
             publish_date_is_resolved=True,
         )

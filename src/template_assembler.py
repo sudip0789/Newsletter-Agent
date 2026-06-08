@@ -197,6 +197,48 @@ class TemplateAssembler:
         output_file.write_text(html, encoding="utf-8")
         return html
 
+    def compute_metadata(
+        self,
+        publish_date: date | datetime | str | None = None,
+        publish_date_is_resolved: bool = False,
+    ) -> dict[str, Any]:
+        """Return issue label, date parts, and stats without rendering the page.
+
+        Used to populate the archive index cards with the same numbers shown in
+        the issue masthead (sections, stories, read time).
+        """
+        exclude_urls = [headline.get("url", "") for headline in self.headlines]
+        grouped_all = self.group_by_section(self.stories, exclude_urls=[])
+        grouped = self.group_by_section(self.stories, exclude_urls=exclude_urls)
+        active_sections = self.get_active_sections(grouped)
+
+        body_section_keys = [(k, n) for k, n in self.ALL_SECTIONS if grouped.get(k)]
+        headline_only_keys = [
+            (k, n)
+            for k, n in self.ALL_SECTIONS
+            if not grouped.get(k) and grouped_all.get(k)
+        ]
+        sections = [{"articles": grouped[key]} for key, _name in active_sections]
+        section_story_count = sum(len(section["articles"]) for section in sections)
+
+        issue_date = self._resolve_publish_date(
+            publish_date,
+            publish_date_is_resolved=publish_date_is_resolved,
+        )
+        issue_metadata = self._build_issue_metadata(issue_date)
+
+        return {
+            "issue_label": issue_metadata["issue_label"],
+            "weekday": issue_metadata["weekday"],
+            "month_day": issue_metadata["month_day"],
+            "year": issue_metadata["year"],
+            "section_count": len(body_section_keys) + len(headline_only_keys),
+            "story_count": section_story_count + len(self.headlines),
+            "read_time_minutes": self._estimate_read_time_minutes(
+                sections, self.headlines
+            ),
+        }
+
     def group_by_section(
         self, stories: list[dict], exclude_urls: list[str]
     ) -> dict[str, list[dict]]:

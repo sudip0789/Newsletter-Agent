@@ -100,20 +100,26 @@
     }
 
     .issue-links {
-      display: none;
+      display: flex;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .issue-links-dot {
+      color: var(--page-subtle);
     }
 
     .archive-link,
     .latest-issue-link,
     .pdf-download-link {
-      display: none;
+      display: inline-flex;
       align-items: center;
       gap: 8px;
       color: var(--page-ink);
       font-family: var(--sans-ui);
-      font-size: 0.82rem;
-      font-weight: 600;
-      letter-spacing: 0.24em;
+      font-size: 0.7rem;
+      font-weight: 450;
+      letter-spacing: 0.18em;
       text-decoration: none;
       text-transform: uppercase;
     }
@@ -1130,7 +1136,7 @@
         overflow: visible;
       }
 
-      .pdf-download-link {
+      .issue-links {
         display: none;
       }
 
@@ -1173,55 +1179,20 @@
       }
 
       .mobile-issue-nav {
-        display: block;
-      }
-
-      .mobile-issue-nav-card {
-        padding: 20px 18px 22px;
-      }
-
-      .mobile-issue-nav-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 10px;
-      }
-
-      .mobile-issue-nav-link {
-        min-height: 100px;
-        gap: 8px;
-        padding: 12px 10px;
-      }
-
-      .mobile-issue-nav-index {
-        font-size: 1.65rem;
-      }
-
-      .mobile-issue-nav-label {
-        font-size: 0.7rem;
+        display: none;
       }
 
       .headline-card {
-        grid-template-columns: 120px minmax(0, 1fr);
-        gap: 14px;
-        padding: 16px;
+        grid-template-columns: 180px minmax(0, 1fr);
+        gap: 20px;
+        padding: 20px;
       }
 
       .headline-card img {
-        width: 120px;
-        height: 120px;
+        width: 180px;
+        height: 180px;
         aspect-ratio: 1 / 1;
         object-fit: cover;
-      }
-
-      .headline-copy h3,
-      .article-title {
-        font-size: 1.2rem;
-        line-height: 1.18;
-      }
-
-      .headline-blurb,
-      .article-summary p {
-        font-size: 0.92rem;
-        line-height: 1.48;
       }
 
       .media-card--podcast .media-card-cover {
@@ -1384,7 +1355,7 @@
 
       .layout {
         grid-template-columns: 1fr;
-        gap: 30px;
+        gap: 45px;
         margin-top: 16px;
       }
 
@@ -1548,21 +1519,51 @@
   <script>
     if (new URLSearchParams(window.location.search).get('embed') === '1') {
       document.documentElement.classList.add('embed-mode');
+      // Keep embed mode across internal navigation (Past Issues, Latest Issue, etc.)
+      // by appending embed=1 to relative links. External (http/https) links and
+      // in-page anchors are left untouched.
+      document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('a[href]').forEach(function (a) {
+          var href = a.getAttribute('href');
+          if (!href || href.charAt(0) === '#' || /^[a-z][a-z0-9+.-]*:/i.test(href)) return;
+          var url = new URL(href, window.location.href);
+          url.searchParams.set('embed', '1');
+          a.setAttribute('href', url.pathname + url.search + url.hash);
+        });
+      });
     }
   </script>
   <style>
     /* Embed mode (?embed=1): compact layout for the Google Sites iframe —
        hides the full masthead/logo and shows a slim issue/date bar instead. */
     .embed-issue-meta { display: none; }
+    .embed-issue-links { display: none; }
     .embed-mode .masthead-top,
     .embed-mode .masthead-divider { display: none; }
-    .embed-mode .hero { padding-top: 16px; }
-    .embed-mode .embed-issue-meta { display: flex; align-items: center; gap: 20px; margin-bottom: 24px; flex-wrap: nowrap; }
-    .embed-mode .embed-issue-meta .issue-date { flex-wrap: nowrap; gap: 8px; font-size: 0.72rem; }
-    .embed-mode .embed-issue-meta .issue-pill { font-size: 0.65rem; min-height: 28px; padding: 0 10px; }
-    .embed-mode .hero-summary { font-size: 1rem; }
+    .embed-mode .hero { padding-top: 16px; align-items: stretch; }
+    .embed-mode .hero > div:last-child { display: flex; flex-direction: column; }
+    .embed-mode .embed-issue-links { display: flex; gap: 18px; align-items: center; margin-bottom: 14px; }
+    .embed-mode .embed-issue-meta { display: flex; align-items: center; justify-content: flex-start; gap: 20px; margin-top: 46px; flex-wrap: nowrap; }
+    .embed-mode .embed-issue-meta .issue-date { flex-wrap: nowrap; gap: 10px; font-size: 0.9rem; font-weight: 600; color: var(--page-ink); }
+    .embed-mode .embed-issue-meta .issue-pill { font-size: 0.78rem; min-height: 32px; padding: 0 14px; }
+    .embed-mode .embed-issue-links { gap: 12px; justify-content: flex-end; }
+    .embed-mode .embed-issue-links .pdf-download-link,
+    .embed-mode .embed-issue-links .archive-link,
+    .embed-mode .embed-issue-links .latest-issue-link,
+    .embed-mode .embed-issue-links .issue-links-dot {
+      font-family: var(--serif-body);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.28em;
+    }
+    .embed-mode .hero .eyebrow { margin-top: 46px; font-size: clamp(0.8rem, 1.2vw, 1rem); }
+    .embed-mode .hero-summary { font-size: clamp(1rem, 1.55vw, 1.2rem); }
+    .embed-mode .stats-strip { margin-top: auto; }
     @media (max-width: 760px) {
-      .embed-mode .embed-issue-meta { margin-top: 28px; }
+      .embed-mode .embed-issue-meta { margin-top: 28px; justify-content: flex-start; }
+      .embed-mode .embed-issue-meta .issue-date { font-size: 0.7rem; white-space: nowrap; }
+      .embed-mode .embed-issue-meta .issue-pill { font-size: 0.62rem; min-height: 26px; padding: 0 10px; }
+      .embed-mode .embed-issue-links { display: none; }
     }
   </style>
 </head>
@@ -1578,11 +1579,14 @@
           
           <div class="issue-links">
             
-            <a class="archive-link" href="../">
-              Past Issues
+            
+            
+            
+            
+            <a class="latest-issue-link" href="../../">
+              Latest Issue
               <span aria-hidden="true">↗</span>
             </a>
-            
             
           </div>
           
@@ -1614,8 +1618,6 @@
               <span>Weekly Digest</span>
             </span>
           </h1>
-        </div>
-        <div>
           <div class="embed-issue-meta">
             <span class="issue-pill">ISSUE 01</span>
             <div class="issue-date">
@@ -1624,6 +1626,22 @@
               <span class="issue-separator" aria-hidden="true">·</span><span>2026</span>
             </div>
           </div>
+        </div>
+        <div>
+          
+          <div class="embed-issue-links">
+            
+            
+            
+            
+            
+            <a class="latest-issue-link" href="../../">
+              Latest Issue
+              <span aria-hidden="true">↗</span>
+            </a>
+            
+          </div>
+          
           <p class="eyebrow">This Week&#39;s Briefing</p>
           <p class="hero-summary">A curated read on artificial intelligence: what shipped, what changed, and what it means for the law.</p>
           <div class="stats-strip" aria-label="Issue stats">
@@ -1645,12 +1663,6 @@
         </div>
       </div>
     </header>
-
-    
-    <div class="utility-row">
-      <a class="latest-issue-link" href="../../">Latest Issue</a>
-    </div>
-    
 
     <div class="post-stats-divider" aria-hidden="true"></div>
 

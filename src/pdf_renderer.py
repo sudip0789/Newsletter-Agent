@@ -29,7 +29,10 @@ def render_html_to_pdf(html_path: Path, pdf_path: Path) -> None:
     try:
         with sync_playwright() as playwright:
             browser = playwright.chromium.launch()
-            page = browser.new_page()
+            page = browser.new_page(
+                viewport={"width": 1200, "height": 1600},
+                device_scale_factor=2,
+            )
             page.goto(html_file.as_uri(), wait_until="networkidle")
             page.emulate_media(media="print")
             page.pdf(

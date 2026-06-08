@@ -91,6 +91,14 @@ def build_publish_commands(args: argparse.Namespace) -> list[tuple[str, list[str
     headline_agent_cmd = [sys.executable, str(SCRIPT_DIR / "run_headline_agent.py")]
     commands.append(("headline_agent", headline_agent_cmd))
 
+    archive_headlines_cmd = [
+        sys.executable,
+        str(SCRIPT_DIR / "run_archive_headlines.py"),
+        "--date",
+        args.date,
+    ]
+    commands.append(("archive_headlines", archive_headlines_cmd))
+
     publish_issue_cmd = [
         sys.executable,
         str(SCRIPT_DIR / "publish_issue.py"),
