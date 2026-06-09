@@ -3,8 +3,16 @@ Run the newsletter pipeline in serial using the existing stage runners.
 
 Usage:
     python3 newsletter_pipeline
+        Run ingestion through scoring, then stop for review.
+
     python3 newsletter_pipeline --date YYYY-MM-DD
+        Run the entire pipeline end to end, including publish_issue.py.
+
+    python3 newsletter_pipeline --date YYYY-MM-DD --publish-only
+        Skip ingestion/scoring; run only the post-scorer steps through publish.
+
     python3 newsletter_pipeline --date YYYY-MM-DD --serve
+        Same as above, then serve the built site locally.
 """
 
 from __future__ import annotations
@@ -28,7 +36,8 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
             "Run the AI newsletter pipeline. Without --date, runs ingestion "
-            "through scoring. With --date, runs summarization through publish."
+            "through scoring and stops for review. With --date, runs the whole "
+            "pipeline end to end through publish."
         )
     )
 
@@ -36,8 +45,17 @@ def parse_args() -> argparse.Namespace:
         "--date",
         default=None,
         help=(
-            "Issue date in YYYY-MM-DD. When provided, run summarizer, title "
-            "rewriter, headline agent, then publish_issue.py for this date."
+            "Issue date in YYYY-MM-DD. When provided, run the full pipeline "
+            "(ingestion through publish_issue.py) for this date."
+        ),
+    )
+    parser.add_argument(
+        "--publish-only",
+        action="store_true",
+        help=(
+            "Skip ingestion/scoring and run only the post-scorer steps "
+            "(summarizer, title rewriter, headline agent, archive headlines, "
+            "publish). Requires --date."
         ),
     )
     parser.add_argument(
@@ -48,13 +66,24 @@ def parse_args() -> argparse.Namespace:
             "http://localhost:8000/. Only applies with --date."
         ),
     )
-    return parser.parse_args()
+
+    args = parser.parse_args()
+    if args.publish_only and not args.date:
+        parser.error("--publish-only requires --date YYYY-MM-DD")
+    if args.serve and not args.date:
+        parser.error("--serve requires --date YYYY-MM-DD")
+    return args
 
 
 def build_stage_commands(args: argparse.Namespace) -> list[tuple[str, list[str]]]:
-    if args.date:
+    # No date: run ingestion through scoring, then stop for review.
+    if not args.date:
+        return build_scoring_commands(args)
+    # Date + publish-only: run just the post-scorer steps through publish.
+    if args.publish_only:
         return build_publish_commands(args)
-    return build_scoring_commands(args)
+    # Date: run the whole pipeline end to end.
+    return build_scoring_commands(args) + build_publish_commands(args)
 
 
 def build_scoring_commands(args: argparse.Namespace) -> list[tuple[str, list[str]]]:

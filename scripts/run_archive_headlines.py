@@ -2,7 +2,7 @@
 Generate archive index headlines and cache them in data/output/archive.json.
 
 Reads each issue's headline_picks.json (the three top stories) and asks Claude
-Sonnet 4.6 for a single 2-3 line cover headline used on the archive index cards.
+Opus 4.8 for a single 2-3 line cover headline used on the archive index cards.
 
 Usage:
     python3 scripts/run_archive_headlines.py                 # backfill any issues missing a headline

@@ -22,9 +22,9 @@ BLURB_SYSTEM_PROMPT = (
 )
 
 class HeadlineAgent:
-    HEADLINE_SELECTION_MODEL = "gpt-5.4"
-    BLURB_MODEL = "claude-sonnet-4-6"
-    IMAGE_MODEL = "gpt-image-1.5"
+    HEADLINE_SELECTION_MODEL = "gpt-5.5"
+    BLURB_MODEL = "claude-opus-4-8"
+    IMAGE_MODEL = "gpt-image-2"
     HEADLINE_COUNT = 3
     SELECTION_TEMPERATURE = 0.65
 

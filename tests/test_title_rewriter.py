@@ -62,10 +62,10 @@ class TestTitleRewriter(unittest.TestCase):
         rewriter.input_path = Path("/tmp/summarized_stories.json")
         rewriter.output_path = rewriter.input_path
         rewriter.top_n = top_n
-        rewriter.model_name = "sonnet-4.6"
-        rewriter.model_config = TitleRewriter.MODEL_CONFIGS["sonnet-4.6"]
+        rewriter.model_name = "opus-4.8"
+        rewriter.model_config = TitleRewriter.MODEL_CONFIGS["opus-4.8"]
         rewriter.provider = "anthropic"
-        rewriter.api_model = "claude-sonnet-4-20250514"
+        rewriter.api_model = "claude-opus-4-8"
         rewriter.summarized_stories = stories
         rewriter.client = MagicMock()
         return rewriter
@@ -221,7 +221,7 @@ class TestTitleRewriter(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir:
             input_path = Path(tmpdir) / "summarized_stories.json"
             input_path.write_text(json.dumps(payload), encoding="utf-8")
-            rewriter = TitleRewriter(input_path=str(input_path), model="sonnet-4.6")
+            rewriter = TitleRewriter(input_path=str(input_path), model="opus-4.8")
 
         self.assertEqual(rewriter.output_path, input_path)
         self.assertEqual(len(rewriter.summarized_stories), 1)

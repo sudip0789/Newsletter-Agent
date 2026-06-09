@@ -5,8 +5,8 @@ Usage:
     python3 scripts/run_summarizer.py
     python3 scripts/run_summarizer.py --top 25
     python3 scripts/run_summarizer.py --input data/output/scored_stories.json
-    python3 scripts/run_summarizer.py --model sonnet-4.6
-    python3 scripts/run_summarizer.py --model gpt-5.4
+    python3 scripts/run_summarizer.py --model opus-4.8
+    python3 scripts/run_summarizer.py --model gpt-5.5
 """
 
 from __future__ import annotations
@@ -46,8 +46,8 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--model",
-        choices=["gpt-5.4", "sonnet-4.6"],
-        default="sonnet-4.6",
+        choices=["gpt-5.5", "opus-4.8"],
+        default="opus-4.8",
         help="Summarization model to use.",
     )
     return parser.parse_args()

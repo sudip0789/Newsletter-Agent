@@ -13,7 +13,6 @@ The pipeline collects 500+ articles per week from RSS feeds and news APIs, filte
 - Python 3.11+
 - API keys: OpenAI, Anthropic, NewsAPI (free tier)
 
-
 ### Setup
 
 ```bash
@@ -34,17 +33,9 @@ ANTHROPIC_API_KEY=your_key
 ### Run the Full Pipeline
 
 ```bash
-python3 newsletter_pipeline
 python3 newsletter_pipeline --date YYYY-MM-DD
 ```
-
-Run without `--date` to fetch, filter, deduplicate with recomputed embeddings, and score stories. Run with `--date` after review to summarize, rewrite titles, select headlines, and publish that issue date.
-
-To preview locally immediately after publishing:
-
-```bash
-python3 newsletter_pipeline --date YYYY-MM-DD --serve
-```
+Runs every stage end to end for that issue date — ingestion, filtering, deduplication, scoring, summarization, title rewriting, headline selection, and publishing.
 
 If headline images were regenerated after publishing and the Drive folder should
 be refreshed too:
@@ -72,41 +63,41 @@ PDF generation uses Playwright + Chromium. After installing Python dependencies,
 python -m playwright install chromium
 ```
 
+### Add Audio/Video After Publishing
 
-### Publish an Issue and Update the Archive
+The full pipeline already publishes the issue — it snapshots into `issue_snapshots/YYYY-MM-DD/`, uploads headline images to Google Drive (when configured), and rebuilds the public site. The podcast and video are produced from the finished newsletter using notebookLM
 
-When an issue is approved and ready to go live:
+Once the podcast and video exist, drop the audio at `data/output/audio.m4a` and add the video's Google Drive link to `data/output/media_inputs.json`:
 
-1. Upload that week's `.m4a` and `.mp4` files.
-2. Paste their Google Drive share links into `data/output/media_inputs.json`.
-3. Run:
-
-```bash
-python3 scripts/publish_issue.py --date 2026-05-06
+```json
+{ "video_url": "https://drive.google.com/file/d/FILE_ID/view" }
 ```
 
-This workflow:
+Then rebuild:
 
-- snapshots the current issue into `issue_snapshots/YYYY-MM-DD/`
-- copies generated headline images into that dated snapshot
-- reads weekly audio/video links from `data/output/media_inputs.json`
-- rebuilds `public/index.html` for the latest issue
-- rebuilds `public/issues/index.html` plus dated archive pages for older issues
+```bash
+python3 scripts/build_public_site.py --date YYYY-MM-DD
+```
 
-`data/output/media_inputs.json` is the weekly handoff file for media links. It accepts either full Google Drive share URLs such as `https://drive.google.com/file/d/.../view?...` or already-normalized `/preview` URLs. The publisher converts those into the embed URLs used by the newsletter.
+The build converts the audio to MP3 for browser playback, syncs the media into the issue snapshot, and regenerates the site.
 
-After that, commit the snapshot and rebuilt static files, then trigger a manual production deployment on Vercel.
+### Deployment
 
-# Tech Stack
+1. Commit your changes (the snapshot and rebuilt static files).
+2. Push to `main` — this triggers the Vercel deployment.
+
+The site is also embedded into the Google Site for Stanford's Learning Hub.
+
+## Tech Stack
 
 | Component | Tool |
 |---|---|
 | Language | Python 3.11+ & HTML |
-| Scoring | OpenAI GPT-5.4 |
-| Summaries, Headline blurbs | Anthropic Claude Sonnet 4.6 |
-| Headline selection | OpenAI GPT-5.4 |
+| Scoring | OpenAI GPT-5.5 |
+| Summaries, Headline blurbs | Anthropic Claude Opus 4.8 |
+| Headline selection | OpenAI GPT-5.5 |
 | Embeddings | OpenAI text-embedding-3 |
-| Image generation | OpenAI GPT Image 1.5 |
+| Image generation | OpenAI GPT Image 2 |
 | Article extraction | Trafilatura |
 | RSS parsing | Feedparser |
 | News search | NewsAPI.org |

@@ -1,7 +1,7 @@
 """
 Generate a short 2-3 line "issue headline" for the archive index cards.
 
-Reads a week's three headline picks (title + blurb) and asks Claude Sonnet 4.6
+Reads a week's three headline picks (title + blurb) and asks Claude Opus 4.8
 to synthesize one editorial headline that captures the issue's through-line.
 Results are cached per issue date in data/output/archive.json so the model only
 runs once per issue.
@@ -15,7 +15,7 @@ from typing import Any
 
 LOGGER = logging.getLogger(__name__)
 
-ARCHIVE_HEADLINE_MODEL = "claude-sonnet-4-6"
+ARCHIVE_HEADLINE_MODEL = "claude-opus-4-8"
 
 ARCHIVE_HEADLINE_SYSTEM_PROMPT = (
     "You write the one-line cover headline for a weekly AI newsletter's archive "

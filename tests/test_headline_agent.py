@@ -74,7 +74,7 @@ class TestHeadlineAgent(unittest.TestCase):
             choices=[MagicMock(message=MagicMock(content=json.dumps(payload)))]
         )
 
-    def test_run_uses_gpt54_selection_order_and_prompt(self) -> None:
+    def test_run_uses_gpt55_selection_order_and_prompt(self) -> None:
         input_path = self._write_input(
             [
                 self._story_payload("launch", "ai_products", 0.98, "Launch summary"),
@@ -101,7 +101,7 @@ class TestHeadlineAgent(unittest.TestCase):
             ["Story lawsuit", "Story launch", "Story risk"],
         )
         call_kwargs = agent.selection_client.chat.completions.create.call_args.kwargs
-        self.assertEqual(call_kwargs["model"], "gpt-5.4")
+        self.assertEqual(call_kwargs["model"], "gpt-5.5")
         self.assertEqual(call_kwargs["response_format"], {"type": "json_object"})
         self.assertGreater(call_kwargs["temperature"], 0.0)
         system_prompt = call_kwargs["messages"][0]["content"]
@@ -284,7 +284,7 @@ class TestHeadlineAgent(unittest.TestCase):
 
         self.assertEqual(blurb, "A sharp teaser for the newsletter.")
         call_kwargs = agent.blurb_client.messages.create.call_args.kwargs
-        self.assertEqual(call_kwargs["model"], "claude-sonnet-4-20250514")
+        self.assertEqual(call_kwargs["model"], "claude-opus-4-8")
         self.assertIn("Title: OpenAI infrastructure pivot", call_kwargs["messages"][0]["content"])
         self.assertIn("Summary: A summary about compute strategy shifts.", call_kwargs["messages"][0]["content"])
 
@@ -321,7 +321,7 @@ class TestHeadlineAgent(unittest.TestCase):
 
         self.assertEqual(short_title, "OpenAI courtroom trial showdown begins")
         call_kwargs = agent.blurb_client.messages.create.call_args.kwargs
-        self.assertEqual(call_kwargs["model"], "claude-sonnet-4-20250514")
+        self.assertEqual(call_kwargs["model"], "claude-opus-4-8")
         self.assertIn("Original title:", call_kwargs["messages"][0]["content"])
 
     def test_generate_short_title_raises_when_word_count_is_out_of_range(self) -> None:
@@ -355,6 +355,8 @@ class TestHeadlineAgent(unittest.TestCase):
         self.assertTrue(Path(image_path).exists())
         self.assertEqual(Path(image_path).name, "headline_2.png")
         agent.image_client.images.generate.assert_called_once()
+        call_kwargs = agent.image_client.images.generate.call_args.kwargs
+        self.assertEqual(call_kwargs["model"], "gpt-image-2")
 
     def test_generate_headline_image_returns_none_on_failure(self) -> None:
         input_path = self._write_input([])

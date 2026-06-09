@@ -11,5 +11,3 @@ weights:
 selection:
   total_top: 25
 
-# Model
-model: "gpt-5.4"

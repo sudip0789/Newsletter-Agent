@@ -5,7 +5,7 @@ Usage:
     python3 scripts/run_title_rewriter.py
     python3 scripts/run_title_rewriter.py --top 25
     python3 scripts/run_title_rewriter.py --input data/output/summarized_stories.json
-    python3 scripts/run_title_rewriter.py --model gpt-5.4
+    python3 scripts/run_title_rewriter.py --model gpt-5.5
 """
 
 from __future__ import annotations
@@ -45,8 +45,8 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--model",
-        choices=["gpt-5.4", "sonnet-4.6"],
-        default="sonnet-4.6",
+        choices=["gpt-5.5", "opus-4.8"],
+        default="opus-4.8",
         help="Title rewriting model to use.",
     )
     return parser.parse_args()

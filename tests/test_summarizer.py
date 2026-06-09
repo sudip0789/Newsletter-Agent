@@ -70,9 +70,9 @@ class TestSummarizer(unittest.TestCase):
         summarizer.scored_stories = stories
         summarizer.client = MagicMock()
         summarizer.provider = "openai"
-        summarizer.api_model = "gpt-5.4"
-        summarizer.model_name = "gpt-5.4"
-        summarizer.model_config = Summarizer.MODEL_CONFIGS["gpt-5.4"]
+        summarizer.api_model = "gpt-5.5"
+        summarizer.model_name = "gpt-5.5"
+        summarizer.model_config = Summarizer.MODEL_CONFIGS["gpt-5.5"]
         return summarizer
 
     def test_run_selects_top_n_by_composite_score(self) -> None:
@@ -236,7 +236,7 @@ class TestSummarizer(unittest.TestCase):
         with self.assertRaisesRegex(
             ValueError, "OPENAI_API_KEY is required for summarization."
         ):
-            Summarizer(model="gpt-5.4")
+            Summarizer(model="gpt-5.5")
 
     @patch("src.summarizer.load_dotenv")
     @patch.object(Summarizer, "_build_client")
@@ -284,7 +284,7 @@ class TestSummarizer(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir:
             input_path = Path(tmpdir) / "scored_stories.json"
             input_path.write_text(json.dumps(payload), encoding="utf-8")
-            summarizer = Summarizer(input_path=str(input_path), model="gpt-5.4")
+            summarizer = Summarizer(input_path=str(input_path), model="gpt-5.5")
 
         self.assertEqual(len(summarizer.scored_stories), 1)
         self.assertEqual(
@@ -296,7 +296,7 @@ class TestSummarizer(unittest.TestCase):
     @patch("src.summarizer.load_dotenv")
     @patch.object(Summarizer, "_build_client")
     @patch("src.summarizer.os.getenv")
-    def test_init_requires_anthropic_api_key_for_sonnet(
+    def test_init_requires_anthropic_api_key_for_opus(
         self,
         mock_getenv: MagicMock,
         _mock_build_client: MagicMock,
@@ -306,7 +306,7 @@ class TestSummarizer(unittest.TestCase):
         with self.assertRaisesRegex(
             ValueError, "ANTHROPIC_API_KEY is required for summarization."
         ):
-            Summarizer(model="sonnet-4.6")
+            Summarizer(model="opus-4.8")
 
     @patch("src.summarizer.load_dotenv")
     @patch.object(Summarizer, "_build_client")
@@ -324,10 +324,10 @@ class TestSummarizer(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir:
             input_path = Path(tmpdir) / "scored_stories.json"
             input_path.write_text(json.dumps(payload), encoding="utf-8")
-            summarizer = Summarizer(input_path=str(input_path), model="sonnet-4.6")
+            summarizer = Summarizer(input_path=str(input_path), model="opus-4.8")
 
         self.assertEqual(summarizer.provider, "anthropic")
-        self.assertEqual(summarizer.api_model, "claude-sonnet-4-6")
+        self.assertEqual(summarizer.api_model, "claude-opus-4-8")
         self.assertEqual(summarizer.output_path.name, "summarized_stories.json")
 
 

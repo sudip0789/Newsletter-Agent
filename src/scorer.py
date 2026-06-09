@@ -117,7 +117,7 @@ class Scorer:
         self.clusters = [StoryCluster.model_validate(item) for item in raw_clusters]
         self.weights = self._validate_weights(self.rubric.get("weights", {}))
         self.selection_total = int(self.rubric.get("selection", {}).get("total_top", 25))
-        self.model = str(self.rubric.get("model", "gpt-5.4"))
+        self.model = str(self.rubric.get("model", "gpt-5.5"))
         self.client = OpenAI()
 
         self.all_scored_stories: list[ScoredStory] = []
@@ -161,7 +161,7 @@ class Scorer:
         """
         Single LLM call per cluster.
 
-        Send the primary article's title + text to gpt-5.4.
+        Send the primary article's title + text to gpt-5.5.
         Request a JSON response with:
         - ai_relevance: float 0-1 (is this story actually about AI?)
         - impact: float 0-1 (how significant is this story objectively?)
@@ -173,7 +173,7 @@ class Scorer:
         - rationale: string (one-line explanation of the scores)
 
         Use response_format={"type": "json_object"} to enforce JSON output.
-        Model: gpt-5.4
+        Model: gpt-5.5
         """
         article = cluster.primary_article
         prompt = (

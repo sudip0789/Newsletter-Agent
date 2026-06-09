@@ -20,7 +20,7 @@ from src.template_assembler import TemplateAssembler
 LOGGER = logging.getLogger(__name__)
 
 # Background color the generated headline images are normalized to, so the square
-# DALL-E art blends seamlessly into the headline card. Keep this in sync with the
+# GPT Image art blends seamlessly into the headline card. Keep this in sync with the
 # `.headline-card` background in templates/newsletter.html.
 HEADLINE_CARD_BG = (0xF6, 0xF4, 0xF1)
 
@@ -135,7 +135,7 @@ def _normalize_headline_image_backgrounds(
 ) -> None:
     """Repaint the flat background of headline_{1,2,3}.png to ``target_rgb``.
 
-    DALL-E renders each headline image on a slightly different warm off-white, so
+    GPT Image renders each headline image on a slightly different warm off-white, so
     the square art shows a faint edge against the fixed headline-card color. This
     recolors only the background — the region of near-background pixels connected
     to the image border — leaving the foreground artwork untouched. It is

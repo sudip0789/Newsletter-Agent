@@ -40,7 +40,7 @@ Summary:
 
 class TitleRewriter:
     DEFAULT_TOP_N = 30
-    DEFAULT_MODEL = "sonnet-4.6"
+    DEFAULT_MODEL = "opus-4.8"
     MAX_WORKERS = 6
     MAX_TEXT_CHARS = 10000
     TITLE_MIN_WORDS = 5
@@ -48,17 +48,17 @@ class TitleRewriter:
     TITLE_TOKEN_PATTERN = re.compile(r"[A-Za-z0-9]+(?:['-][A-Za-z0-9]+)*")
     TITLE_COMPARISON_PATTERN = re.compile(r"[^a-z0-9]+")
     MODEL_CONFIGS = {
-        "gpt-5.4": {
+        "gpt-5.5": {
             "provider": "openai",
-            "api_model": "gpt-5.4",
+            "api_model": "gpt-5.5",
             "env_var": "OPENAI_API_KEY",
-            "output_label": "openai_gpt_5_4",
+            "output_label": "openai_gpt_5_5",
         },
-        "sonnet-4.6": {
+        "opus-4.8": {
             "provider": "anthropic",
-            "api_model": "claude-sonnet-4-6",
+            "api_model": "claude-opus-4-8",
             "env_var": "ANTHROPIC_API_KEY",
-            "output_label": "anthropic_sonnet_4_6",
+            "output_label": "anthropic_opus_4_8",
         },
     }
 
@@ -197,7 +197,7 @@ class TitleRewriter:
                 from anthropic import Anthropic
             except ImportError as exc:
                 raise ImportError(
-                    "The 'anthropic' package is required for sonnet-4.6 title rewriting."
+                    "The 'anthropic' package is required for opus-4.8 title rewriting."
                 ) from exc
             return Anthropic()
         raise ValueError(f"Unsupported title rewriting provider '{self.provider}'.")
