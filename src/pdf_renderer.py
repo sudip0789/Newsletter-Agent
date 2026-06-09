@@ -28,12 +28,25 @@ def render_html_to_pdf(html_path: Path, pdf_path: Path) -> None:
 
     try:
         with sync_playwright() as playwright:
-            browser = playwright.chromium.launch()
+            try:
+                browser = playwright.chromium.launch()
+            except Exception as exc:
+                raise PdfRenderError(
+                    "Chromium is unavailable for PDF rendering. Run "
+                    "`python -m playwright install chromium` and try again. "
+                    f"(launch failed: {exc})"
+                ) from exc
+
             page = browser.new_page(
-                viewport={"width": 1200, "height": 1600},
+                viewport={"width": 816, "height": 1056},
                 device_scale_factor=2,
             )
-            page.goto(html_file.as_uri(), wait_until="networkidle")
+            # Don't wait on "networkidle": the Listen & Watch embeds pull in
+            # Google Drive iframes that keep the network busy indefinitely, so
+            # networkidle never fires and the render times out. "load" plus an
+            # explicit fonts-ready wait is enough for a faithful print render.
+            page.goto(html_file.as_uri(), wait_until="load")
+            page.evaluate("() => document.fonts.ready")
             page.emulate_media(media="print")
             page.pdf(
                 path=str(output_file),
@@ -42,8 +55,7 @@ def render_html_to_pdf(html_path: Path, pdf_path: Path) -> None:
                 format="Letter",
             )
             browser.close()
+    except PdfRenderError:
+        raise
     except Exception as exc:
-        raise PdfRenderError(
-            "Chromium is unavailable for PDF rendering. Run "
-            "`python -m playwright install chromium` and try again."
-        ) from exc
+        raise PdfRenderError(f"PDF rendering failed: {exc}") from exc

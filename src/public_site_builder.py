@@ -395,6 +395,7 @@ def build_public_site(
     try:
         from src.pdf_renderer import PdfRenderError, render_html_to_pdf
         render_html_to_pdf(root / "public" / "index.html", latest_pdf_path)
+        print(f"Rendered newsletter PDF: {latest_pdf_path.relative_to(root)}")
     except ModuleNotFoundError:
         pass
     except PdfRenderError as exc:

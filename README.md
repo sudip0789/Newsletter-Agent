@@ -77,7 +77,7 @@ python -m playwright install chromium
 
 When an issue is approved and ready to go live:
 
-1. Upload that week's `.m4a` and `.mp4` files to Google Drive.
+1. Upload that week's `.m4a` and `.mp4` files.
 2. Paste their Google Drive share links into `data/output/media_inputs.json`.
 3. Run:
 

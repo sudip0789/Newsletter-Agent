@@ -20,6 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script defer src="https://sls-analytics.vercel.app/script.js" data-website-id="fe83ea74-3b5e-491b-9b94-7c5d00a09e2b"></script>
   <style>
     :root {
       --page-bg: #FAF9F8;
@@ -1081,7 +1082,7 @@
       flex-shrink: 0;
     }
 
-    @media (min-width: 1101px) {
+    @media screen and (min-width: 1101px) {
       .podcast-details {
         justify-content: flex-end;
         padding-top: 12px;
@@ -1182,6 +1183,43 @@
         display: none;
       }
 
+      /* Audio/video can't play from a PDF — drop the Listen & Watch section. */
+      #listen-watch,
+      .media-embed-grid {
+        display: none !important;
+      }
+
+      /* The hero already has a red em-dash rule above "Weekly Digest";
+         drop the repetitive "This Week's Briefing" eyebrow in print. */
+      .hero .eyebrow {
+        display: none;
+      }
+
+      /* Drop the Stanford logo and the divider under the date in the PDF. */
+      .brand-mark,
+      .masthead-divider {
+        display: none;
+      }
+
+      /* Smaller issue pill + date for the print masthead. */
+      .issue-pill {
+        min-height: 26px;
+        padding: 0 10px;
+        font-size: 0.62rem;
+        letter-spacing: 0.14em;
+      }
+
+      .issue-date {
+        gap: 10px;
+        font-size: 0.66rem;
+        letter-spacing: 0.2em;
+      }
+
+      /* More breathing room between the title block and the summary line. */
+      .hero-summary {
+        margin-top: 28px;
+      }
+
       .headline-card {
         grid-template-columns: 180px minmax(0, 1fr);
         gap: 20px;
@@ -1200,16 +1238,23 @@
         align-items: stretch;
       }
 
+      /* Keep small blocks intact, but let long articles flow across pages
+         instead of jumping whole and leaving big gaps. */
       .headline-card,
-      .media-card,
-      .article,
-      .newsletter-disclaimer {
+      .media-card {
         break-inside: avoid;
         page-break-inside: avoid;
       }
+
+      /* Don't strand a section heading alone at the bottom of a page. */
+      .section-heading,
+      .section-title {
+        break-after: avoid;
+        page-break-after: avoid;
+      }
     }
 
-    @media (max-width: 1100px) {
+    @media screen and (max-width: 1100px) {
       .page {
         padding-inline: 28px;
       }
@@ -1236,7 +1281,7 @@
       }
     }
 
-    @media (max-width: 760px) {
+    @media screen and (max-width: 760px) {
       .page {
         width: var(--mobile-canvas-width);
         max-width: none;
@@ -1559,7 +1604,7 @@
     .embed-mode .hero .eyebrow { margin-top: 46px; font-size: clamp(0.8rem, 1.2vw, 1rem); }
     .embed-mode .hero-summary { font-size: clamp(1rem, 1.55vw, 1.2rem); }
     .embed-mode .stats-strip { margin-top: auto; }
-    @media (max-width: 760px) {
+    @media screen and (max-width: 760px) {
       .embed-mode .embed-issue-meta { margin-top: 28px; justify-content: flex-start; }
       .embed-mode .embed-issue-meta .issue-date { font-size: 0.7rem; white-space: nowrap; }
       .embed-mode .embed-issue-meta .issue-pill { font-size: 0.62rem; min-height: 26px; padding: 0 10px; }
