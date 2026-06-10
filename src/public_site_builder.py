@@ -9,7 +9,6 @@ from typing import Any
 
 from jinja2 import Environment, select_autoescape
 from src.media_config import (
-    LOCAL_PODCAST_AUDIO_FILENAME,
     MEDIA_INPUTS_FILENAME,
     build_local_podcast_audio_path,
     load_media_inputs,
@@ -222,11 +221,16 @@ def _load_media(path: Path) -> dict | None:
     return None
 
 
-def _convert_to_mp3(source_path: Path) -> Path:
-    """Convert audio to mp3 via ffmpeg for browser seek compatibility. Returns mp3 path."""
+def _convert_to_mp3(source_path: Path, output_path: Path | None = None) -> Path:
+    """Convert audio to mp3 via ffmpeg for browser seek compatibility. Returns mp3 path.
+
+    When ``output_path`` is given the mp3 is written there regardless of the
+    source filename (ffmpeg ``-y`` overwrites any existing file), so a freshly
+    named weekly ``.m4a`` always lands at the canonical ``audio.mp3``.
+    """
     import subprocess
 
-    output_path = source_path.with_suffix(".mp3")
+    output_path = output_path or source_path.with_suffix(".mp3")
     subprocess.run(
         ["ffmpeg", "-y", "-i", str(source_path), "-q:a", "2", str(output_path)],
         check=True,
@@ -253,7 +257,7 @@ def _copy_local_podcast_audio(
 def _sync_media_to_snapshot(
     root: Path,
     issue_date: str,
-    audio_source: Path,
+    audio_source: Path | None,
     media_updates: dict,
 ) -> None:
     """Sync local audio file and media metadata back into the issue snapshot.
@@ -265,11 +269,14 @@ def _sync_media_to_snapshot(
     if not snapshot_dir.exists():
         return
 
-    if audio_source.exists():
+    if audio_source is not None and audio_source.exists():
         relative = Path(build_local_podcast_audio_path(issue_date, audio_source.suffix))
         target = snapshot_dir / relative
         target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(audio_source, target)
+        # Skip when the source already is the snapshot file (no new recording
+        # this run) — copying a file onto itself raises SameFileError.
+        if audio_source.resolve() != target.resolve():
+            shutil.copy2(audio_source, target)
 
     if media_updates:
         media_json_path = snapshot_dir / "media.json"
@@ -331,6 +338,12 @@ def build_public_site(
 
     issue_snapshots = _collect_issue_snapshots(root)
 
+    # The latest issue is the home page (/), so the archive lists only past
+    # issues — exclude the latest issue's own snapshot from /issues/.
+    archive_issues = [
+        issue for issue in issue_snapshots if issue["issue_date"] != latest_issue_date
+    ]
+
     # Load media.json for the latest issue: prefer the issue snapshot (when publish_date
     # is known), fall back to data/output/media.json (committed alongside headline_picks.json).
     if publish_date is not None:
@@ -351,24 +364,40 @@ def build_public_site(
     media_inputs = load_media_inputs(root / "data" / "output" / MEDIA_INPUTS_FILENAME)
     current_media = {**dict(current_media or {}), **media_inputs}
 
-    mp3_path = root / "data" / "output" / "audio.mp3"
-    m4a_path = root / "data" / "output" / LOCAL_PODCAST_AUDIO_FILENAME
-    snapshot_audio = next(
-        (root / "issue_snapshots" / latest_issue_date / "assets" / "media").glob("podcast-*.mp3"),
-        None,
-    ) if (root / "issue_snapshots" / latest_issue_date / "assets" / "media").exists() else None
-    if mp3_path.exists():
-        audio_source = mp3_path
-    elif m4a_path.exists():
-        audio_source = _convert_to_mp3(m4a_path)
-    elif snapshot_audio:
+    output_dir = root / "data" / "output"
+    mp3_path = output_dir / "audio.mp3"
+    # The editor drops a freshly-named .m4a each week, so match by extension
+    # rather than a fixed filename; the newest one wins if several are present.
+    m4a_files = sorted(
+        output_dir.glob("*.m4a"), key=lambda p: p.stat().st_mtime, reverse=True
+    )
+    snapshot_media_dir = root / "issue_snapshots" / latest_issue_date / "assets" / "media"
+    snapshot_audio = (
+        next(snapshot_media_dir.glob("podcast-*.mp3"), None)
+        if snapshot_media_dir.exists()
+        else None
+    )
+
+    if m4a_files:
+        # A new weekly recording is present: (re)convert it to the canonical
+        # audio.mp3 (overwriting last week's stale mp3), then remove the consumed
+        # .m4a inputs so a leftover never gets reused for a future issue.
+        newest_m4a = m4a_files[0]
+        audio_source = _convert_to_mp3(newest_m4a, mp3_path)
+        for consumed in m4a_files:
+            consumed.unlink(missing_ok=True)
+        print(f"Converted podcast audio: {newest_m4a.name} -> {mp3_path.name}")
+    elif snapshot_audio is not None:
+        # No new recording this run: reuse this issue's already-converted audio
+        # from its snapshot (date-stamped, so never a previous week's file).
         audio_source = snapshot_audio
     else:
-        audio_source = mp3_path
-    latest_audio_path = _copy_local_podcast_audio(
-        audio_source,
-        root / "public",
-        latest_issue_date,
+        audio_source = None
+
+    latest_audio_path = (
+        _copy_local_podcast_audio(audio_source, root / "public", latest_issue_date)
+        if audio_source is not None
+        else None
     )
     if latest_audio_path:
         current_media["podcast_audio_url"] = latest_audio_path
@@ -387,7 +416,7 @@ def build_public_site(
     latest_html = assembler.run(
         publish_date=publish_date,
         output_path=str(root / "public" / "index.html"),
-        archive_url="issues/" if len(issue_snapshots) > 1 else None,
+        archive_url="issues/" if archive_issues else None,
         pdf_url="newsletter.pdf",
         pdf_download_name=latest_pdf_name,
         publish_date_is_resolved=publish_date_is_resolved,
@@ -401,7 +430,7 @@ def build_public_site(
     except PdfRenderError as exc:
         LOGGER.warning("Skipping PDF render: %s", exc)
 
-    for issue in issue_snapshots:
+    for issue in archive_issues:
         issue_source_dir = Path(issue["source_dir"])
         issue_output_dir = issues_public_root / issue["issue_date"]
         issue_media = _load_media(issue_source_dir / "media.json")
@@ -429,5 +458,5 @@ def build_public_site(
             publish_date_is_resolved=True,
         )
 
-    _build_archive_index(root, issue_snapshots)
+    _build_archive_index(root, archive_issues)
     return latest_html

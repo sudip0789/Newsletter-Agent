@@ -252,7 +252,6 @@ class Summarizer:
         if self.provider == "openai":
             response = self.client.chat.completions.create(
                 model=self.api_model,
-                temperature=0.7,
                 messages=[
                     {"role": "system", "content": SUMMARIZER_SYSTEM_PROMPT},
                     {"role": "user", "content": user_message},
@@ -264,7 +263,6 @@ class Summarizer:
             response = self.client.messages.create(
                 model=self.api_model,
                 max_tokens=400,
-                temperature=0.7,
                 system=SUMMARIZER_SYSTEM_PROMPT,
                 messages=[{"role": "user", "content": user_message}],
             )

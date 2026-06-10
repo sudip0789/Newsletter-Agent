@@ -68,7 +68,6 @@ def generate_archive_headline(client: Any, headlines: list[dict[str, Any]]) -> s
     response = client.messages.create(
         model=ARCHIVE_HEADLINE_MODEL,
         max_tokens=120,
-        temperature=0.7,
         system=ARCHIVE_HEADLINE_SYSTEM_PROMPT,
         messages=[{"role": "user", "content": user_message}],
     )

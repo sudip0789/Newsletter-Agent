@@ -188,7 +188,6 @@ class Scorer:
         response = self.client.chat.completions.create(
             model=self.model,
             response_format={"type": "json_object"},
-            temperature=0.1,
             messages=[
                 {"role": "system", "content": SCORING_SYSTEM_PROMPT},
                 {"role": "user", "content": prompt},

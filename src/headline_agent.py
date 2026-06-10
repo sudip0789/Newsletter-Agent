@@ -26,7 +26,6 @@ class HeadlineAgent:
     BLURB_MODEL = "claude-opus-4-8"
     IMAGE_MODEL = "gpt-image-2"
     HEADLINE_COUNT = 3
-    SELECTION_TEMPERATURE = 0.65
 
     def __init__(self, input_path: str = "data/output/summarized_stories.json"):
         """Load summarized stories."""
@@ -74,7 +73,6 @@ class HeadlineAgent:
         response = client.messages.create(
             model=self.BLURB_MODEL,
             max_tokens=80,
-            temperature=0.6,
             system=BLURB_SYSTEM_PROMPT,
             messages=[{"role": "user", "content": user_message}],
         )
@@ -91,7 +89,6 @@ class HeadlineAgent:
             response = client.messages.create(
                 model=self.BLURB_MODEL,
                 max_tokens=60,
-                temperature=0.4,
                 system=BLURB_SYSTEM_PROMPT + " You MUST stay under 20 words.",
                 messages=[{"role": "user", "content": user_message}],
             )
@@ -299,7 +296,6 @@ class HeadlineAgent:
         response = client.chat.completions.create(
             model=self.HEADLINE_SELECTION_MODEL,
             response_format={"type": "json_object"},
-            temperature=self.SELECTION_TEMPERATURE,
             messages=[
                 {
                     "role": "system",

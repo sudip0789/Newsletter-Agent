@@ -131,7 +131,7 @@ class Deduplicator:
         2. Use AgglomerativeClustering from scikit-learn:
            - metric='cosine'
            - linkage='average'
-           - distance_threshold=0.30 (i.e. similarity > 0.70 = same story)
+           - distance_threshold=0.40 (similarity ≥ 0.60 = same story)
            - n_clusters=None (let the algorithm decide cluster count)
         3. Group articles by their cluster label.
         4. For each group, call select_primary_article() to pick the best one.
