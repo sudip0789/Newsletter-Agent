@@ -33,7 +33,7 @@ Article text:
 
 class Summarizer:
     DEFAULT_TOP_N = 30
-    DEFAULT_MODEL = "opus-4.8"
+    DEFAULT_MODEL = "sonnet-4.6"
     MAX_WORKERS = 6
     MAX_TEXT_CHARS = 10000
     MIN_TEXT_CHARS = 100
@@ -44,6 +44,12 @@ class Summarizer:
             "api_model": "gpt-5.5",
             "env_var": "OPENAI_API_KEY",
             "output_label": "openai_gpt_5_5",
+        },
+        "sonnet-4.6": {
+            "provider": "anthropic",
+            "api_model": "claude-sonnet-4-6",
+            "env_var": "ANTHROPIC_API_KEY",
+            "output_label": "anthropic_sonnet_4_6",
         },
         "opus-4.8": {
             "provider": "anthropic",

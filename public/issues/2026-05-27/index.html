@@ -509,15 +509,6 @@
       text-transform: uppercase;
     }
 
-    .mobile-issue-nav-title {
-      margin: 0;
-      font-family: var(--serif-display);
-      font-size: 2rem;
-      font-weight: 600;
-      letter-spacing: -0.05em;
-      line-height: 0.94;
-    }
-
     .mobile-issue-nav-meta {
       display: flex;
       align-items: baseline;
@@ -1416,10 +1407,6 @@
         padding: 24px 18px 24px;
       }
 
-      .mobile-issue-nav-title {
-        font-size: 2.75rem;
-      }
-
       .mobile-issue-nav-grid {
         gap: 12px;
       }
@@ -1435,6 +1422,38 @@
 
       .content-section {
         padding: 24px 0 8px;
+      }
+
+      .collapsible-section .section-heading {
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .collapsible-section .eyebrow {
+        position: relative;
+      }
+
+      .collapsible-section .eyebrow::before {
+        transition: width 0.18s ease;
+      }
+
+      .collapsible-section.collapsed .eyebrow::before {
+        width: 14px;
+      }
+
+      .collapsible-section.collapsed .eyebrow::after {
+        content: "";
+        position: absolute;
+        left: 5.5px;
+        top: 50%;
+        width: 3px;
+        height: 14px;
+        transform: translateY(-50%);
+        background: var(--brand-red);
+      }
+
+      .collapsible-section.collapsed .article-list {
+        display: none;
       }
 
       .headline-section-title {
@@ -1526,7 +1545,7 @@
       .mobile-issue-nav-link {
         min-height: 118px;
         gap: 10px;
-        padding: 13px 12px 11px;
+        padding: 13px 12px 20px;
       }
 
       .mobile-issue-nav-index {
@@ -1933,7 +1952,6 @@
       <div class="mobile-issue-nav-kicker">
         <span class="mobile-issue-nav-kicker-text">— In This Issue</span>
       </div>
-      <h2 class="mobile-issue-nav-title">Sections</h2>
       <div class="mobile-issue-nav-meta" aria-label="Issue section totals">
         <span class="mobile-issue-nav-meta-strong">09</span>
         <span class="mobile-issue-nav-meta-label">Sections</span>
@@ -1997,12 +2015,12 @@
         
 
         
-        <section class="content-section" id="enterprise_ai">
-          <div class="section-heading">
+        <section class="content-section collapsible-section" id="enterprise_ai">
+          <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="enterprise_ai-articles">
             <p class="eyebrow">Section 01</p>
             <h2 class="section-title">Enterprise AI</h2>
           </div>
-          <div class="article-list">
+          <div class="article-list" id="enterprise_ai-articles">
             
             <article class="article">
               <h3 class="article-title">
@@ -2070,12 +2088,12 @@
           </div>
         </section>
         
-        <section class="content-section" id="legal_intelligence">
-          <div class="section-heading">
+        <section class="content-section collapsible-section" id="legal_intelligence">
+          <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="legal_intelligence-articles">
             <p class="eyebrow">Section 02</p>
             <h2 class="section-title">Legal Intelligence</h2>
           </div>
-          <div class="article-list">
+          <div class="article-list" id="legal_intelligence-articles">
             
             <article class="article">
               <h3 class="article-title">
@@ -2147,12 +2165,12 @@
           </div>
         </section>
         
-        <section class="content-section" id="ai_products">
-          <div class="section-heading">
+        <section class="content-section collapsible-section" id="ai_products">
+          <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="ai_products-articles">
             <p class="eyebrow">Section 03</p>
             <h2 class="section-title">AI Products</h2>
           </div>
-          <div class="article-list">
+          <div class="article-list" id="ai_products-articles">
             
             <article class="article">
               <h3 class="article-title">
@@ -2199,12 +2217,12 @@
           </div>
         </section>
         
-        <section class="content-section" id="security">
-          <div class="section-heading">
+        <section class="content-section collapsible-section" id="security">
+          <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="security-articles">
             <p class="eyebrow">Section 04</p>
             <h2 class="section-title">Security</h2>
           </div>
-          <div class="article-list">
+          <div class="article-list" id="security-articles">
             
             <article class="article">
               <h3 class="article-title">
@@ -2295,12 +2313,12 @@
           </div>
         </section>
         
-        <section class="content-section" id="policy">
-          <div class="section-heading">
+        <section class="content-section collapsible-section" id="policy">
+          <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="policy-articles">
             <p class="eyebrow">Section 05</p>
             <h2 class="section-title">Policy</h2>
           </div>
-          <div class="article-list">
+          <div class="article-list" id="policy-articles">
             
             <article class="article">
               <h3 class="article-title">
@@ -2393,12 +2411,12 @@
           </div>
         </section>
         
-        <section class="content-section" id="ai_sustainability">
-          <div class="section-heading">
+        <section class="content-section collapsible-section" id="ai_sustainability">
+          <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="ai_sustainability-articles">
             <p class="eyebrow">Section 06</p>
             <h2 class="section-title">AI Sustainability</h2>
           </div>
-          <div class="article-list">
+          <div class="article-list" id="ai_sustainability-articles">
             
             <article class="article">
               <h3 class="article-title">
@@ -2426,12 +2444,12 @@
           </div>
         </section>
         
-        <section class="content-section" id="creative_ai">
-          <div class="section-heading">
+        <section class="content-section collapsible-section" id="creative_ai">
+          <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="creative_ai-articles">
             <p class="eyebrow">Section 07</p>
             <h2 class="section-title">Creative AI</h2>
           </div>
-          <div class="article-list">
+          <div class="article-list" id="creative_ai-articles">
             
             <article class="article">
               <h3 class="article-title">
@@ -2459,12 +2477,12 @@
           </div>
         </section>
         
-        <section class="content-section" id="higher_education">
-          <div class="section-heading">
+        <section class="content-section collapsible-section" id="higher_education">
+          <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="higher_education-articles">
             <p class="eyebrow">Section 08</p>
             <h2 class="section-title">Higher Education</h2>
           </div>
-          <div class="article-list">
+          <div class="article-list" id="higher_education-articles">
             
             <article class="article">
               <h3 class="article-title">
@@ -2633,6 +2651,26 @@
         seek.addEventListener('pointerup', applySeekValue);
         updateSeekVisual(0);
       }
+    })();
+  </script>
+  <script>
+    (function () {
+      var mq = window.matchMedia('(max-width: 760px)');
+      document.querySelectorAll('.collapsible-section > .section-heading').forEach(function (heading) {
+        function toggle() {
+          if (!mq.matches) return;
+          var section = heading.parentElement;
+          var collapsed = section.classList.toggle('collapsed');
+          heading.setAttribute('aria-expanded', String(!collapsed));
+        }
+        heading.addEventListener('click', toggle);
+        heading.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggle();
+          }
+        });
+      });
     })();
   </script>
 </body>

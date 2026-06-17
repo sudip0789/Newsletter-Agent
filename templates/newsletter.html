@@ -5,7 +5,6 @@
       <div class="mobile-issue-nav-kicker">
         <span class="mobile-issue-nav-kicker-text">— In This Issue</span>
       </div>
-      <h2 class="mobile-issue-nav-title">Sections</h2>
       <div class="mobile-issue-nav-meta" aria-label="Issue section totals">
         <span class="mobile-issue-nav-meta-strong">{{ "%02d"|format(section_count) }}</span>
         <span class="mobile-issue-nav-meta-label">Sections</span>
@@ -533,15 +532,6 @@
       font-weight: 500;
       letter-spacing: 0.32em;
       text-transform: uppercase;
-    }
-
-    .mobile-issue-nav-title {
-      margin: 0;
-      font-family: var(--serif-display);
-      font-size: 2rem;
-      font-weight: 600;
-      letter-spacing: -0.05em;
-      line-height: 0.94;
     }
 
     .mobile-issue-nav-meta {
@@ -1442,10 +1432,6 @@
         padding: 24px 18px 24px;
       }
 
-      .mobile-issue-nav-title {
-        font-size: 2.75rem;
-      }
-
       .mobile-issue-nav-grid {
         gap: 12px;
       }
@@ -1461,6 +1447,38 @@
 
       .content-section {
         padding: 24px 0 8px;
+      }
+
+      .collapsible-section .section-heading {
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .collapsible-section .eyebrow {
+        position: relative;
+      }
+
+      .collapsible-section .eyebrow::before {
+        transition: width 0.18s ease;
+      }
+
+      .collapsible-section.collapsed .eyebrow::before {
+        width: 14px;
+      }
+
+      .collapsible-section.collapsed .eyebrow::after {
+        content: "";
+        position: absolute;
+        left: 5.5px;
+        top: 50%;
+        width: 3px;
+        height: 14px;
+        transform: translateY(-50%);
+        background: var(--brand-red);
+      }
+
+      .collapsible-section.collapsed .article-list {
+        display: none;
       }
 
       .headline-section-title {
@@ -1552,7 +1570,7 @@
       .mobile-issue-nav-link {
         min-height: 118px;
         gap: 10px;
-        padding: 13px 12px 11px;
+        padding: 13px 12px 20px;
       }
 
       .mobile-issue-nav-index {
@@ -1881,12 +1899,12 @@
         {% endif %}
 
         {% for section in sections %}
-        <section class="content-section" id="{{ section.key }}">
-          <div class="section-heading">
+        <section class="content-section collapsible-section" id="{{ section.key }}">
+          <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="{{ section.key }}-articles">
             <p class="eyebrow">Section {{ "%02d"|format(loop.index) }}</p>
             <h2 class="section-title">{{ section.name }}</h2>
           </div>
-          <div class="article-list">
+          <div class="article-list" id="{{ section.key }}-articles">
             {% for article in section.articles %}
             <article class="article">
               <h3 class="article-title">
@@ -2034,6 +2052,26 @@
         seek.addEventListener('pointerup', applySeekValue);
         updateSeekVisual(0);
       }
+    })();
+  </script>
+  <script>
+    (function () {
+      var mq = window.matchMedia('(max-width: 760px)');
+      document.querySelectorAll('.collapsible-section > .section-heading').forEach(function (heading) {
+        function toggle() {
+          if (!mq.matches) return;
+          var section = heading.parentElement;
+          var collapsed = section.classList.toggle('collapsed');
+          heading.setAttribute('aria-expanded', String(!collapsed));
+        }
+        heading.addEventListener('click', toggle);
+        heading.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggle();
+          }
+        });
+      });
     })();
   </script>
 </body>

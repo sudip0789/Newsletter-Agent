@@ -24,7 +24,7 @@ BLURB_SYSTEM_PROMPT = (
 class HeadlineAgent:
     HEADLINE_SELECTION_MODEL = "gpt-5.5"
     BLURB_MODEL = "claude-opus-4-8"
-    IMAGE_MODEL = "gpt-image-2"
+    IMAGE_MODEL = "gpt-image-1.5"
     HEADLINE_COUNT = 3
 
     def __init__(self, input_path: str = "data/output/summarized_stories.json"):

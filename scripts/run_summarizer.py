@@ -46,8 +46,8 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--model",
-        choices=["gpt-5.5", "opus-4.8"],
-        default="opus-4.8",
+        choices=["gpt-5.5", "sonnet-4.6", "opus-4.8"],
+        default="sonnet-4.6",
         help="Summarization model to use.",
     )
     return parser.parse_args()

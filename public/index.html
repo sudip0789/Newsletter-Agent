@@ -509,15 +509,6 @@
       text-transform: uppercase;
     }
 
-    .mobile-issue-nav-title {
-      margin: 0;
-      font-family: var(--serif-display);
-      font-size: 2rem;
-      font-weight: 600;
-      letter-spacing: -0.05em;
-      line-height: 0.94;
-    }
-
     .mobile-issue-nav-meta {
       display: flex;
       align-items: baseline;
@@ -1416,10 +1407,6 @@
         padding: 24px 18px 24px;
       }
 
-      .mobile-issue-nav-title {
-        font-size: 2.75rem;
-      }
-
       .mobile-issue-nav-grid {
         gap: 12px;
       }
@@ -1435,6 +1422,38 @@
 
       .content-section {
         padding: 24px 0 8px;
+      }
+
+      .collapsible-section .section-heading {
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .collapsible-section .eyebrow {
+        position: relative;
+      }
+
+      .collapsible-section .eyebrow::before {
+        transition: width 0.18s ease;
+      }
+
+      .collapsible-section.collapsed .eyebrow::before {
+        width: 14px;
+      }
+
+      .collapsible-section.collapsed .eyebrow::after {
+        content: "";
+        position: absolute;
+        left: 5.5px;
+        top: 50%;
+        width: 3px;
+        height: 14px;
+        transform: translateY(-50%);
+        background: var(--brand-red);
+      }
+
+      .collapsible-section.collapsed .article-list {
+        display: none;
       }
 
       .headline-section-title {
@@ -1526,7 +1545,7 @@
       .mobile-issue-nav-link {
         min-height: 118px;
         gap: 10px;
-        padding: 13px 12px 11px;
+        padding: 13px 12px 20px;
       }
 
       .mobile-issue-nav-index {
@@ -1624,7 +1643,7 @@
           
           <div class="issue-links">
             
-            <a class="pdf-download-link" href="newsletter.pdf" download="ai-upload-weekly-digest-2026-06-10.pdf">
+            <a class="pdf-download-link" href="newsletter.pdf" download="ai-upload-weekly-digest-2026-06-17.pdf">
               Download PDF
             </a>
             
@@ -1642,12 +1661,12 @@
           </div>
           
           <div class="issue-row">
-            <span class="issue-pill">ISSUE 03</span>
+            <span class="issue-pill">ISSUE 04</span>
             <div class="issue-date">
               <span>WEDNESDAY</span>
               
               <span class="issue-separator" aria-hidden="true">·</span>
-              <span>JUN 10</span>
+              <span>JUN 17</span>
               
               
               <span class="issue-separator" aria-hidden="true">·</span>
@@ -1670,10 +1689,10 @@
             </span>
           </h1>
           <div class="embed-issue-meta">
-            <span class="issue-pill">ISSUE 03</span>
+            <span class="issue-pill">ISSUE 04</span>
             <div class="issue-date">
               <span>WEDNESDAY</span>
-              <span class="issue-separator" aria-hidden="true">·</span><span>JUN 10</span>
+              <span class="issue-separator" aria-hidden="true">·</span><span>JUN 17</span>
               <span class="issue-separator" aria-hidden="true">·</span><span>2026</span>
             </div>
           </div>
@@ -1682,7 +1701,7 @@
           
           <div class="embed-issue-links">
             
-            <a class="pdf-download-link" href="newsletter.pdf" download="ai-upload-weekly-digest-2026-06-10.pdf">
+            <a class="pdf-download-link" href="newsletter.pdf" download="ai-upload-weekly-digest-2026-06-17.pdf">
               Download PDF
             </a>
             
@@ -1703,7 +1722,7 @@
           <p class="hero-summary">A curated read on artificial intelligence: what shipped, what changed, and what it means for the law.</p>
           <div class="stats-strip" aria-label="Issue stats">
             <div class="stat">
-              <span class="stat-value">08</span>
+              <span class="stat-value">07</span>
               <span class="stat-label">Sections</span>
             </div>
             <span class="stat-separator" aria-hidden="true">✦</span>
@@ -1730,7 +1749,7 @@
             <span class="sidebar-kicker-text">— In This Issue</span>
           </div>
           <div class="sidebar-meta" aria-label="Issue section totals">
-            <span class="sidebar-meta-strong">08</span>
+            <span class="sidebar-meta-strong">07</span>
             <span>Sections</span>
             <span class="sidebar-meta-separator" aria-hidden="true">·</span>
             <span class="sidebar-meta-strong">21</span>
@@ -1755,7 +1774,7 @@
             <span class="sidebar-link-body">
               <span class="sidebar-link-title">Legal Intelligence</span>
               
-              <span class="sidebar-link-count">2 Stories</span>
+              <span class="sidebar-link-count">4 Stories</span>
               
             </span>
             <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
@@ -1766,7 +1785,7 @@
             <span class="sidebar-link-body">
               <span class="sidebar-link-title">AI Products</span>
               
-              <span class="sidebar-link-count">3 Stories</span>
+              <span class="sidebar-link-count">2 Stories</span>
               
             </span>
             <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
@@ -1816,17 +1835,6 @@
             <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
           </a>
           
-          <a class="sidebar-link" href="#creative_ai">
-            <span class="sidebar-link-number">08</span>
-            <span class="sidebar-link-body">
-              <span class="sidebar-link-title">Creative AI</span>
-              
-              <span class="sidebar-link-count">1 Story</span>
-              
-            </span>
-            <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
-          </a>
-          
         </nav>
       </aside>
 
@@ -1835,30 +1843,30 @@
           <h2 class="headline-section-title">This Week&#39;s Headlines</h2>
           <div class="headline-list">
             
-            <a class="headline-card" href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-live-3-5-translate/" target="_blank" rel="noreferrer">
-              <img src="assets/generated/headline_1.png" alt="Gemini 3.5 Live Translate Brings Natural Speech-to-Speech Across 70+ Languages">
+            <a class="headline-card" href="https://www.vox.com/politics/492031/anthropic-fable-claude-ban-trump-ai" target="_blank" rel="noreferrer">
+              <img src="assets/generated/headline_1.png" alt="Trump Administration&#39;s Export Controls Force Anthropic&#39;s Newest AI Model Offline">
               <div class="headline-copy">
-                <h3>Gemini 3.5 Live Translate Brings Natural Speech-to-Speech Across 70+ Languages</h3>
-                <p class="headline-meta">Google - The Keyword</p>
-                <p class="headline-blurb">Hear translated speech in real time—voices keep their tone and pace across 70+ languages, with continuous output that skips awkward pauses.</p>
+                <h3>Trump Administration&#39;s Export Controls Force Anthropic&#39;s Newest AI Model Offline</h3>
+                <p class="headline-meta">Vox</p>
+                <p class="headline-blurb">A cybersecurity flaw shared by Amazon triggered a takedown—but experts say the legal basis is shaky.</p>
               </div>
             </a>
             
-            <a class="headline-card" href="https://www.geeky-gadgets.com/claude-mythos-5-fable-launch/" target="_blank" rel="noreferrer">
-              <img src="assets/generated/headline_2.png" alt="Anthropic Debuts Claude Mythos 5 and Fable 5 With Tiered Access Controls">
+            <a class="headline-card" href="https://techcrunch.com/2026/06/16/spacex-to-acquire-cursor-for-60b-in-stock-days-after-blockbuster-ipo/" target="_blank" rel="noreferrer">
+              <img src="assets/generated/headline_2.png" alt="SpaceX to Buy AI Coding Startup Cursor in $60B Stock Deal After Record IPO">
               <div class="headline-copy">
-                <h3>Anthropic Debuts Claude Mythos 5 and Fable 5 With Tiered Access Controls</h3>
-                <p class="headline-meta">Geeky Gadgets</p>
-                <p class="headline-blurb">A two-tier model launch where the most capable version stays locked behind government-backed access controls.</p>
+                <h3>SpaceX to Buy AI Coding Startup Cursor in $60B Stock Deal After Record IPO</h3>
+                <p class="headline-meta">TechCrunch</p>
+                <p class="headline-blurb">A coding startup, $60B in stock, and an AI division already losing its founders.</p>
               </div>
             </a>
             
-            <a class="headline-card" href="https://www.theverge.com/ai-artificial-intelligence/947051/apple-europe-dma-siri-ai" target="_blank" rel="noreferrer">
-              <img src="assets/generated/headline_3.png" alt="Apple Withholds AI Siri in EU, Citing Digital Markets Act Conflict">
+            <a class="headline-card" href="https://www.computerweekly.com/podcast/Agentic-workflows-A-Computer-Weekly-Downtime-Upload-podcast" target="_blank" rel="noreferrer">
+              <img src="assets/generated/headline_3.png" alt="Thomson Reuters Rebuilds CoCounsel With Agent-First AI Approach Using Anthropic&#39;s Claude">
               <div class="headline-copy">
-                <h3>Apple Withholds AI Siri in EU, Citing Digital Markets Act Conflict</h3>
-                <p class="headline-meta">The Verge</p>
-                <p class="headline-blurb">Why 450 million Europeans won&#39;t get the new Siri—and why scholars doubt Apple&#39;s privacy defense holds up.</p>
+                <h3>Thomson Reuters Rebuilds CoCounsel With Agent-First AI Approach Using Anthropic&#39;s Claude</h3>
+                <p class="headline-meta">ComputerWeekly.com</p>
+                <p class="headline-blurb">How a legal AI assistant was rebuilt over three years, plus the evaluation framework behind it.</p>
               </div>
             </a>
             
@@ -1879,7 +1887,7 @@
                   <span class="media-card-brand">The AI Upload</span>
                   <span class="media-card-type">VIDEO<br>BRIEFING</span>
                 </div>
-                <div class="media-card-dateline">ISSUE 03 · JUN 10 · 2026</div>
+                <div class="media-card-dateline">ISSUE 04 · JUN 17 · 2026</div>
                 <div class="media-card-title-row">
                   <div class="media-card-title-inner">
                     <div class="media-card-title">This week in <em>AI &amp; Law</em></div>
@@ -1890,7 +1898,7 @@
                   <span class="media-card-subtitle">— video edition</span>
                 </div>
               </div>
-              <iframe class="media-card-iframe" src="https://drive.google.com/file/d/135mqfjQdHg8qJKRv939T7ucNP_WB5m78/preview" allow="autoplay" allowfullscreen></iframe>
+              <iframe class="media-card-iframe" src="https://drive.google.com/file/d/1csGTqUonPtXua5d9ORxkzG4WUfI7OeBR/preview" allow="autoplay" allowfullscreen></iframe>
             </div>
             
             
@@ -1899,10 +1907,10 @@
                 <div class="podcast-inner-card">
                   <span class="podcast-inner-brand">The AI Upload</span>
                   <div class="podcast-inner-title">Podcast<br>Edition</div>
-                  <span class="podcast-inner-ep">EPISODE 03</span>
+                  <span class="podcast-inner-ep">EPISODE 04</span>
                 </div>
                 <div class="podcast-details">
-                  <span class="podcast-ep-label">EPISODE 03</span>
+                  <span class="podcast-ep-label">EPISODE 04</span>
                   <div class="podcast-show-title">This week in <em>AI &amp; Law</em></div>
                   <div class="podcast-player-row">
                     <div class="podcast-play-btn" id="podcast-play-btn" onclick="togglePodcast()" role="button" aria-label="Play podcast">
@@ -1919,7 +1927,7 @@
               </div>
               
               <audio id="podcast-audio" preload="none">
-                <source src="assets/media/podcast-2026-06-10.mp3">
+                <source src="assets/media/podcast-2026-06-17.mp3">
               </audio>
               
             </div>
@@ -1934,9 +1942,8 @@
       <div class="mobile-issue-nav-kicker">
         <span class="mobile-issue-nav-kicker-text">— In This Issue</span>
       </div>
-      <h2 class="mobile-issue-nav-title">Sections</h2>
       <div class="mobile-issue-nav-meta" aria-label="Issue section totals">
-        <span class="mobile-issue-nav-meta-strong">08</span>
+        <span class="mobile-issue-nav-meta-strong">07</span>
         <span class="mobile-issue-nav-meta-label">Sections</span>
         <span class="mobile-issue-nav-meta-separator" aria-hidden="true">·</span>
         <span class="mobile-issue-nav-meta-strong">21</span>
@@ -1980,11 +1987,6 @@
         <span class="mobile-issue-nav-label">AI Sustainability</span>
       </a>
       
-      <a class="mobile-issue-nav-link" href="#creative_ai">
-        <span class="mobile-issue-nav-index">08</span>
-        <span class="mobile-issue-nav-label">Creative AI</span>
-      </a>
-      
     </nav>
   </div>
 </section>
@@ -1993,32 +1995,32 @@
         
 
         
-        <section class="content-section" id="enterprise_ai">
-          <div class="section-heading">
+        <section class="content-section collapsible-section" id="enterprise_ai">
+          <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="enterprise_ai-articles">
             <p class="eyebrow">Section 01</p>
             <h2 class="section-title">Enterprise AI</h2>
           </div>
-          <div class="article-list">
+          <div class="article-list" id="enterprise_ai-articles">
             
             <article class="article">
               <h3 class="article-title">
                 
-                <a href="https://www.wired.com/story/openai-confidentially-files-for-ipo/" target="_blank" rel="noreferrer">OpenAI Files Confidential IPO, Joining SpaceX and Anthropic in AI Market Push</a>
+                <a href="https://siliconangle.com/2026/06/15/salesforce-acquire-customer-service-automation-startup-fin-3-6b/" target="_blank" rel="noreferrer">Salesforce to Buy Customer Service Automation Startup Fin for $3.6 Billion</a>
                 
               </h3>
               <p class="article-source">
                 Read the article:
                 
-                <a href="https://www.wired.com/story/openai-confidentially-files-for-ipo/" target="_blank" rel="noreferrer">WIRED</a>
+                <a href="https://siliconangle.com/2026/06/15/salesforce-acquire-customer-service-automation-startup-fin-3-6b/" target="_blank" rel="noreferrer">SiliconANGLE News</a>
                 
               </p>
               <div class="article-summary">
                 
-                <p>OpenAI confidentially filed paperwork for an initial public offering, the company announced Monday, joining a trio of AI players pursuing what could each be trillion-dollar debuts. Anthropic filed its confidential IPO paperwork on June 1, and Elon Musk&#39;s SpaceX filed publicly last month. OpenAI did not specify timing or how much it plans to raise, noting in a brief blog post that it expects the filing to leak.</p>
+                <p>Salesforce has announced plans to acquire Fin, a customer service automation platform, for approximately $3.6 billion. The deal is expected to close in the fourth quarter of Salesforce&#39;s fiscal year 2027. Salesforce intends to integrate Fin&#39;s technology into its Agentforce suite of AI agent development services, with a focus on delivering pre-packaged customer service automation workflows.</p>
                 
-                <p>The development carries significant legal complexity. OpenAI&#39;s nonprofit still owns roughly 25 percent of the company, more than $200 billion, and retains power to block major decisions and fire executives. The company recently defeated Musk&#39;s lawsuit alleging it strayed from its nonprofit mission, but its structure remains under scrutiny by California and Delaware regulators. The Securities and Exchange Commission must now review the company&#39;s accounting and risk disclosures.</p>
+                <p>Fin, originally founded in 2011 as Intercom Inc. and rebranded in March 2026, serves roughly 12,000 organizations including Anthropic and Autodesk, and reports resolving more than 2 million support incidents per week. The platform allows companies to train AI models on their own knowledge bases, build customizable automation workflows using natural language inputs, and track performance through a built-in analytics dashboard. Some features rely on Apex, a proprietary AI model Fin debuted in February.</p>
                 
-                <p>For legal professionals, the filing raises questions about how a public benefit corporation overseen by a nonprofit navigates SEC requirements while claiming it can weigh societal impacts over shareholder value. OpenAI remains unprofitable, with revenue between $10 billion and $20 billion last year offset by billions in losses. Public adv</p>
+                <p>For legal professionals tracking enterprise AI adoption, the acquisition signals continued consolidation in the AI-powered customer service space and raises questions about data governance, vendor lock-in, and how large platform integrations reshape enterprise AI contracting.</p>
                 
               </div>
             </article>
@@ -2026,22 +2028,20 @@
             <article class="article">
               <h3 class="article-title">
                 
-                <a href="https://science.slashdot.org/story/26/06/08/0418226/jeff-bezos-is-funding-a-wild-hunt-for-the-brains-core-algorithm" target="_blank" rel="noreferrer">Bezos-Backed Startup Flourish Seeks the Brain&#39;s &#39;Core Algorithm&#39; for Efficient AI</a>
+                <a href="https://arstechnica.com/ai/2026/06/leaked-financial-docs-show-openai-is-losing-billions-of-dollars-a-year/" target="_blank" rel="noreferrer">Leaked Documents Reveal OpenAI&#39;s Multibillion-Dollar Annual Losses Ahead of IPO</a>
                 
               </h3>
               <p class="article-source">
                 Read the article:
                 
-                <a href="https://science.slashdot.org/story/26/06/08/0418226/jeff-bezos-is-funding-a-wild-hunt-for-the-brains-core-algorithm" target="_blank" rel="noreferrer">Slashdot.org</a>
+                <a href="https://arstechnica.com/ai/2026/06/leaked-financial-docs-show-openai-is-losing-billions-of-dollars-a-year/" target="_blank" rel="noreferrer">Ars Technica</a>
                 
               </p>
               <div class="article-summary">
                 
-                <p>Jeff Bezos has invested in Flourish, a new neuro AI startup that has raised $500 million and carries a reported $2.5 billion valuation. Founded by former Amazon executive Rob Williams and neuroscientist Thomas Reardon, the company aims to study the brain&#39;s architecture to uncover its &#34;core algorithm&#34; and build AI that learns continuously while consuming far less energy than current large language models.</p>
+                <p>Leaked financial documents obtained by independent journalist Ed Zitron and reviewed by the Financial Times reveal that OpenAI&#39;s revenues, while growing rapidly, remain far outpaced by its expenditures. The company reported revenue of $3.7 billion in 2024 rising to $13.07 billion in 2025, with monthly revenues approaching $2 billion by year&#39;s end. Despite this growth, research and development expenses alone exceeded total revenues in both years, climbing from $7.81 billion in 2024 to $19.18 billion in 2025, including $10.59 billion paid to Microsoft.</p>
                 
-                <p>Reardon argues that today&#39;s frontier models, despite their power, are inefficient consumers of compute and data and remain static once trained. A person processes information on roughly 20 watts, he notes, while a single AI training chip uses more than 30 times that amount. Flourish&#39;s stated goal is a synthetic intelligence system that runs on 50 watts or less and adapts like a human mind, drawing on original wet lab neuroscience experiments conducted alongside AI research.</p>
-                
-                <p>For legal professionals tracking AI&#39;s trajectory, the venture signals a possible shift away from data-hungry, energy-intensive models. Beyond Bezos, backers include Lux Capital, Google Ventures, and Catalio. The company plans to release interim models as products while pursuing its larger ambition.</p>
+                <p>The disclosures come as OpenAI files SEC paperwork ahead of an anticipated IPO, making the financial picture newly relevant to potential investors and legal observers tracking the company&#39;s corporate restructuring. For legal professionals and law students following AI industry developments, the scale of the losses and the concentration of costs within a single vendor relationship raise questions that are likely to feature prominently in the company&#39;s upcoming public filings.</p>
                 
               </div>
             </article>
@@ -2049,22 +2049,20 @@
             <article class="article">
               <h3 class="article-title">
                 
-                <a href="https://techcrunch.com/2026/06/09/can-tech-companies-learn-to-love-cheaper-models/" target="_blank" rel="noreferrer">As Costs Rise, Tech Firms Weigh Cheaper AI Models Over Frontier Giants</a>
+                <a href="https://techcrunch.com/2026/06/16/spacex-valuation-balloons-to-2-6t-briefly-passes-amazon/" target="_blank" rel="noreferrer">SpaceX Valuation Hits $2.6T, Briefly Overtakes Amazon After Cursor Deal</a>
                 
               </h3>
               <p class="article-source">
                 Read the article:
                 
-                <a href="https://techcrunch.com/2026/06/09/can-tech-companies-learn-to-love-cheaper-models/" target="_blank" rel="noreferrer">TechCrunch</a>
+                <a href="https://techcrunch.com/2026/06/16/spacex-valuation-balloons-to-2-6t-briefly-passes-amazon/" target="_blank" rel="noreferrer">TechCrunch</a>
                 
               </p>
               <div class="article-summary">
                 
-                <p>A core assumption underlying the AI industry, that the most powerful models are the ones worth using, may be starting to crack as costs mount and investor subsidies slow. With token prices rising, enterprise users are facing real cost pressure for the first time and beginning to weigh smaller, cheaper models against frontier ones.</p>
+                <p>SpaceX&#39;s valuation surged to as high as $2.9 trillion on Tuesday before settling back down, briefly surpassing Amazon to become the fifth-most valuable company in the world. The spike followed news that SpaceX is acquiring AI coding company Cursor for $60 billion in company shares, with the deal expected to close in the third quarter. The announcement, combined with the launch of options trading on SpaceX shares, drove intense market activity, with traders swapping more than 300 million shares in a single day.</p>
                 
-                <p>The legal sector offers an early test case. Legal AI tool Harvey, working with inference platform Fireworks AI, cut its inference costs threefold without reducing quality by combining Claude Opus with Fireworks&#39; GLM 5.1, reserving Opus for the most intensive tasks. Harvey co-founder Gabe Pereyra said quality remains paramount in legal work, but that the definition of quality is shifting toward using the most efficient model that still reaches the right answer.</p>
-                
-                <p>Coinbase co-founder Brian Armstrong predicts that 80 percent of workloads will move to far cheaper models within 12 to 18 months. If true, the shift would reshape AI economics and deal a financial blow to labs like OpenAI and Anthropic as they approach their IPOs.</p>
+                <p>The valuation jump is notable given SpaceX&#39;s financials: the company posted a $4.9 billion loss on $18.7 billion in revenue last year. Investor enthusiasm appears driven by SpaceX&#39;s stated ambitions in AI, supported by non-binding compute leasing deals with Anthropic and Google. The company raised nearly $86 billion in its IPO last Friday, debuting at roughly $1.7 trillion. With only about 4% of total shares available for public trading, analysts had anticipated significant price volatility, and Tuesday&#39;s trading confirmed those expectations.</p>
                 
               </div>
             </article>
@@ -2072,22 +2070,20 @@
             <article class="article">
               <h3 class="article-title">
                 
-                <a href="https://www.axios.com/2026/06/06/ai-bubble-economy-growth" target="_blank" rel="noreferrer">Insiders Sound the Alarm as AI Costs Outpace Promised Savings</a>
+                <a href="https://www.wired.com/story/claude-tokens-compute-cost-code-8x8/" target="_blank" rel="noreferrer">Soaring AI Token Costs Force Companies to Rethink Spending Strategies</a>
                 
               </h3>
               <p class="article-source">
                 Read the article:
                 
-                <a href="https://www.axios.com/2026/06/06/ai-bubble-economy-growth" target="_blank" rel="noreferrer">Axios</a>
+                <a href="https://www.wired.com/story/claude-tokens-compute-cost-code-8x8/" target="_blank" rel="noreferrer">WIRED</a>
                 
               </p>
               <div class="article-summary">
                 
-                <p>A new phase of AI skepticism is emerging, and this time the doubters are insiders rather than outside critics. According to Axios, early corporate adopters are confronting the steep costs of treating AI as a universal productivity tool. Uber capped employee AI usage after exhausting its annual Claude Code budget in four months, with one executive calling the spending &#34;harder to justify.&#34; Amazon shut down an internal token leaderboard after employees gamed it, and GitHub moved its Copilot assistant to usage-based billing to build a &#34;sustainable&#34; business.</p>
+                <p>A quiet but urgent conversation has taken hold in corporate boardrooms: how to manage the soaring cost of AI token usage. According to a WIRED review of transcripts from data provider AlphaStreet, roughly 300 companies raised questions or concerns about AI tokens during earnings calls in April or May 2026, compared to just 93 companies that mentioned the term during the same period a year ago. Royal Bank of Canada reported a 500 percent surge in token usage over six months; Cisco&#39;s CEO described internal usage as &#34;pretty, pretty crazy&#34;; and Box&#39;s CEO called token budgeting one of the most &#34;heated&#34; topics in the company.</p>
                 
-                <p>The financial picture is sobering. A Bain survey of 951 large companies found AI savings falling well below projections even as most firms planned to increase spending, concluding that &#34;the technology worked&#34; but &#34;the value didn&#39;t arrive.&#34; Even OpenAI CEO Sam Altman called the question of whether AI spending shows up in revenue &#34;the most fair criticism&#34; of the moment.</p>
-                
-                <p>The debate carries market weight. Axios reports the Nasdaq fell 4.2% and the Philadelphia Semiconductor Index dropped 10.3% after Broadcom declined to raise its longer-term AI revenue outlook. For legal professionals tracking AI adoption costs and corporate risk, the full piece offers use</p>
+                <p>Not all organizations are pulling back. Clothing brand Baseball Lifestyle 101 instructed about 50 senior managers to spend roughly 20 percent of their monthly salary on AI tokens, with costs expected to exceed $100,000 per month by year&#39;s end. Meanwhile, communications software company 8x8 reports it has saved approximately $5 million annually by canceling software subscriptions replaced by Anthropic&#39;s Claude, while keeping its Claude bill well below that figure. To manage rising costs, 8x8 is now weighing whether to require employees to justify use of pricier AI models before access is granted, reflecting a broader industry shift toward deliberate &#34;tokenomics&#34; strategies.</p>
                 
               </div>
             </article>
@@ -2095,32 +2091,30 @@
           </div>
         </section>
         
-        <section class="content-section" id="legal_intelligence">
-          <div class="section-heading">
+        <section class="content-section collapsible-section" id="legal_intelligence">
+          <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="legal_intelligence-articles">
             <p class="eyebrow">Section 02</p>
             <h2 class="section-title">Legal Intelligence</h2>
           </div>
-          <div class="article-list">
+          <div class="article-list" id="legal_intelligence-articles">
             
             <article class="article">
               <h3 class="article-title">
                 
-                <a href="https://www.inquirer.com/business/law-legal-firms-ai-technology-changes-20260607.html" target="_blank" rel="noreferrer">Big Law Overhauls Pricing, Hiring, and Services as AI Reshapes the Field</a>
+                <a href="https://www.theguardian.com/technology/2026/jun/12/police-officer-under-criminal-investigation-over-alleged-use-of-ai" target="_blank" rel="noreferrer">Derbyshire Officer Faces Criminal Probe Over AI-Fabricated Evidence in UK First</a>
                 
               </h3>
               <p class="article-source">
                 Read the article:
                 
-                <a href="https://www.inquirer.com/business/law-legal-firms-ai-technology-changes-20260607.html" target="_blank" rel="noreferrer">The Philadelphia Inquirer</a>
+                <a href="https://www.theguardian.com/technology/2026/jun/12/police-officer-under-criminal-investigation-over-alleged-use-of-ai" target="_blank" rel="noreferrer">The Guardian - Technology</a>
                 
               </p>
               <div class="article-summary">
                 
-                <p>Major law firms are restructuring how they operate as artificial intelligence reshapes legal work, from pricing and hiring to the services they offer. The shift dates back several years. In 2021, Volkswagen approached global firm Freshfields to assess software compliance across more than 100 countries, a task that traditionally required local lawyers in each jurisdiction. Instead, Freshfields Lab built a flexible AI platform allowing the carmaker to run real-time global risk assessments, a tool still in use today.</p>
+                <p>A Derbyshire police officer has been placed under criminal investigation for allegedly using artificial intelligence to fabricate evidential material across multiple cases, in what is believed to be the first such case in the United Kingdom. The officer has been removed from frontline duties pending the outcome of the investigation, though no arrests have been made. Derbyshire police confirmed they are working closely with the Crown Prosecution Service, which has begun engaging with defense teams and courts in potentially affected cases.</p>
                 
-                <p>That early experiment is now widespread. Firms including Allen &amp; Overy Shearman and Linklaters license custom AI products, while out-of-the-box giants Legora and Harvey have reached valuations of $5.6 billion and $11 billion, respectively. These tools enable rapid document review during due diligence and discovery and have introduced multitier pricing, threatening the billable hour as clients weigh speed and cost against perfection.</p>
-                
-                <p>The risks remain real. A database tracking AI-introduced inaccuracies in legal filings has logged hundreds of instances, and Sullivan &amp; Cromwell recently apologized for an AI-generated citation error. With routine tasks vanishing, firms anticipate slower junior hiring and pipeline concer</p>
+                <p>The incident raises serious concerns about AI integrity in criminal proceedings and follows a warning from the National Police Chiefs&#39; Council&#39;s Police AI centre, which had previously instructed several forces to halt AI use in preparing court statements due to reliability concerns. For legal professionals, the case underscores the evidentiary and procedural risks that can arise when AI-generated content enters the justice system unchecked.</p>
                 
               </div>
             </article>
@@ -2128,22 +2122,64 @@
             <article class="article">
               <h3 class="article-title">
                 
-                <a href="http://www.billboard.com/pro/musicians-union-lawsuit-umg-wmg-ai-settlements/" target="_blank" rel="noreferrer">Musicians Union Sues UMG and WMG Over AI Training Settlements</a>
+                <a href="https://www.medianama.com/2026/06/223-google-ai-overviews-liability-german-court-ruling/" target="_blank" rel="noreferrer">German Court Holds Google Liable for False AI Overviews Statements</a>
                 
               </h3>
               <p class="article-source">
                 Read the article:
                 
-                <a href="http://www.billboard.com/pro/musicians-union-lawsuit-umg-wmg-ai-settlements/" target="_blank" rel="noreferrer">Billboard</a>
+                <a href="https://www.medianama.com/2026/06/223-google-ai-overviews-liability-german-court-ruling/" target="_blank" rel="noreferrer">MediaNama.com</a>
                 
               </p>
               <div class="article-summary">
                 
-                <p>The American Federation of Musicians has filed a lawsuit against Universal Music Group and Warner Music Group, alleging the major labels breached their collective bargaining agreement by licensing session musicians&#39; recordings to AI companies Suno and Udio without compensation or credit. The complaint, filed June 5 and first obtained by Billboard, also claims the labels refused to disclose which recordings and whose work are being fed into the AI training sets.</p>
+                <p>A German court has found Google directly liable for false statements made by its AI Overviews feature, granting a temporary injunction after two Munich-based publishers were wrongly linked to scams and dubious business practices. The Regional Court of Munich concluded that AI Overviews constitutes Google&#39;s own content rather than aggregated third-party material, because the tool generates &#34;independent, new and substantive&#34; statements that sometimes go beyond what any cited source actually says. The court rejected Google&#39;s safe harbour defenses under both German search engine precedent and the EU&#39;s Digital Services Act.</p>
                 
-                <p>The dispute stems from copyright settlements the majors reached at the end of 2025, allowing Suno and Udio to train new models on licensed works. AFM argues its collective bargaining agreement requires the labels to compensate members for &#34;new uses&#34; of their music and entitles the union to know which recordings are being used.</p>
+                <p>The ruling carries significant implications for AI liability broadly. Because Google alone controls the algorithms producing AI Overviews, the court held it bears full responsibility for the output. The court also dismissed Google&#39;s argument that users could simply verify the cited links themselves, noting that AI Overviews presents confident, self-contained answers that give readers little reason to cross-check sources. The decision suggests other large language model providers, including OpenAI and Anthropic, could face comparable exposure if their systems generate factually incorrect characterizations of third parties.</p>
                 
-                <p>Both UMG and WMG responded that the union chose litigation amid ongoing collective bargaining negotiations, expressing disappointment and a desire to resolve matters at the table. The case spotlights an unresolved question for artists and their advocates: whether musicians will receive approval or compensation when their catalogs are used as AI training inputs, separate from the outputs the models generate. Compensation structures and the specific recordings involved remain unclear.</p>
+              </div>
+            </article>
+            
+            <article class="article">
+              <h3 class="article-title">
+                
+                <a href="https://www.theregister.com/systems/2026/06/16/microsoft-faces-down-sueball-capacity-problems-in-series-of-challenges/5256175" target="_blank" rel="noreferrer">Microsoft Hit by Copilot Lawsuit as GitHub Weighs Multi-Cloud Capacity Fixes</a>
+                
+              </h3>
+              <p class="article-source">
+                Read the article:
+                
+                <a href="https://www.theregister.com/systems/2026/06/16/microsoft-faces-down-sueball-capacity-problems-in-series-of-challenges/5256175" target="_blank" rel="noreferrer">The Register</a>
+                
+              </p>
+              <div class="article-summary">
+                
+                <p>Microsoft is facing pressure on two fronts stemming from its AI ambitions. The City of St. Clair Shores Police and Fire Retirement System has filed a class action lawsuit in Seattle federal court against Microsoft and CEO Satya Nadella, alleging that executives made materially false and misleading statements about Copilot adoption. The complaint points to Microsoft&#39;s own earnings disclosures, which revealed that only 15 million of 450 million Microsoft 365 users had converted to paid Copilot subscriptions. Following Microsoft&#39;s fiscal Q2 results announcement on January 28, the company&#39;s share price dropped more than $48, or roughly ten percent. Microsoft has stated it believes the claims are without merit and intends to defend itself vigorously.</p>
+                
+                <p>Separately, GitHub is reportedly exploring a multi-cloud strategy that may include AWS resources to address reliability and scalability problems driven by a surge in AI-assisted and agentic development workflows. GitHub acknowledged that infrastructure limits have been tested, and confirmed it is both accelerating migration to Azure and evaluating additional cloud providers. The situation is notable given that Microsoft, GitHub&#39;s parent company since 2018, operates its own competing cloud platform.</p>
+                
+              </div>
+            </article>
+            
+            <article class="article">
+              <h3 class="article-title">
+                
+                <a href="https://thenextweb.com/news/music-industry-ai-deals-streaming-fraud-royalties-pro-crackdown/" target="_blank" rel="noreferrer">Music Industry Faces Four Existential Battles: AI Deals, Streaming Fraud, and Royalty Fights</a>
+                
+              </h3>
+              <p class="article-source">
+                Read the article:
+                
+                <a href="https://thenextweb.com/news/music-industry-ai-deals-streaming-fraud-royalties-pro-crackdown/" target="_blank" rel="noreferrer">The Next Web</a>
+                
+              </p>
+              <div class="article-summary">
+                
+                <p>The music industry convened in New York this week for Indie Week amid four overlapping disputes that could reshape how recorded music generates revenue. The National Music Publishers&#39; Association announced its first industry-wide AI licensing deals with Udio and Klay, while Spotify unveiled a partnership with Universal Music Group allowing Premium subscribers to remix and cover songs using AI, with a revenue-sharing model for participating artists. Payment mechanics for songwriters under these deals have not been disclosed.</p>
+                
+                <p>Streaming fraud has moved from concern to criminal prosecution. Michael Smith of North Carolina pleaded guilty to wire fraud after using AI to generate hundreds of thousands of songs and bots to stream them billions of times, collecting more than $8 million in royalties from major platforms before being caught. Apple Music reportedly flagged roughly two billion fraudulent streams on its platform in 2025 alone.</p>
+                
+                <p>Publishers are also pushing back against performing rights organizations over transparency and governance, with Kobalt CEO Laurent Hubert stating that 30 percent of the company&#39;s PRO-related income cannot be audited. Separately, negotiations over statutory mechanical royalty rates beyond the current 2027 deadline have yet to produce any publicly disclosed agreement between the NMPA and the Digital Media Association.</p>
                 
               </div>
             </article>
@@ -2151,32 +2187,30 @@
           </div>
         </section>
         
-        <section class="content-section" id="ai_products">
-          <div class="section-heading">
+        <section class="content-section collapsible-section" id="ai_products">
+          <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="ai_products-articles">
             <p class="eyebrow">Section 03</p>
             <h2 class="section-title">AI Products</h2>
           </div>
-          <div class="article-list">
+          <div class="article-list" id="ai_products-articles">
             
             <article class="article">
               <h3 class="article-title">
                 
-                <a href="https://www.theregister.com/devops/2026/06/09/apple-courts-developers-with-privacy-and-context-in-ai-comeback-bid/5252564" target="_blank" rel="noreferrer">Apple Pitches Privacy and Context to Developers in AI Comeback</a>
+                <a href="https://techcrunch.com/2026/06/16/qualcomm-wants-to-be-the-chip-inside-whatever-replaces-your-smartphone-and-it-just-announced-two-products-toward-that-end/" target="_blank" rel="noreferrer">Qualcomm Unveils Two Chips Targeting the Smartphone&#39;s Successor</a>
                 
               </h3>
               <p class="article-source">
                 Read the article:
                 
-                <a href="https://www.theregister.com/devops/2026/06/09/apple-courts-developers-with-privacy-and-context-in-ai-comeback-bid/5252564" target="_blank" rel="noreferrer">The Register</a>
+                <a href="https://techcrunch.com/2026/06/16/qualcomm-wants-to-be-the-chip-inside-whatever-replaces-your-smartphone-and-it-just-announced-two-products-toward-that-end/" target="_blank" rel="noreferrer">TechCrunch</a>
                 
               </p>
               <div class="article-summary">
                 
-                <p>At its 2026 Worldwide Developers Conference, Apple presented a deliberately understated vision for integrating AI across its products, focusing on three areas: platform improvements, child safety enhancements, and Apple Intelligence. The company emphasized privacy, integration, and cost as its core advantages, with software engineering chief Craig Federighi calling privacy in AI &#34;non-negotiable&#34; and contrasting Apple&#39;s approach with providers that retain personal interactions by default.</p>
+                <p>Qualcomm is making a significant push into post-smartphone computing, announcing two new offerings aimed at AI wearables and mixed-reality devices. The first, Snapdragon Reality Elite, is a chip platform for mixed-reality glasses delivering up to 160% improvement in neural processing unit performance over its predecessor and capable of running a 3-billion-parameter language model at 45 tokens per second. The second, the Scalable Turnkey AI-Ready Toolkit (START), bundles hardware modules, a software stack, and a white-label program to help manufacturers bring smart glasses and other wearable form factors to market more quickly.</p>
                 
-                <p>For developers, the announcements carry practical weight. Apple is offering its Foundation Models framework, now based on Google&#39;s Gemini model family and newly multimodal, to run on-device or through Private Cloud Compute. Developers with fewer than two million first-time App Store downloads can use Apple Foundation Models in Private Cloud Compute with no cloud API costs. A new Core AI framework provides a memory-safe Swift API for running models entirely on-device with no token costs or server dependencies.</p>
-                
-                <p>The update matters for legal professionals tracking AI and data privacy, since cloud-based models can capture sensitive information. Apple also expanded Xcode 27 to support Google&#39;s Gemini alongside Anthropic&#39;s Claude Agent and OpenAI&#39;s Codex, and r</p>
+                <p>CEO Cristiano Amon told CNBC that Qualcomm is currently working with partners on over 40 AI wearable device designs spanning earbuds, pins, jewelry, and watches, reflecting a broad bet that the next major computing platform will be something worn rather than carried. Eyewear manufacturers Inspecs and O&#39;Neill are among the first partners in the START white-label program, while XREAL and Play for Dream are early adopters of the Snapdragon Reality Elite platform. Legal professionals tracking AI hardware development and its implications for data collection, agent-based computing, and competition with established players like Apple and Samsung will want to follow this space closely.</p>
                 
               </div>
             </article>
@@ -2184,45 +2218,22 @@
             <article class="article">
               <h3 class="article-title">
                 
-                <a href="https://www.wired.com/story/everything-apple-announced-at-wwdc-2026/" target="_blank" rel="noreferrer">Apple Unveils Gemini-Powered AI Overhaul at WWDC 2026 as Cook Steps Down</a>
+                <a href="https://www.theregister.com/ai-and-ml/2026/06/16/the-new-siri-makes-one-of-apples-most-convenient-os-features-a-cumbersome-mess/5256591" target="_blank" rel="noreferrer">Revamped Siri Complicates Apple&#39;s Spotlight Search in iOS, macOS 27 Betas</a>
                 
               </h3>
               <p class="article-source">
                 Read the article:
                 
-                <a href="https://www.wired.com/story/everything-apple-announced-at-wwdc-2026/" target="_blank" rel="noreferrer">WIRED</a>
+                <a href="https://www.theregister.com/ai-and-ml/2026/06/16/the-new-siri-makes-one-of-apples-most-convenient-os-features-a-cumbersome-mess/5256591" target="_blank" rel="noreferrer">The Register</a>
                 
               </p>
               <div class="article-summary">
                 
-                <p>Apple&#39;s WWDC 2026 keynote centered on its long-anticipated artificial intelligence overhaul, the product of a new partnership with Google to use Gemini as a backbone for Apple Intelligence. Beginning this fall, AI features will be integrated across Mail, Messages, Safari, Photos, and a revamped Siri, with the assistant gaining broader contextual awareness, a new dedicated Siri AI app, camera-based visual search, and a more expressive voice. Apple says much of the processing occurs on-device, likely limiting the features to recent hardware, and emphasized that cloud requests are handled securely.</p>
+                <p>Apple debuted a revamped Siri alongside iOS and macOS 27 at WWDC last week, positioning it as a major leap in on-device AI. After testing developer betas released June 8, one writer found the update introduced genuine improvements, including conversational follow-up capability and improved on-device file search, but at a notable cost to existing functionality.</p>
                 
-                <p>Notably for those tracking regulatory developments, Apple confirmed the new AI features will not launch in the European Union or China, citing unresolved regulatory hurdles tied to preserving its privacy protections. The company also introduced AI-driven photo editing tools that can reframe, extend, and alter the perspective of images, raising familiar questions about authenticity in digital media.</p>
+                <p>The most significant complaint centers on Spotlight, Apple&#39;s built-in search and app launcher. What was previously a swipe-and-tap web search now requires multiple additional steps, as the new Siri-first interface intercepts queries and surfaces AI-selected links before allowing access to traditional search results. The experience is compared to Google&#39;s AI Overviews. The personnel connection is direct: Apple&#39;s new VP of AI, Amar Subramanya, spent 16 years at Google including a role leading Gemini engineering, and Apple has confirmed a partnership with Google in building its foundation models.</p>
                 
-                <p>The event marked Tim Cook&#39;s final WWDC as CEO. Cook becomes executive chairman on September 1, with hardware engineering chief John Ternus taking over as chief executive. WIRED&#39;s full rundown covers iOS</p>
-                
-              </div>
-            </article>
-            
-            <article class="article">
-              <h3 class="article-title">
-                
-                <a href="https://blog.google/innovation-and-ai/technology/developers-tools/bringing-gemini-models-to-apple-developers/" target="_blank" rel="noreferrer">Google Brings Latest Gemini Models to Apple Developers via Foundation Models Framework</a>
-                
-              </h3>
-              <p class="article-source">
-                Read the article:
-                
-                <a href="https://blog.google/innovation-and-ai/technology/developers-tools/bringing-gemini-models-to-apple-developers/" target="_blank" rel="noreferrer">Google - The Keyword</a>
-                
-              </p>
-              <div class="article-summary">
-                
-                <p>Google announced at Apple&#39;s Worldwide Developers Conference that Apple developers can now call cloud-hosted Gemini models through the Foundation Models framework and access Gemini directly in Xcode. Apple is opening its Foundation Models framework to third-party cloud model providers starting with iOS 27, macOS 27, iPadOS 27, visionOS 27 and watchOS 27, and Google has made Gemini available through the Firebase Apple SDK.</p>
-                
-                <p>The integration places Apple&#39;s on-device model and cloud-hosted Gemini models behind a shared API surface, allowing developers to swap between local and cloud inference. Switching to Gemini requires only a small code change. The setup runs on Firebase AI Logic, removing the need for a separate backend server, while Firebase App Check protects service APIs from abuse.</p>
-                
-                <p>The Xcode integration supports multi-step agentic tasks such as code review and bug fixing. Individual developers can obtain a self-serve API key through Google AI Studio, with free and paid tiers, while enterprise developers can use the Gemini Enterprise Agent Platform for dedicated corporate quotas and data privacy controls. The Foundation Models integration is available as a preview release.</p>
+                <p>Apple has not confirmed whether the Spotlight changes are intentional. The software remains in developer beta, with public release expected this fall.</p>
                 
               </div>
             </article>
@@ -2230,32 +2241,30 @@
           </div>
         </section>
         
-        <section class="content-section" id="security">
-          <div class="section-heading">
+        <section class="content-section collapsible-section" id="security">
+          <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="security-articles">
             <p class="eyebrow">Section 04</p>
             <h2 class="section-title">Security</h2>
           </div>
-          <div class="article-list">
+          <div class="article-list" id="security-articles">
             
             <article class="article">
               <h3 class="article-title">
                 
-                <a href="https://www.axios.com/2026/06/08/exclusive-anthropics-mythos-can-exploit-new-flaws-in-hours" target="_blank" rel="noreferrer">Anthropic&#39;s Mythos Converts Software Patches Into Working Exploits Within Minutes</a>
+                <a href="https://thehackernews.com/2026/06/one-click-microsoft-365-copilot-flaw.html" target="_blank" rel="noreferrer">One-Click Microsoft 365 Copilot Flaw Risked Emails, Files, and MFA Codes</a>
                 
               </h3>
               <p class="article-source">
                 Read the article:
                 
-                <a href="https://www.axios.com/2026/06/08/exclusive-anthropics-mythos-can-exploit-new-flaws-in-hours" target="_blank" rel="noreferrer">Axios</a>
+                <a href="https://thehackernews.com/2026/06/one-click-microsoft-365-copilot-flaw.html" target="_blank" rel="noreferrer">The Hacker News</a>
                 
               </p>
               <div class="article-summary">
                 
-                <p>Anthropic&#39;s new research suggests that advanced AI models can rapidly convert publicly disclosed software vulnerabilities into working exploits, a capability that could shrink the so-called &#34;patch gap&#34; between when a flaw is disclosed and when systems are widely updated. The company&#39;s Mythos Preview turned newly disclosed bugs into functional exploits in hours rather than weeks, according to findings shared first with Axios.</p>
+                <p>Researchers at Varonis Threat Labs disclosed a critical vulnerability in Microsoft 365 Copilot Enterprise Search that could have allowed an attacker to steal emails, calendar data, SharePoint files, and live MFA codes with a single click on a legitimate microsoft.com link. Tracked as CVE-2026-42824, the flaw chains three bugs into what Varonis calls SearchLeak: a parameter-to-prompt injection, a sanitizer race condition that fires a malicious image request before guardrails can block it, and a Content Security Policy bypass that routes stolen data out through Bing&#39;s own infrastructure. Because the attack link pointed to a real Microsoft domain, standard URL filtering and anti-phishing tools would not have flagged it.</p>
                 
-                <p>Anthropic&#39;s frontier red team tested Mythos against vulnerabilities disclosed in January and February in Mozilla Firefox and the Microsoft Windows kernel, focusing on bugs disclosed after the models&#39; knowledge cutoff dates. Within 31 minutes, Mythos generated its first proof-of-concept exploit for a Windows kernel vulnerability, and it caused a &#34;blue screen of death&#34; in 18 of 21 kernel bugs tested. On Firefox, it built eight working code-execution exploits across 18 security patches. Anthropic estimated the Windows privilege-escalation exploits cost roughly $2,000 each in API credits.</p>
-                
-                <p>The concern extends beyond Mythos, as some open-source models and OpenAI&#39;s GPT-5.5-Cyber are reportedly performing at</p>
+                <p>Microsoft mitigated the vulnerability on its backend, requiring no action from tenant administrators. Varonis presented a proof-of-concept and has not observed active exploitation in the wild. Because Copilot Enterprise inherits the signed-in user&#39;s full Microsoft Graph access, the potential exposure included time-sensitive one-time passwords and account-reset links still valid at the moment of the click. Legal professionals handling sensitive client communications, financial data, or confidential filings stored in Microsoft 365 environments should take note, as this is the second time Varonis has demonstrated this attack pattern against Copilot products.</p>
                 
               </div>
             </article>
@@ -2263,22 +2272,22 @@
             <article class="article">
               <h3 class="article-title">
                 
-                <a href="https://thehackernews.com/2026/06/researchers-build-self-replicating-ai.html" target="_blank" rel="noreferrer">Self-Replicating AI Worm Runs Entirely on Local Open-Weight Models</a>
+                <a href="https://thehackernews.com/2026/06/google-sues-chinese-smishing-network.html" target="_blank" rel="noreferrer">Google Sues Chinese Phishing Network Over Alleged Gemini AI Misuse</a>
                 
               </h3>
               <p class="article-source">
                 Read the article:
                 
-                <a href="https://thehackernews.com/2026/06/researchers-build-self-replicating-ai.html" target="_blank" rel="noreferrer">The Hacker News</a>
+                <a href="https://thehackernews.com/2026/06/google-sues-chinese-smishing-network.html" target="_blank" rel="noreferrer">The Hacker News</a>
                 
               </p>
               <div class="article-summary">
                 
-                <p>University of Toronto researchers have built an AI-powered computer worm that can break into networks on its own, no human guidance required. In lab tests on a 33-machine network, the worm found vulnerabilities, gained access to systems, and spread itself to 62 percent of the network within seven days.</p>
+                <p>Google filed suit in Manhattan federal court against a Chinese cybercrime network accused of weaponizing its Gemini AI to conduct large-scale SMS phishing attacks against Americans. The network operates a phishing-as-a-service platform called Outsider, which allowed criminals to generate fraudulent websites using AI-generated code and blast fake text messages impersonating banks, brokerages, and mobile carriers. Licenses were available for as little as $88 per week through a Telegram bot.</p>
                 
-                <p>Unlike traditional malware, which relies on a fixed set of pre-programmed attack methods, this worm thinks on the fly. It reads the latest public security advisories and adapts its approach to whatever it finds on each new target. That means patching a single known flaw is not enough to stop it.</p>
+                <p>The FBI estimates Outsider is linked to approximately 3.87 million stolen credit cards and $1.9 billion in losses since July 2023. Between November 2025 and April 2026, investigators identified over 9,000 fake websites and 1.59 million fraudulent URLs connected to the service. As part of a coordinated takedown called Operation Ghost Hook, law enforcement seized domains, confiscated roughly $100,000 in cryptocurrency, and disrupted thousands of phishing domains.</p>
                 
-                <p>What makes it especially difficult to contain is that it runs on freely available AI models, with no connection to commercial AI providers. There is no account to suspend, no API key to cut off. The researchers have not released the code publicly, but they argue the findings should push organizations to rethink how quickly they respond to newly disclosed vulnerabilities, because the window between a flaw being published and it being exploited may now be measured in hours.</p>
+                <p>Google is partnering with AT&amp;T, T-Mobile, and Verizon to block Outsider messages from reaching users. The FBI noted that criminals are increasingly using AI to make fraud more convincing and harder to detect, a concern that will resonate with legal professionals navigating emerging liability questions around AI misuse.</p>
                 
               </div>
             </article>
@@ -2286,22 +2295,22 @@
             <article class="article">
               <h3 class="article-title">
                 
-                <a href="https://thehackernews.com/2026/06/new-chatgpt-lockdown-mode-limits-tools.html" target="_blank" rel="noreferrer">ChatGPT&#39;s New Lockdown Mode Restricts Tools to Curb Data Exfiltration</a>
+                <a href="https://www.axios.com/2026/06/10/openai-china-ai-data-center-tariffs-chatgpt" target="_blank" rel="noreferrer">OpenAI Bans China-Linked Accounts Targeting Tariff and Data Center Debates</a>
                 
               </h3>
               <p class="article-source">
                 Read the article:
                 
-                <a href="https://thehackernews.com/2026/06/new-chatgpt-lockdown-mode-limits-tools.html" target="_blank" rel="noreferrer">The Hacker News</a>
+                <a href="https://www.axios.com/2026/06/10/openai-china-ai-data-center-tariffs-chatgpt" target="_blank" rel="noreferrer">Axios</a>
                 
               </p>
               <div class="article-summary">
                 
-                <p>OpenAI has begun rolling out a Lockdown Mode for eligible personal ChatGPT accounts, an optional security setting aimed at reducing the risk of data exfiltration from prompt injection attacks. The feature targets individuals and organizations that handle sensitive data and need stricter protection. It is available to logged-in users on Free, Go, Plus, and Pro tiers, as well as self-serve ChatGPT Business plans.</p>
+                <p>OpenAI has banned a set of China-linked accounts that used ChatGPT to generate social media content targeting U.S. policy debates over tariffs and AI data centers. The company identified two distinct operations: one called &#34;Data Center Bandwagon,&#34; which produced comments and comics portraying data centers as driving up electricity costs for American families, and another called &#34;Tech and Tariffs,&#34; which generated political cartoons critical of Trump&#39;s trade policies and U.S. ambitions for global tech dominance.</p>
                 
-                <p>Rather than preventing prompt injections outright, Lockdown Mode limits the pathways through which data could leave the system by restricting outbound network requests. Activating it disables or limits several features, including live web browsing, image support, deep research, agent mode, Canvas networking, and file downloads. The mode cannot run alongside Developer Mode. OpenAI cautioned that the setting does not guarantee data exfiltration cannot occur, noting that risks may persist through enabled apps, unforeseen capability combinations, or newly discovered techniques.</p>
+                <p>OpenAI&#39;s principal investigator Ben Nimmo emphasized that these campaigns did not manufacture controversy but rather sought to amplify divisions that already existed in American public discourse. The company acknowledged that neither campaign gained significant online traction. Still, OpenAI flagged this as the first known instance of a China-linked operation using its models to interfere specifically in the AI data center debate.</p>
                 
-                <p>For legal professionals managing confidential client information, the trade-off between functionality and security is worth understanding. OpenAI also introduced an account management feature allowing users to review active sessions and log out of individual or all devices if unauthorized activity is suspected</p>
+                <p>For legal professionals and researchers tracking AI governance and disinformation, the episode raises concrete questions about platform liability, foreign interference, and how AI-generated content may increasingly be weaponized around domestic policy flashpoints.</p>
                 
               </div>
             </article>
@@ -2309,32 +2318,30 @@
           </div>
         </section>
         
-        <section class="content-section" id="policy">
-          <div class="section-heading">
+        <section class="content-section collapsible-section" id="policy">
+          <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="policy-articles">
             <p class="eyebrow">Section 05</p>
             <h2 class="section-title">Policy</h2>
           </div>
-          <div class="article-list">
+          <div class="article-list" id="policy-articles">
             
             <article class="article">
               <h3 class="article-title">
                 
-                <a href="https://www.axios.com/2026/06/08/white-house-hill-relaunch-effort-block-state-ai-laws" target="_blank" rel="noreferrer">White House and Congress Revive Push to Override State AI Laws</a>
+                <a href="https://economictimes.indiatimes.com/opinion/et-commentary/americas-shutdown-of-anthropics-ai-models-is-not-a-surprise-and-india-has-seen-it-coming-for-30-years/articleshow/131716863.cms" target="_blank" rel="noreferrer">US Export Controls Block Foreign Access to Anthropic AI Models</a>
                 
               </h3>
               <p class="article-source">
                 Read the article:
                 
-                <a href="https://www.axios.com/2026/06/08/white-house-hill-relaunch-effort-block-state-ai-laws" target="_blank" rel="noreferrer">Axios</a>
+                <a href="https://economictimes.indiatimes.com/opinion/et-commentary/americas-shutdown-of-anthropics-ai-models-is-not-a-surprise-and-india-has-seen-it-coming-for-30-years/articleshow/131716863.cms" target="_blank" rel="noreferrer">The Times of India</a>
                 
               </p>
               <div class="article-summary">
                 
-                <p>The White House is negotiating a deal with congressional lawmakers to preempt certain state AI laws in exchange for backing key tech policy priorities, according to Axios. Sen. Marsha Blackburn (R-Tenn.) is leading the talks, which would pair federal override of state AI regulations with the Kids Online Safety Act, the NO FAKES Act, and age verification requirements. A Blackburn spokesperson stressed the package is not a &#34;blanket preemption of all laws regulating AI or child safety.&#34;</p>
+                <p>On June 12, 2026, U.S. Commerce Secretary Howard Lutnick signed an export control order blocking all non-American nationals from accessing two Anthropic models: Claude Fable 5, which had launched three days earlier, and Claude Mythos 5, a restricted model with cybersecurity capabilities that had drawn government scrutiny. The stated trigger was a researcher-identified method to bypass Mythos 5&#39;s safety guardrails, which were designed to prevent attacks on banks, critical infrastructure, and government systems. Anthropic complied within hours. Users outside the United States, including across India, lost access immediately.</p>
                 
-                <p>The development matters because states are increasingly passing stronger AI laws, and the Trump administration faces pressure to act. Blackburn&#39;s support, which the White House previously lacked, would be central to passage. Her involvement also suggests that a competing bipartisan bill from Reps. Jay Obernolte (R-Calif.) and Lori Trahan (D-Mass.), which would preempt state AI laws for three years and establish the Center for AI Standards and Innovation, is not the likely vehicle.</p>
-                
-                <p>The renewed effort follows Trump&#39;s recent AI and cyber executive order, which includes voluntary pre-deployment testing of frontier models. Axios reports the White House is also meeting with AI companies this week to discuss benchm</p>
+                <p>Writing in the Times of India, IIT Kharagpur alumni member Pravin Kaushal argues the shutdown is less notable for its drama than for its ordinariness. No diplomatic incident accompanied it. A letter was signed, a company complied, and professional workflows were disrupted worldwide. Kaushal notes that Google&#39;s Gemini, OpenAI&#39;s GPT models, Meta&#39;s open source offerings, and Microsoft&#39;s Copilot all rest on American corporate and legal infrastructure, making them subject in principle to the same export control architecture. For legal professionals and institutions that have integrated these tools into daily practice, the episode raises concrete questions about continuity of access and the risks of dependence on foreign AI infrastructure.</p>
                 
               </div>
             </article>
@@ -2342,22 +2349,20 @@
             <article class="article">
               <h3 class="article-title">
                 
-                <a href="https://www.wired.com/story/uk-supercomputer-investment-ai-homegrown-semiconductor/" target="_blank" rel="noreferrer">UK Commits \$1.47 Billion to AI Supercomputer, Cutting Reliance on US Tech</a>
+                <a href="https://www.axios.com/2026/06/16/ai-deepfake-ads-campaigns-midterms" target="_blank" rel="noreferrer">AI Deepfakes Become Routine in U.S. Political Advertising Amid Disclosure Gaps</a>
                 
               </h3>
               <p class="article-source">
                 Read the article:
                 
-                <a href="https://www.wired.com/story/uk-supercomputer-investment-ai-homegrown-semiconductor/" target="_blank" rel="noreferrer">WIRED</a>
+                <a href="https://www.axios.com/2026/06/16/ai-deepfake-ads-campaigns-midterms" target="_blank" rel="noreferrer">Axios</a>
                 
               </p>
               <div class="article-summary">
                 
-                <p>The UK government has unveiled a $1.47 billion plan to reduce its dependence on foreign-made artificial intelligence hardware. Announced Monday, the measures include more than $1 billion for a national AI supercomputer, stocked with $530 million worth of hardware. Of that, $200 million will go toward specialist inference chips for processing AI tasks. The government will give procurement priority to British firms, naming startups Olix and Fractile as potential beneficiaries. Researchers and startups are expected to access the supercomputer beginning in 2030.</p>
+                <p>AI-generated deepfakes have moved from novelty to standard practice in American political advertising, with candidates and outside groups across the country using fabricated imagery to attack opponents. Recent examples include a Trump-aligned group depicting Texas Democratic Senate nominee James Talarico in a dress singing altered lyrics, a &#34;throuple&#34; ad falsely showing Rep. Thomas Massie dining with Reps. Ilhan Omar and Alexandria Ocasio-Cortez, and a fully AI-generated Georgia gubernatorial ad showing a Republican primary opponent inflating a hot air balloon with his breath. The practice spans both parties and multiple states, including Texas, Kentucky, Georgia, New York, and Maryland.</p>
                 
-                <p>The plan forms part of a broader push to minimize reliance on foreign powers for AI products and services, an effort made more urgent by tensions between the US and its European counterparts. The European Union outlined a similar tech sovereignty proposal last week. UK technology secretary Liz Kendall framed AI sovereignty as a matter of &#34;reducing overdependencies and increasing resilience.&#34;</p>
-                
-                <p>The hardware plan joins earlier UK initiatives, including AI growth zones launched last November and the $675 million SovAI venture fund launched in April. Observers say the government&#39;s willingness to back domestic firms with hard contracts could anchor promising chip startups in the country and carve out a strategically important niche.</p>
+                <p>Currently, no federal law requires campaigns to disclose when AI is used in political advertising, and voluntary disclosure remains inconsistent. Democrats have indicated they would pursue mandatory disclosure requirements if they regain congressional control after November. For legal professionals and election law scholars, the rapid normalization of fabricated political content raises pressing questions about disclosure standards, defamation exposure, and the adequacy of existing campaign finance and advertising regulations to address synthetic media.</p>
                 
               </div>
             </article>
@@ -2365,22 +2370,20 @@
             <article class="article">
               <h3 class="article-title">
                 
-                <a href="https://www.theguardian.com/technology/2026/jun/08/trump-ai-growth-anthropic" target="_blank" rel="noreferrer">Trump&#39;s Executive Orders Signal Push for AI Growth Over Safety Constraints</a>
+                <a href="https://www.theregister.com/security/2026/06/15/feds-freaked-over-fable-5-after-simple-fix-this-code-prompt-not-jailbreak-says-researcher/5255827" target="_blank" rel="noreferrer">Simple &#39;Fix This Code&#39; Prompt, Not Jailbreak, Triggered Fable 5 Export Curbs</a>
                 
               </h3>
               <p class="article-source">
                 Read the article:
                 
-                <a href="https://www.theguardian.com/technology/2026/jun/08/trump-ai-growth-anthropic" target="_blank" rel="noreferrer">The Guardian - Technology</a>
+                <a href="https://www.theregister.com/security/2026/06/15/feds-freaked-over-fable-5-after-simple-fix-this-code-prompt-not-jailbreak-says-researcher/5255827" target="_blank" rel="noreferrer">The Register</a>
                 
               </p>
               <div class="article-summary">
                 
-                <p>President Trump&#39;s recent actions signal a clear commitment to accelerating AI development rather than constraining it for safety. According to the article, Trump issued two executive orders last week, one seeking a government review of AI models 30 days before release without mandating it, and another directing the defense department to accelerate AI adoption for national cybersecurity. He had earlier postponed signing the review order, citing concerns about maintaining the US lead over China.</p>
+                <p>The Trump administration&#39;s decision to restrict Anthropic&#39;s most advanced AI models under export controls was triggered not by a sophisticated jailbreak, but by the three-word prompt &#34;fix this code,&#34; according to Katie Moussouris, founder of Luta Security and the only outside expert who reviewed the third-party research underlying the ban. The government&#39;s directive, citing national security concerns, suspended foreign national access to Anthropic&#39;s Fable 5 and Mythos 5 models, prompting Anthropic to disable both for all customers. Moussouris, who helped negotiate the Wassenaar Arrangement&#39;s cybersecurity exemptions, argues that no guardrail was bypassed and that the models were performing standard defensive security work.</p>
                 
-                <p>The administration is also reportedly discussing taking financial stakes in leading US AI companies, with OpenAI&#39;s Sam Altman said to have participated in talks with White House officials. Trump described the concept as &#34;almost a partnership with the American public.&#34;</p>
-                
-                <p>Meanwhile, Anthropic advocated for a possible &#34;temporary pause&#34; on advancing AI capabilities, even as it confidentially filed for an initial public offering. Valued around $965bn, the company now surpasses rival OpenAI. The article raises pointed questions about who such a freeze would apply to and whether self-described ethical labs would benefit. For legal professionals tracking AI regulation and corporate governance, these developments warrant attention.</p>
+                <p>More than 100 cybersecurity leaders have signed an open letter urging the administration to reverse the restrictions. Moussouris contends the ban harms defenders far more than attackers, since advanced AI models from China and other countries will soon reach comparable capabilities regardless, and open-weight systems fall outside US export control reach entirely. Legal and security professionals tracking AI governance and export compliance will want to read her full analysis.</p>
                 
               </div>
             </article>
@@ -2388,32 +2391,30 @@
           </div>
         </section>
         
-        <section class="content-section" id="responsible_ai">
-          <div class="section-heading">
+        <section class="content-section collapsible-section" id="responsible_ai">
+          <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="responsible_ai-articles">
             <p class="eyebrow">Section 06</p>
             <h2 class="section-title">Responsible AI</h2>
           </div>
-          <div class="article-list">
+          <div class="article-list" id="responsible_ai-articles">
             
             <article class="article">
               <h3 class="article-title">
                 
-                <a href="https://www.theroot.com/new-stanford-study-how-ai-is-shutting-black-applicants-2000110316" target="_blank" rel="noreferrer">Stanford Study Finds AI Hiring Tools Disadvantage Black and Asian Applicants</a>
+                <a href="https://www.theguardian.com/technology/2026/jun/12/pokemon-go-data-trained-ai-that-could-assist-military-drones-in-war-zones" target="_blank" rel="noreferrer">Pokémon Go Location Scans Helped Train AI for Military Drone Navigation</a>
                 
               </h3>
               <p class="article-source">
                 Read the article:
                 
-                <a href="https://www.theroot.com/new-stanford-study-how-ai-is-shutting-black-applicants-2000110316" target="_blank" rel="noreferrer">The Root</a>
+                <a href="https://www.theguardian.com/technology/2026/jun/12/pokemon-go-data-trained-ai-that-could-assist-military-drones-in-war-zones" target="_blank" rel="noreferrer">The Guardian - Technology</a>
                 
               </p>
               <div class="article-summary">
                 
-                <p>Algorithmic hiring tools, now used by more than 90 percent of companies worldwide for initial candidate screening, may be amplifying racial discrimination at a scale that individual rejections never could. That is the central finding of a new study from Stanford University&#39;s Human-Centered Artificial Intelligence institute, which the researchers describe as the first large-scale analysis of hiring algorithms operating in real-world conditions.</p>
+                <p>Pokémon Go players who opted in to scan real-world locations between 2021 and 2025 may not have anticipated their contributions ending up in military technology. Niantic Spatial, a spin-off from the company that created the augmented reality game, used those voluntary location scans to train AI models capable of recognizing and interpreting physical spaces. The company has since partnered with Vantor, a spatial detection software firm whose drone navigation tools are used by some militaries, to help autonomous systems orient themselves in environments where GPS signals are unavailable, jammed, or spoofed.</p>
                 
-                <p>The team examined more than 4 million job applications from 3.4 million people across 156 employers using the same AI hiring vendor. They found the tools effectively locked out nearly 26 percent of Black candidates and also produced negative effects for Asian applicants. Had these groups been recommended at the same rate as the most-favored group, typically white applicants, 40,000 more applications would have advanced. The study also identified offsetting patterns, with Black candidates less likely to be recommended in finance but more likely in warehouse roles, which can make discrimination appear absent.</p>
-                
-                <p>The researchers tied these outcomes to market concentration and warned that widespread use, high-stakes consequences, and limited transparency rarely belong together. They call for independent research to support evidence-based AI policy and accountability.</p>
+                <p>Both companies say the raw game scans were not directly transferred to Vantor, but that they informed Niantic&#39;s underlying AI models. Vantor announced a separate deal with the US Army worth up to $217 million in February. Privacy advocates and researchers are raising alarms: Digital Rights Watch&#39;s Tom Sulston called the use of civilian data for military ends troubling, noting that most users do not read terms of service documents. A University of Sydney researcher warned the case is likely just the beginning of a broader pattern of consumer app data finding its way into unintended applications.</p>
                 
               </div>
             </article>
@@ -2421,65 +2422,30 @@
           </div>
         </section>
         
-        <section class="content-section" id="ai_sustainability">
-          <div class="section-heading">
+        <section class="content-section collapsible-section" id="ai_sustainability">
+          <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="ai_sustainability-articles">
             <p class="eyebrow">Section 07</p>
             <h2 class="section-title">AI Sustainability</h2>
           </div>
-          <div class="article-list">
+          <div class="article-list" id="ai_sustainability-articles">
             
             <article class="article">
               <h3 class="article-title">
                 
-                <a href="https://www.theguardian.com/world/2026/jun/09/worlds-first-wind-powered-underwater-datacentre-starts-operating-in-china" target="_blank" rel="noreferrer">China Launches World&#39;s First Wind-Powered Underwater Datacentre off Shanghai</a>
+                <a href="https://www.axios.com/2026/06/11/amazon-water-savings-data-center" target="_blank" rel="noreferrer">Amazon Highlights Water Efficiency as Data Center Opposition Grows</a>
                 
               </h3>
               <p class="article-source">
                 Read the article:
                 
-                <a href="https://www.theguardian.com/world/2026/jun/09/worlds-first-wind-powered-underwater-datacentre-starts-operating-in-china" target="_blank" rel="noreferrer">The Guardian - Technology</a>
+                <a href="https://www.axios.com/2026/06/11/amazon-water-savings-data-center" target="_blank" rel="noreferrer">Axios</a>
                 
               </p>
               <div class="article-summary">
                 
-                <p>China has launched the world&#39;s first wind-powered underwater datacentre off the coast of Shanghai, advancing the country&#39;s efforts to address energy challenges driven by its artificial intelligence expansion. The Shanghai Lingang undersea project, which began operations in May, has a capacity of 24 megawatts and is a joint effort between HiCloud Technology and the state-owned China Communications Construction.</p>
+                <p>Amazon announced it has reached 75% of its 2030 goal to replenish more water into communities than its data centers consume, and claims its facilities are seven times more water-efficient than the industry average. The disclosure follows a similar water-focused announcement from Google the prior week, signaling a coordinated effort by major tech companies to respond to growing public backlash over the environmental footprint of AI infrastructure. Notably, Amazon&#39;s &#34;industry average&#34; benchmark is derived from an academic study converted using a Department of Energy methodology, rather than a directly reported industry figure.</p>
                 
-                <p>Submerged 10 metres below the surface more than 6 miles offshore, the facility draws power from a nearby offshore windfarm. The Chinese government reports it reduces power consumption by over one-fifth compared with land-based datacentres, partly because seawater provides natural cooling. Traditional facilities can spend 25% to 40% of their electricity on chilling servers and have faced scrutiny over their freshwater use. The United Nations University recently warned that datacentre water consumption could reach 9.3tn litres by 2030.</p>
-                
-                <p>The project, which received 1.6bn yuan in investment, builds on HiCloud&#39;s 2023 commercial underwater datacentre in Hainan and follows an earlier Microsoft pilot in Scotland. Experts noted potential risks to marine ecosystems, including disturbed sediment and warmer seawater</p>
-                
-              </div>
-            </article>
-            
-          </div>
-        </section>
-        
-        <section class="content-section" id="creative_ai">
-          <div class="section-heading">
-            <p class="eyebrow">Section 08</p>
-            <h2 class="section-title">Creative AI</h2>
-          </div>
-          <div class="article-list">
-            
-            <article class="article">
-              <h3 class="article-title">
-                
-                <a href="https://fortune.com/2026/06/04/suno-ai-and-the-future-of-music-5-4-billion-valuation-eye-on-ai/" target="_blank" rel="noreferrer">Suno&#39;s $5.4 Billion Valuation Signals AI Music Boom Amid Unresolved Copyright Disputes</a>
-                
-              </h3>
-              <p class="article-source">
-                Read the article:
-                
-                <a href="https://fortune.com/2026/06/04/suno-ai-and-the-future-of-music-5-4-billion-valuation-eye-on-ai/" target="_blank" rel="noreferrer">Fortune</a>
-                
-              </p>
-              <div class="article-summary">
-                
-                <p>AI music generator Suno announced a new $400 million funding round at a $5.4 billion valuation, signaling continued investor confidence in AI-generated music. The platform allows users to create songs from simple text prompts in seconds, and according to fundraising materials reported by Billboard, users were generating more than 7 million songs per day at the time of the financing.</p>
-                
-                <p>For the legal community, the valuation arrives against a backdrop of unresolved copyright litigation. Suno and rival Udio have acknowledged training their models on copyrighted recordings, arguing the practice qualifies as fair use, a position copyright holders dispute. Universal Music Group, Sony Music, and Germany&#39;s GEMA continue to pursue legal action, while Warner Music Group reached a licensing agreement last year. When the labels first sued Suno in 2024, they alleged training on roughly 560 copyrighted works. Last month they sought to amend their complaint to claim more than 61,000 additional songs were used without permission. Both Suno and Udio have asked courts to keep their training dataset sizes confidential.</p>
-                
-                <p>These questions about lawful training and demand remain open even as investors look past the uncertainty.</p>
+                <p>The pushback is substantial. According to Gallup polling released in May, roughly 70% of Americans oppose data center construction in their communities, with water use for cooling cited as the top concern. Amazon&#39;s chief sustainability officer acknowledged the company is planning continued growth while arguing that efficiency gains and transparency can address community concerns. Whether per-unit efficiency improvements will offset rising total water consumption as AI demand surges remains an open question that industry observers are watching closely.</p>
                 
               </div>
             </article>
@@ -2607,6 +2573,26 @@
         seek.addEventListener('pointerup', applySeekValue);
         updateSeekVisual(0);
       }
+    })();
+  </script>
+  <script>
+    (function () {
+      var mq = window.matchMedia('(max-width: 760px)');
+      document.querySelectorAll('.collapsible-section > .section-heading').forEach(function (heading) {
+        function toggle() {
+          if (!mq.matches) return;
+          var section = heading.parentElement;
+          var collapsed = section.classList.toggle('collapsed');
+          heading.setAttribute('aria-expanded', String(!collapsed));
+        }
+        heading.addEventListener('click', toggle);
+        heading.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggle();
+          }
+        });
+      });
     })();
   </script>
 </body>
