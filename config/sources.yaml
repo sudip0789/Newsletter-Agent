@@ -1,5 +1,5 @@
 # Time window for article freshness
-lookback_days: 7
+lookback_days: 5
 
 # Optional: emit score signal breakdowns for non-full/borderline
 # completeness classifications at DEBUG log level.
