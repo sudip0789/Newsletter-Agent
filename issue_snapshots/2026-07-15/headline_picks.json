@@ -1,0 +1,29 @@
+[
+  {
+    "title": "University of Chicago Law School Bans Devices Amid AI Cheating Concerns",
+    "source_name": "Futurism",
+    "url": "https://futurism.com/future-society/law-school-bans-laptops-ai",
+    "section": "higher_education",
+    "composite_score": 0.7364999999999999,
+    "blurb": "Pen and paper return to first-year classes as one law school rethinks how students learn—and where AI fits in.",
+    "image_path": "assets/generated/headline_1.png"
+  },
+  {
+    "title": "OpenAI Launches GPT-5.6 With Three Tiers and Stronger Cybersecurity Gains",
+    "source_name": "Openai.com",
+    "url": "https://openai.com/index/gpt-5-6/",
+    "section": "ai_products",
+    "composite_score": 0.877,
+    "blurb": "Three model tiers, a parallel-agent \"ultra\" mode, and cybersecurity scores that jumped 25 points. Verified access starts September 1.",
+    "image_path": "assets/generated/headline_2.png"
+  },
+  {
+    "title": "Publishers Sue Google, Alleging Gemini Was Trained on Copyrighted Works",
+    "source_name": "TechCrunch",
+    "url": "https://techcrunch.com/2026/07/14/google-faces-another-ai-training-lawsuit-from-major-publishers/",
+    "section": "legal_intelligence",
+    "composite_score": 0.8559,
+    "blurb": "Publishers say Google reused their searchable books to train Gemini—and hid the evidence.",
+    "image_path": "assets/generated/headline_3.png"
+  }
+]

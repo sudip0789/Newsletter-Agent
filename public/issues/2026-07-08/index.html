@@ -1,0 +1,2693 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The AI Upload Weekly Digest</title>
+  <meta name="description" content="A curated read on artificial intelligence: what shipped, what changed, and what it means for the law.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="The AI Upload">
+  <meta property="og:description" content="A curated read on artificial intelligence: what shipped, what changed, and what it means for the law.">
+  <meta property="og:image" content="../../assets/logos/ai-upload-social.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The AI Upload">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The AI Upload">
+  <meta name="twitter:description" content="A curated read on artificial intelligence: what shipped, what changed, and what it means for the law.">
+  <meta name="twitter:image" content="../../assets/logos/ai-upload-social.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script defer src="https://sls-analytics.vercel.app/script.js" data-website-id="fe83ea74-3b5e-491b-9b94-7c5d00a09e2b"></script>
+  <style>
+    :root {
+      --page-bg: #FAF9F8;
+      --page-bg-alt: #FAF9F8;
+      --page-ink: #16120f;
+      --page-muted: #6c6259;
+      --page-subtle: #988d83;
+      --page-line: #E8E5E0;
+      --brand-red: #a11a17;
+      --brand-red-deep: #8e1411;
+      --desktop-canvas-min: 980px;
+      --mobile-canvas-width: 390px;
+      --serif-display: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", "Baskerville", Georgia, serif;
+      --serif-body: "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
+      --sans-ui: "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-alt) 100%);
+      color: var(--page-ink);
+      font-family: var(--serif-body);
+      overflow-x: auto;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    .page-viewport {
+      width: 100%;
+      overflow: visible;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 1300px;
+      min-width: var(--desktop-canvas-min);
+      margin: 0 auto;
+      padding: 30px 36px 68px;
+    }
+
+    .site-header {
+      padding-top: 0;
+    }
+
+    .masthead-top {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .brand-mark {
+      display: block;
+      width: clamp(280px, 34vw, 420px);
+      height: auto;
+    }
+
+    .issue-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .issue-links {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .issue-links-dot {
+      color: var(--page-subtle);
+    }
+
+    .archive-link,
+    .latest-issue-link,
+    .pdf-download-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--page-ink);
+      font-family: var(--sans-ui);
+      font-size: 0.7rem;
+      font-weight: 450;
+      letter-spacing: 0.18em;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .archive-link:hover,
+    .latest-issue-link:hover,
+    .pdf-download-link:hover,
+    .section-nav-link:hover,
+    .article-source a:hover,
+    .article-title a:hover {
+      color: var(--brand-red);
+    }
+
+    .issue-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 18px;
+      font-family: var(--sans-ui);
+      color: var(--page-ink);
+      text-transform: uppercase;
+    }
+
+    .issue-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 32px;
+      padding: 0 13px;
+      border-radius: 4px;
+      background: var(--brand-red);
+      color: #fffdf9;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      white-space: nowrap;
+    }
+
+    .issue-date {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 14px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.28em;
+      line-height: 1.2;
+    }
+
+    .issue-separator {
+      color: var(--page-subtle);
+      letter-spacing: normal;
+    }
+
+    .divider {
+      height: 1px;
+      margin: 44px 0;
+      background: var(--page-line);
+    }
+
+    .masthead-divider {
+      margin-top: 2px;
+      margin-bottom: 0;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.32fr) minmax(300px, 0.72fr);
+      gap: 48px;
+      align-items: start;
+      padding: 48px 0 20px;
+    }
+
+    .hero-title {
+      margin: 0;
+      line-height: 0.9;
+    }
+
+    .hero-title-main {
+      display: block;
+      font-family: var(--serif-display);
+      font-size: clamp(4.2rem, 8vw, 6.6rem);
+      font-weight: 400;
+      letter-spacing: -0.06em;
+    }
+
+    .hero-title-sub {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-top: 22px;
+      color: var(--brand-red);
+      font-family: var(--serif-display);
+      font-size: clamp(1.95rem, 4vw, 3.45rem);
+      font-style: italic;
+      font-weight: 600;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-title-rule {
+      width: clamp(42px, 6vw, 54px);
+      height: 4px;
+      background: var(--brand-red);
+      flex-shrink: 0;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 18px;
+      margin: 0 0 18px;
+      color: var(--brand-red);
+      font-family: var(--sans-ui);
+      font-size: 0.86rem;
+      font-weight: 700;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 42px;
+      height: 3px;
+      background: currentColor;
+      flex-shrink: 0;
+    }
+
+    .hero-summary {
+      margin: 0;
+      color: var(--page-muted);
+      font-family: var(--serif-body);
+      font-size: clamp(1.05rem, 1.3vw, 1.15rem);
+      font-style: italic;
+      line-height: 1.48;
+    }
+
+    .stats-strip {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: center;
+      gap: clamp(6px, 0.8vw, 12px);
+      padding: 2px 0;
+      margin-top: 28px;
+      font-family: var(--sans-ui);
+    }
+
+    .stat {
+      display: flex;
+      align-items: baseline;
+      gap: clamp(4px, 0.6vw, 12px);
+    }
+
+    .stat-value {
+      font-family: "Fraunces", var(--serif-display);
+      font-size: clamp(0.9rem, 1.2vw, 1.15rem);
+      font-weight: 600;
+      font-style: normal;
+      letter-spacing: 0.01em;
+    }
+
+    .stat-label {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--page-subtle);
+      font-size: clamp(0.58rem, 0.75vw, 0.78rem);
+      font-weight: 400;
+      letter-spacing: clamp(0.1em, 0.22em, 0.22em);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .stat-separator {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--brand-red);
+      font-size: clamp(0.55rem, 0.7vw, 0.75rem);
+      line-height: 1;
+    }
+
+    .utility-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 6px;
+    }
+
+    .post-stats-divider {
+      height: 1px;
+      margin: 16px 0 0;
+      background: var(--page-line);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 310px minmax(0, 1fr);
+      gap: 36px;
+      margin-top: 38px;
+      align-items: start;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 24px;
+      margin-top: 28px;
+      max-height: calc(100vh - 48px);
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #E8E5E0;
+      border-radius: 34px;
+      background: #FAF9F8;
+      overflow: hidden;
+      box-shadow: 0 18px 42px rgba(88, 62, 33, 0.08);
+    }
+
+    .sidebar-header {
+      padding: 18px 20px 16px;
+    }
+
+    .sidebar-kicker {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .sidebar-kicker-text {
+      color: var(--brand-red);
+      font-family: "IBM Plex Mono", var(--sans-ui);
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .sidebar-label {
+      margin: 0;
+      font-family: var(--serif-display);
+      font-size: 2.8rem;
+      font-weight: 600;
+      letter-spacing: -0.05em;
+      line-height: 0.96;
+    }
+
+    .sidebar-meta {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 4px 8px;
+      margin-top: 10px;
+      color: var(--page-subtle);
+      font-family: "IBM Plex Mono", var(--sans-ui);
+      font-size: 0.68rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+    }
+
+    .sidebar-meta-strong {
+      color: var(--page-ink);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+    }
+
+    .sidebar-meta-separator {
+      letter-spacing: 0;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid #E8E5E0;
+      overflow-y: auto;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .sidebar-link {
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr) 14px;
+      align-items: center;
+      gap: 10px;
+      min-height: 68px;
+      padding: 14px 20px;
+      border-top: 1px solid #E8E5E0;
+      color: var(--page-ink);
+      text-decoration: none;
+      background: transparent;
+      transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+    }
+
+    .sidebar-link:first-child {
+      border-top: none;
+    }
+
+    .sidebar-link:hover {
+      background: rgba(244, 233, 212, 0.72);
+    }
+
+    .sidebar-link:focus-visible {
+      outline: 2px solid rgba(161, 26, 23, 0.7);
+      outline-offset: -2px;
+      background: rgba(244, 233, 212, 0.82);
+    }
+
+    .sidebar-link:hover .sidebar-link-title,
+    .sidebar-link:focus-visible .sidebar-link-title,
+    .sidebar-link:hover .sidebar-link-arrow,
+    .sidebar-link:focus-visible .sidebar-link-arrow {
+      color: var(--brand-red);
+    }
+
+    .sidebar-link-number {
+      color: var(--brand-red);
+      font-family: var(--serif-display);
+      font-size: 1.75rem;
+      font-style: italic;
+      letter-spacing: -0.06em;
+      line-height: 0.85;
+    }
+
+    .sidebar-link-body {
+      min-width: 0;
+    }
+
+    .sidebar-link-title {
+      display: block;
+      font-family: var(--serif-display);
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      transition: color 0.18s ease;
+    }
+
+    .sidebar-link-count {
+      display: block;
+      margin-top: 5px;
+      color: var(--page-subtle);
+      font-family: "IBM Plex Mono", var(--sans-ui);
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .sidebar-link-arrow {
+      color: var(--page-subtle);
+      font-family: var(--sans-ui);
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.18s ease;
+    }
+
+    .content {
+      min-width: 0;
+    }
+
+    .mobile-issue-nav {
+      display: none;
+    }
+
+    .mobile-issue-nav-card {
+      border: 1px solid #E8E5E0;
+      border-radius: 34px;
+      background: #FAF9F8;
+      padding: 26px 22px 28px;
+      box-shadow: 0 18px 42px rgba(88, 62, 33, 0.08);
+    }
+
+    .mobile-issue-nav-header {
+      padding: 0;
+    }
+
+    .mobile-issue-nav-kicker {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .mobile-issue-nav-kicker-text {
+      color: var(--brand-red);
+      font-family: "IBM Plex Mono", var(--sans-ui);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+    }
+
+    .mobile-issue-nav-meta {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 4px 8px;
+      margin-top: 12px;
+      color: var(--page-subtle);
+      font-family: "IBM Plex Mono", var(--sans-ui);
+      font-size: 0.68rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+    }
+
+    .mobile-issue-nav-meta-strong {
+      color: var(--page-ink);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+    }
+
+    .mobile-issue-nav-meta-separator {
+      letter-spacing: 0;
+    }
+
+    .mobile-issue-nav-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 26px;
+    }
+
+    .mobile-issue-nav-link {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      min-height: 105px;
+      padding: 11px 10px 10px;
+      border: 1px solid #E8E5E0;
+      border-radius: 18px;
+      color: var(--page-ink);
+      text-decoration: none;
+      background: #F2F0EC;
+      transition: transform 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .mobile-issue-nav-link:hover {
+      color: var(--brand-red);
+      border-color: rgba(161, 26, 23, 0.24);
+      box-shadow: 0 10px 24px rgba(88, 62, 33, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .mobile-issue-nav-link:focus-visible {
+      outline: 2px solid rgba(161, 26, 23, 0.7);
+      outline-offset: 2px;
+      color: var(--brand-red);
+      border-color: rgba(161, 26, 23, 0.24);
+    }
+
+    .mobile-issue-nav-index {
+      color: var(--brand-red);
+      font-family: var(--serif-display);
+      font-size: 1.35rem;
+      font-style: italic;
+      letter-spacing: -0.07em;
+      line-height: 0.84;
+    }
+
+    .mobile-issue-nav-label {
+      color: var(--page-ink);
+      font-family: var(--sans-ui);
+      font-size: 0.67rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      line-height: 1.22;
+    }
+
+    .content-section {
+      padding: 28px 0 10px;
+      border-top: none;
+    }
+
+    .section-heading {
+      margin-bottom: 18px;
+    }
+
+    .section-title {
+      margin: 0;
+      font-family: var(--serif-display);
+      font-size: clamp(2.0rem, 3.8vw, 3.4rem);
+      font-weight: 400;
+      letter-spacing: -0.04em;
+      line-height: 0.96;
+    }
+
+    .section-dek {
+      max-width: 700px;
+      margin: 12px 0 0;
+      color: var(--page-muted);
+      font-family: var(--serif-body);
+      font-size: 1.35rem;
+      font-style: italic;
+      line-height: 1.38;
+    }
+
+    .headline-list {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .headline-section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 16px;
+      color: var(--brand-red-deep);
+      font-family: var(--sans-ui);
+      font-size: clamp(1.82rem, 1.0vw, 1.2rem);
+      font-weight: 700;
+      letter-spacing: 0.23em;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+
+    .headline-section-title::before {
+      content: "";
+      width: clamp(24px, 3vw, 34px);
+      height: 3px;
+      background: var(--brand-red);
+      flex-shrink: 0;
+    }
+
+    .article {
+      border-top: 1px solid #E8E5E0;
+    }
+
+    .headline-card {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+      gap: 34px;
+      padding: 18px 24px;
+      color: inherit;
+      text-decoration: none;
+      align-items: start;
+      border: 1px solid #E8E5E0;
+      border-radius: 18px;
+      background: #F6F4F1;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+
+    .headline-card:first-child,
+    .article:first-child {
+      margin-top: 0;
+    }
+
+    .headline-card:hover {
+      border-color: rgba(161, 26, 23, 0.35);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 28px rgba(124, 103, 82, 0.16);
+    }
+
+    .headline-card:hover .headline-copy h3 {
+      color: var(--brand-red-deep);
+    }
+
+    .headline-copy h3,
+    .article-title {
+      margin: 0;
+      font-family: var(--serif-display);
+      font-weight: 400;
+      letter-spacing: -0.03em;
+    }
+
+    .headline-copy h3 {
+      font-size: clamp(1.35rem, 1.9vw, 1.75rem);
+      line-height: 1.28;
+    }
+
+    .headline-meta,
+    .article-source {
+      margin: 14px 0 10px;
+      color: var(--brand-red);
+      font-family: var(--sans-ui);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .headline-copy p:last-child {
+      margin-bottom: 0;
+    }
+
+    .headline-card img {
+      width: 170px;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 14px;
+      border: none;
+      background: linear-gradient(135deg, #dce6fb 0%, #f7d9d9 100%);
+    }
+
+    .headline-blurb,
+    .article-summary p {
+      margin: 0 0 12px;
+      color: var(--page-muted);
+      font-size: 1rem;
+      line-height: 1.62;
+    }
+
+    .article-list {
+      margin-top: 12px;
+    }
+
+    .article {
+      display: block;
+      padding: 26px 0;
+    }
+
+    .article-title {
+      font-size: clamp(1.35rem, 1.9vw, 1.75rem);
+      line-height: 1.18;
+      margin-bottom: 12px;
+    }
+
+    .article-title a {
+      text-decoration: none;
+    }
+
+    .article-source {
+      margin: 0 0 14px !important;
+      font-family: var(--sans-ui) !important;
+      font-size: 1.06rem !important;
+      font-weight: 400 !important;
+      letter-spacing: 0.02em !important;
+      text-transform: none !important;
+      color: var(--page-muted) !important;
+    }
+
+    .article-source a {
+      color: var(--brand-red);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .article-source a:hover {
+      text-decoration: underline;
+    }
+
+    .article-summary p:last-child {
+      margin-bottom: 0;
+    }
+
+    #listen-watch {
+      padding-top: 52px;
+    }
+
+    .media-embed-grid {
+      display: grid;
+      grid-template-columns: 1.7fr 0.65fr;
+      gap: 64px;
+      margin-top: 16px;
+      align-items: stretch;
+    }
+
+    .media-card {
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+      min-height: 340px;
+    }
+
+    .media-card-cover {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .media-card-iframe {
+      display: none;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 14px;
+    }
+
+    /* Video card */
+    .media-card--video .media-card-cover {
+      background: #F2F0EC;
+      padding: 24px 26px 22px 32px;
+    }
+
+    .media-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+
+    .media-card-brand {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 1.08rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--brand-red);
+    }
+
+    .media-card-type {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: rgba(22, 18, 15, 0.35);
+      text-align: right;
+      line-height: 1.7;
+    }
+
+    .media-card-dateline {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      color: var(--page-muted);
+      margin-bottom: 14px;
+    }
+
+    .media-card-title-row {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .media-card-title-inner {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .media-card-title {
+      font-family: var(--serif-display);
+      font-size: clamp(1.75rem, 2.1vw, 2.0rem);
+      font-weight: 400;
+      color: var(--page-ink);
+      line-height: 1.28;
+      letter-spacing: -0.02em;
+    }
+
+    .media-card-title em {
+      color: var(--brand-red);
+      font-style: italic;
+    }
+
+    .media-card-subtitle {
+      display: block;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.66rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--page-muted);
+      margin-top: 10px;
+    }
+
+    .media-play-btn {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--brand-red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.15s;
+    }
+
+    .media-play-btn:hover { background: var(--brand-red-deep); }
+
+    /* Podcast card */
+    .media-card--podcast .media-card-cover {
+      background: #F2F0EC;
+      border: none;
+      border-radius: 14px;
+      padding: 18px 18px 18px 24px;
+    }
+
+    .podcast-inner-card {
+      background: var(--brand-red-deep);
+      border-radius: 10px;
+      padding: 14px 16px 16px;
+      margin-bottom: 14px;
+      flex-shrink: 0;
+      aspect-ratio: 4 / 3;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .podcast-inner-brand {
+      display: block;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255, 248, 240, 0.82);
+      margin-bottom: 10px;
+    }
+
+    .podcast-inner-title {
+      font-family: var(--serif-display);
+      font-size: clamp(1.5rem, 2vw, 1.8rem);
+      font-weight: 600;
+      font-style: italic;
+      color: #fff8f0;
+      line-height: 0.96;
+      letter-spacing: -0.03em;
+      flex: 1;
+    }
+
+    .podcast-inner-ep {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255, 248, 240, 0.6);
+    }
+
+    .podcast-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .podcast-ep-label {
+      display: block;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--brand-red);
+      margin-bottom: 6px;
+    }
+
+    .podcast-show-title {
+      font-family: var(--serif-display);
+      font-size: clamp(1.4rem, 2vw, 1.7rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.18;
+      color: var(--page-ink);
+      flex: 1;
+    }
+
+    .podcast-show-title em {
+      color: var(--brand-red);
+      font-style: italic;
+    }
+
+    .podcast-player-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .podcast-play-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--brand-red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .podcast-progress {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .podcast-seek {
+      --seek-progress: 0%;
+      flex: 1;
+      min-width: 0;
+      height: 18px;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .podcast-seek:focus-visible {
+      outline: none;
+    }
+
+    .podcast-seek::-webkit-slider-runnable-track {
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(
+        to right,
+        var(--brand-red) 0%,
+        var(--brand-red) var(--seek-progress),
+        rgba(124, 103, 82, 0.24) var(--seek-progress),
+        rgba(124, 103, 82, 0.24) 100%
+      );
+    }
+
+    .podcast-seek::-webkit-slider-thumb {
+      appearance: none;
+      width: 12px;
+      height: 12px;
+      margin-top: -4.5px;
+      border: 2px solid #fffdf9;
+      border-radius: 50%;
+      background: var(--brand-red);
+      box-shadow: 0 0 0 1px rgba(124, 103, 82, 0.18);
+    }
+
+    .podcast-seek::-moz-range-track {
+      height: 3px;
+      border: none;
+      border-radius: 999px;
+      background: rgba(124, 103, 82, 0.24);
+    }
+
+    .podcast-seek::-moz-range-progress {
+      height: 3px;
+      border-radius: 999px;
+      background: var(--brand-red);
+    }
+
+    .podcast-seek::-moz-range-thumb {
+      width: 12px;
+      height: 12px;
+      border: 2px solid #fffdf9;
+      border-radius: 50%;
+      background: var(--brand-red);
+      box-shadow: 0 0 0 1px rgba(124, 103, 82, 0.18);
+    }
+
+    .podcast-seek:focus-visible::-webkit-slider-thumb,
+    .podcast-seek:focus-visible::-moz-range-thumb {
+      box-shadow: 0 0 0 3px rgba(161, 26, 23, 0.18);
+    }
+
+    .podcast-timecode,
+    .podcast-duration {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.68rem;
+      color: var(--page-muted);
+      flex-shrink: 0;
+    }
+
+    @media screen and (min-width: 1101px) {
+      .podcast-details {
+        justify-content: flex-end;
+        padding-top: 12px;
+        padding-bottom: 6px;
+      }
+
+      .podcast-ep-label {
+        margin-bottom: 14px;
+      }
+
+      .podcast-show-title {
+        flex: 0;
+      }
+
+      .podcast-player-row {
+        margin-top: 6px;
+      }
+    }
+
+    .newsletter-disclaimer {
+      display: grid;
+      grid-template-columns: 18px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      margin-top: 40px;
+      padding-top: 22px;
+      border-top: 1px solid var(--page-line);
+      color: var(--page-subtle);
+      font-family: var(--sans-ui);
+      font-size: 0.82rem;
+      line-height: 1.6;
+    }
+
+    .newsletter-disclaimer svg {
+      margin-top: 2px;
+    }
+
+    @page {
+      size: Letter;
+      margin: 0.55in;
+    }
+
+    @media print {
+      html,
+      body {
+        background: #ffffff;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      body {
+        overflow: visible;
+      }
+
+      .issue-links {
+        display: none;
+      }
+
+      .page {
+        max-width: none;
+        min-width: 0;
+        padding: 0;
+      }
+
+      .page-viewport {
+        overflow: visible;
+      }
+
+      .masthead-top,
+      .hero,
+      .layout,
+      .media-embed-grid,
+      .newsletter-disclaimer {
+        grid-template-columns: 1fr;
+      }
+
+      .masthead-top,
+      .hero,
+      .layout {
+        gap: 24px;
+      }
+
+      .issue-panel,
+      .issue-links {
+        align-items: flex-start;
+      }
+
+      .issue-row,
+      .issue-date {
+        justify-content: flex-start;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .mobile-issue-nav {
+        display: none;
+      }
+
+      /* Audio/video can't play from a PDF — drop the Listen & Watch section. */
+      #listen-watch,
+      .media-embed-grid {
+        display: none !important;
+      }
+
+      /* The hero already has a red em-dash rule above "Weekly Digest";
+         drop the repetitive "This Week's Briefing" eyebrow in print. */
+      .hero .eyebrow {
+        display: none;
+      }
+
+      /* Drop the Stanford logo and the divider under the date in the PDF. */
+      .brand-mark,
+      .masthead-divider {
+        display: none;
+      }
+
+      /* Smaller issue pill + date for the print masthead. */
+      .issue-pill {
+        min-height: 26px;
+        padding: 0 10px;
+        font-size: 0.62rem;
+        letter-spacing: 0.14em;
+      }
+
+      .issue-date {
+        gap: 10px;
+        font-size: 0.66rem;
+        letter-spacing: 0.2em;
+      }
+
+      /* More breathing room between the title block and the summary line. */
+      .hero-summary {
+        margin-top: 28px;
+      }
+
+      .headline-card {
+        grid-template-columns: 180px minmax(0, 1fr);
+        gap: 20px;
+        padding: 20px;
+      }
+
+      .headline-card img {
+        width: 180px;
+        height: 180px;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+      }
+
+      .media-card--podcast .media-card-cover {
+        flex-direction: row;
+        align-items: stretch;
+      }
+
+      /* Keep small blocks intact, but let long articles flow across pages
+         instead of jumping whole and leaving big gaps. */
+      .headline-card,
+      .media-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      /* Don't strand a section heading alone at the bottom of a page. */
+      .section-heading,
+      .section-title {
+        break-after: avoid;
+        page-break-after: avoid;
+      }
+    }
+
+    @media screen and (max-width: 1100px) {
+      .page {
+        padding-inline: 28px;
+      }
+
+      .layout {
+        grid-template-columns: 286px minmax(0, 1fr);
+        gap: 28px;
+      }
+
+      .sidebar-header {
+        padding-inline: 24px;
+      }
+
+      .sidebar-link {
+        padding-inline: 18px;
+      }
+
+      .sidebar-label {
+        font-size: 2rem;
+      }
+
+      .sidebar-link-title {
+        font-size: 0.95rem;
+      }
+    }
+
+    @media screen and (max-width: 760px) {
+      .page {
+        width: var(--mobile-canvas-width);
+        max-width: none;
+        min-width: var(--mobile-canvas-width);
+        margin: 0 auto;
+        padding: 24px 18px 48px;
+      }
+
+      .masthead-top {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .masthead-top > div:first-child {
+        border-bottom: 1px solid var(--page-line);
+        padding-bottom: 10px;
+      }
+
+      .issue-panel {
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 10px;
+        padding: 10px 0;
+        border-top: none;
+      }
+
+      .issue-links {
+        display: none;
+      }
+
+      .issue-row {
+        align-items: center;
+        justify-content: flex-start;
+        gap: 10px;
+        flex-wrap: nowrap;
+      }
+
+      .issue-date {
+        align-items: center;
+        justify-content: flex-start;
+        gap: 5px;
+        font-size: 0.58rem;
+        letter-spacing: 0.06em;
+        flex-wrap: nowrap;
+      }
+
+      .masthead-divider {
+        display: none;
+      }
+
+      .issue-pill {
+        min-height: 24px;
+        padding: 0 7px;
+        font-size: 0.56rem;
+        letter-spacing: 0.1em;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding-top: 14px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--page-line);
+      }
+
+      .brand-mark {
+        width: 210px;
+        max-width: 100%;
+      }
+
+      .hero-title-main {
+        font-size: 3.2rem;
+        white-space: nowrap;
+      }
+
+      .hero-title-sub {
+        gap: 10px;
+        font-size: 1.45rem;
+        margin-top: 12px;
+      }
+
+      .hero .eyebrow {
+        display: none;
+      }
+
+      .hero-summary {
+        display: none;
+      }
+
+      .stats-strip {
+        justify-content: flex-start;
+        gap: 8px 10px;
+      }
+
+      .stat {
+        gap: 8px;
+      }
+
+      .stat-value {
+        font-size: 1.02rem;
+      }
+
+      .stat-label {
+        font-size: 0.72rem;
+        letter-spacing: 0.18em;
+      }
+
+      .stat-separator {
+        display: none;
+      }
+
+      .post-stats-divider {
+        display: none;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+        gap: 45px;
+        margin-top: 16px;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .mobile-issue-nav {
+        display: block;
+      }
+
+      .mobile-issue-nav-card {
+        padding: 24px 18px 24px;
+      }
+
+      .mobile-issue-nav-grid {
+        gap: 12px;
+      }
+
+      .section-title {
+        max-width: none;
+        font-size: 2.4rem;
+      }
+
+      .section-dek {
+        font-size: 1.02rem;
+      }
+
+      .content-section {
+        padding: 24px 0 8px;
+      }
+
+      .collapsible-section .section-heading {
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .collapsible-section .eyebrow {
+        position: relative;
+      }
+
+      .collapsible-section .eyebrow::before {
+        transition: width 0.18s ease;
+      }
+
+      .collapsible-section.collapsed .eyebrow::before {
+        width: 14px;
+      }
+
+      .collapsible-section.collapsed .eyebrow::after {
+        content: "";
+        position: absolute;
+        left: 5.5px;
+        top: 50%;
+        width: 3px;
+        height: 14px;
+        transform: translateY(-50%);
+        background: var(--brand-red);
+      }
+
+      .collapsible-section.collapsed .article-list {
+        display: none;
+      }
+
+      .headline-section-title {
+        font-size: 0.9rem;
+        letter-spacing: 0.16em;
+        margin-bottom: 12px;
+        gap: 10px;
+      }
+
+      .headline-section-title::before {
+        width: 18px;
+      }
+
+      .headline-card {
+        grid-template-columns: 110px minmax(0, 1fr);
+        gap: 14px;
+        padding: 16px;
+      }
+
+      .headline-card img {
+        width: 110px;
+        height: 110px;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        order: 0;
+      }
+
+      .headline-copy h3,
+      .article-title {
+        font-size: 1.2rem;
+        line-height: 1.2;
+      }
+
+      .headline-meta {
+        font-size: 0.64rem;
+        letter-spacing: 0.12em;
+        margin: 10px 0 8px;
+      }
+
+      .headline-blurb,
+      .article-summary p {
+        font-size: 0.84rem;
+        line-height: 1.50;
+      }
+
+      .media-embed-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .media-card {
+        min-height: 300px;
+      }
+
+      .media-card--podcast {
+        min-height: 140px;
+      }
+
+      .media-card--podcast .media-card-cover {
+        flex-direction: row;
+        align-items: stretch;
+        gap: 12px;
+        padding: 12px;
+      }
+
+      .podcast-inner-card {
+        width: 100px;
+        flex-shrink: 0;
+        aspect-ratio: 1 / 1;
+        margin-bottom: 0;
+      }
+
+      .podcast-inner-title {
+        font-size: 1.1rem;
+      }
+
+      .podcast-inner-ep {
+        display: none;
+      }
+
+      .podcast-details {
+        justify-content: center;
+      }
+
+      .podcast-show-title {
+        font-size: 1.2rem;
+      }
+
+      .mobile-issue-nav-link {
+        min-height: 118px;
+        gap: 10px;
+        padding: 13px 12px 20px;
+      }
+
+      .mobile-issue-nav-index {
+        font-size: 1.65rem;
+      }
+
+      .mobile-issue-nav-label {
+        font-size: 0.76rem;
+      }
+
+      .media-card--video .media-card-cover,
+      .media-card--podcast .media-card-cover {
+        padding: 18px;
+      }
+
+      .media-card-title {
+        font-size: 1.68rem;
+      }
+
+      .podcast-inner-title {
+        font-size: 1.48rem;
+      }
+
+      .podcast-show-title {
+        font-size: 1.2rem;
+      }
+
+      .newsletter-disclaimer {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+    }
+  </style>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script>
+    if (new URLSearchParams(window.location.search).get('embed') === '1') {
+      document.documentElement.classList.add('embed-mode');
+      // Keep embed mode across internal navigation (Past Issues, Latest Issue, etc.)
+      // by appending embed=1 to relative links. External (http/https) links and
+      // in-page anchors are left untouched.
+      document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('a[href]').forEach(function (a) {
+          var href = a.getAttribute('href');
+          if (!href || href.charAt(0) === '#' || /^[a-z][a-z0-9+.-]*:/i.test(href)) return;
+          var url = new URL(href, window.location.href);
+          url.searchParams.set('embed', '1');
+          a.setAttribute('href', url.pathname + url.search + url.hash);
+        });
+      });
+    }
+  </script>
+  <style>
+    /* Embed mode (?embed=1): compact layout for the Google Sites iframe —
+       hides the full masthead/logo and shows a slim issue/date bar instead. */
+    .embed-issue-meta { display: none; }
+    .embed-issue-links { display: none; }
+    .embed-mode .masthead-top,
+    .embed-mode .masthead-divider { display: none; }
+    .embed-mode .hero { padding-top: 16px; align-items: stretch; }
+    .embed-mode .hero > div:last-child { display: flex; flex-direction: column; }
+    .embed-mode .embed-issue-links { display: flex; gap: 18px; align-items: center; margin-bottom: 14px; }
+    .embed-mode .embed-issue-meta { display: flex; align-items: center; justify-content: flex-start; gap: 20px; margin-top: 46px; flex-wrap: nowrap; }
+    .embed-mode .embed-issue-meta .issue-date { flex-wrap: nowrap; gap: 10px; font-size: 0.9rem; font-weight: 600; color: var(--page-ink); }
+    .embed-mode .embed-issue-meta .issue-pill { font-size: 0.78rem; min-height: 32px; padding: 0 14px; }
+    .embed-mode .embed-issue-links { gap: 12px; justify-content: flex-end; }
+    .embed-mode .embed-issue-links .pdf-download-link,
+    .embed-mode .embed-issue-links .archive-link,
+    .embed-mode .embed-issue-links .latest-issue-link,
+    .embed-mode .embed-issue-links .issue-links-dot {
+      font-family: var(--serif-body);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.28em;
+    }
+    .embed-mode .hero .eyebrow { margin-top: 46px; font-size: clamp(0.8rem, 1.2vw, 1rem); }
+    .embed-mode .hero-summary { font-size: clamp(1rem, 1.55vw, 1.2rem); }
+    .embed-mode .stats-strip { margin-top: auto; }
+    @media screen and (max-width: 760px) {
+      .embed-mode .embed-issue-meta { margin-top: 28px; justify-content: flex-start; }
+      .embed-mode .embed-issue-meta .issue-date { font-size: 0.7rem; white-space: nowrap; }
+      .embed-mode .embed-issue-meta .issue-pill { font-size: 0.62rem; min-height: 26px; padding: 0 10px; }
+      .embed-mode .embed-issue-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-viewport">
+  <div class="page">
+    <header class="site-header">
+      <div class="masthead-top">
+        <div>
+          <img class="brand-mark" src="../../assets/logos/RBG_RCLL_vrt.png" alt="Stanford Law School Robert Crown Law Library">
+        </div>
+        <div class="issue-panel" aria-label="Issue details">
+          
+          <div class="issue-links">
+            
+            
+            
+            
+            
+            <a class="latest-issue-link" href="../../">
+              Latest Issue
+              <span aria-hidden="true">↗</span>
+            </a>
+            
+          </div>
+          
+          <div class="issue-row">
+            <span class="issue-pill">ISSUE 07</span>
+            <div class="issue-date">
+              <span>WEDNESDAY</span>
+              
+              <span class="issue-separator" aria-hidden="true">·</span>
+              <span>JUL 08</span>
+              
+              
+              <span class="issue-separator" aria-hidden="true">·</span>
+              <span>2026</span>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider masthead-divider" aria-hidden="true"></div>
+
+      <div class="hero">
+        <div>
+          <h1 class="hero-title">
+            <span class="hero-title-main">The AI Upload</span>
+            <span class="hero-title-sub">
+              <span class="hero-title-rule" aria-hidden="true"></span>
+              <span>Weekly Digest</span>
+            </span>
+          </h1>
+          <div class="embed-issue-meta">
+            <span class="issue-pill">ISSUE 07</span>
+            <div class="issue-date">
+              <span>WEDNESDAY</span>
+              <span class="issue-separator" aria-hidden="true">·</span><span>JUL 08</span>
+              <span class="issue-separator" aria-hidden="true">·</span><span>2026</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          
+          <div class="embed-issue-links">
+            
+            
+            
+            
+            
+            <a class="latest-issue-link" href="../../">
+              Latest Issue
+              <span aria-hidden="true">↗</span>
+            </a>
+            
+          </div>
+          
+          <p class="eyebrow">This Week&#39;s Briefing</p>
+          <p class="hero-summary">A curated read on artificial intelligence: what shipped, what changed, and what it means for the law.</p>
+          <div class="stats-strip" aria-label="Issue stats">
+            <div class="stat">
+              <span class="stat-value">09</span>
+              <span class="stat-label">Sections</span>
+            </div>
+            <span class="stat-separator" aria-hidden="true">✦</span>
+            <div class="stat">
+              <span class="stat-value">23</span>
+              <span class="stat-label">Stories</span>
+            </div>
+            <span class="stat-separator" aria-hidden="true">✦</span>
+            <div class="stat">
+              <span class="stat-value">14 Min</span>
+              <span class="stat-label">Read</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="post-stats-divider" aria-hidden="true"></div>
+
+    <div class="layout">
+      <aside class="sidebar" aria-label="Issue sections">
+        <div class="sidebar-header">
+          <div class="sidebar-kicker">
+            <span class="sidebar-kicker-text">— In This Issue</span>
+          </div>
+          <div class="sidebar-meta" aria-label="Issue section totals">
+            <span class="sidebar-meta-strong">09</span>
+            <span>Sections</span>
+            <span class="sidebar-meta-separator" aria-hidden="true">·</span>
+            <span class="sidebar-meta-strong">23</span>
+            <span>Stories</span>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          
+          <a class="sidebar-link" href="#enterprise_ai">
+            <span class="sidebar-link-number">01</span>
+            <span class="sidebar-link-body">
+              <span class="sidebar-link-title">Enterprise AI</span>
+              
+              <span class="sidebar-link-count">3 Stories</span>
+              
+            </span>
+            <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          
+          <a class="sidebar-link" href="#legal_intelligence">
+            <span class="sidebar-link-number">02</span>
+            <span class="sidebar-link-body">
+              <span class="sidebar-link-title">Legal Intelligence</span>
+              
+              <span class="sidebar-link-count">4 Stories</span>
+              
+            </span>
+            <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          
+          <a class="sidebar-link" href="#ai_products">
+            <span class="sidebar-link-number">03</span>
+            <span class="sidebar-link-body">
+              <span class="sidebar-link-title">AI Products</span>
+              
+              <span class="sidebar-link-count">1 Story</span>
+              
+            </span>
+            <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          
+          <a class="sidebar-link" href="#security">
+            <span class="sidebar-link-number">04</span>
+            <span class="sidebar-link-body">
+              <span class="sidebar-link-title">Security</span>
+              
+              <span class="sidebar-link-count">2 Stories</span>
+              
+            </span>
+            <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          
+          <a class="sidebar-link" href="#policy">
+            <span class="sidebar-link-number">05</span>
+            <span class="sidebar-link-body">
+              <span class="sidebar-link-title">Policy</span>
+              
+              <span class="sidebar-link-count">3 Stories</span>
+              
+            </span>
+            <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          
+          <a class="sidebar-link" href="#responsible_ai">
+            <span class="sidebar-link-number">06</span>
+            <span class="sidebar-link-body">
+              <span class="sidebar-link-title">Responsible AI</span>
+              
+              <span class="sidebar-link-count">3 Stories</span>
+              
+            </span>
+            <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          
+          <a class="sidebar-link" href="#ai_sustainability">
+            <span class="sidebar-link-number">07</span>
+            <span class="sidebar-link-body">
+              <span class="sidebar-link-title">AI Sustainability</span>
+              
+              <span class="sidebar-link-count">2 Stories</span>
+              
+            </span>
+            <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          
+          <a class="sidebar-link" href="#higher_education">
+            <span class="sidebar-link-number">08</span>
+            <span class="sidebar-link-body">
+              <span class="sidebar-link-title">Higher Education</span>
+              
+              <span class="sidebar-link-count">1 Story</span>
+              
+            </span>
+            <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          
+          <a class="sidebar-link" href="#research">
+            <span class="sidebar-link-number">09</span>
+            <span class="sidebar-link-body">
+              <span class="sidebar-link-title">Research</span>
+              
+              <span class="sidebar-link-count">1 Story</span>
+              
+            </span>
+            <span class="sidebar-link-arrow" aria-hidden="true">↗</span>
+          </a>
+          
+        </nav>
+      </aside>
+
+      <main class="content">
+        <section class="content-section" id="headlines">
+          <h2 class="headline-section-title">This Week&#39;s Headlines</h2>
+          <div class="headline-list">
+            
+            <a class="headline-card" href="https://nysba.org/beyond-the-mirage-beware-of-generative-ai-and-hallucinations/" target="_blank" rel="noreferrer">
+              <img src="assets/generated/headline_1.png" alt="New York Courts Sanction Attorneys Over AI-Fabricated Citations in Filings">
+              <div class="headline-copy">
+                <h3>New York Courts Sanction Attorneys Over AI-Fabricated Citations in Filings</h3>
+                <p class="headline-meta">Nysba.org</p>
+                <p class="headline-blurb">Fake citations from ChatGPT cost New York lawyers thousands in fines and default judgments. What courts now demand.</p>
+              </div>
+            </a>
+            
+            <a class="headline-card" href="https://www.wired.com/story/meta-now-lets-anyone-use-your-instagram-photos-in-ai-images-unless-you-opt-out/" target="_blank" rel="noreferrer">
+              <img src="assets/generated/headline_2.png" alt="Meta Opts Instagram Users Into AI Image Generation From Public Photos by Default">
+              <div class="headline-copy">
+                <h3>Meta Opts Instagram Users Into AI Image Generation From Public Photos by Default</h3>
+                <p class="headline-meta">WIRED</p>
+                <p class="headline-blurb">Your public Instagram photos can now be turned into AI images—no notice, no consent required. Here&#39;s how to opt out.</p>
+              </div>
+            </a>
+            
+            <a class="headline-card" href="https://siliconangle.com/2026/07/06/token-economy-state-ai-mid-2026/" target="_blank" rel="noreferrer">
+              <img src="assets/generated/headline_3.png" alt="Cost Per Token Emerges as AI&#39;s Defining Battle in Mid-2026">
+              <div class="headline-copy">
+                <h3>Cost Per Token Emerges as AI&#39;s Defining Battle in Mid-2026</h3>
+                <p class="headline-meta">SiliconANGLE News</p>
+                <p class="headline-blurb">Why one agent action fires hundreds of model calls—and who&#39;s racing to make each one cheaper.</p>
+              </div>
+            </a>
+            
+          </div>
+        </section>
+        
+
+        
+        <section class="content-section" id="listen-watch">
+          <div class="section-heading">
+            <p class="eyebrow">Listen &amp; Watch</p>
+          </div>
+          <div class="media-embed-grid">
+            
+            <div class="media-card media-card--video">
+              <div class="media-card-cover" onclick="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                <div class="media-card-header">
+                  <span class="media-card-brand">The AI Upload</span>
+                  <span class="media-card-type">VIDEO<br>BRIEFING</span>
+                </div>
+                <div class="media-card-dateline">ISSUE 07 · JUL 08 · 2026</div>
+                <div class="media-card-title-row">
+                  <div class="media-card-title-inner">
+                    <div class="media-card-title">This week in <em>AI &amp; Law</em></div>
+                    <div class="media-play-btn" aria-hidden="true">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="6,3 20,12 6,21"/></svg>
+                    </div>
+                  </div>
+                  <span class="media-card-subtitle">— video edition</span>
+                </div>
+              </div>
+              <iframe class="media-card-iframe" src="https://drive.google.com/file/d/1BM0_nZ8WmJ8Dmj1DlpjtfwPcsWL-1P-E/preview" allow="autoplay" allowfullscreen></iframe>
+            </div>
+            
+            
+            <div class="media-card media-card--podcast">
+              <div class="media-card-cover">
+                <div class="podcast-inner-card">
+                  <span class="podcast-inner-brand">The AI Upload</span>
+                  <div class="podcast-inner-title">Podcast<br>Edition</div>
+                  <span class="podcast-inner-ep">EPISODE 07</span>
+                </div>
+                <div class="podcast-details">
+                  <span class="podcast-ep-label">EPISODE 07</span>
+                  <div class="podcast-show-title">This week in <em>AI &amp; Law</em></div>
+                  <div class="podcast-player-row">
+                    <div class="podcast-play-btn" id="podcast-play-btn" onclick="togglePodcast()" role="button" aria-label="Play podcast">
+                      <svg id="podcast-icon-play" width="12" height="12" viewBox="0 0 24 24" fill="white"><polygon points="6,3 20,12 6,21"/></svg>
+                      <svg id="podcast-icon-pause" width="12" height="12" viewBox="0 0 24 24" fill="white" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                    </div>
+                    <div class="podcast-progress">
+                      <span class="podcast-timecode" id="podcast-timecode">00:00</span>
+                      <input class="podcast-seek" id="podcast-seek" type="range" min="0" max="0" value="0" step="0.1" aria-label="Seek podcast position">
+                      <span class="podcast-duration" id="podcast-duration">00:00</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <audio id="podcast-audio" preload="none">
+                <source src="assets/media/podcast-2026-07-08.mp3">
+              </audio>
+              
+            </div>
+            
+          </div>
+        </section>
+        
+        
+<section class="content-section mobile-issue-nav" aria-label="Issue sections for mobile">
+  <div class="mobile-issue-nav-card">
+    <div class="mobile-issue-nav-header">
+      <div class="mobile-issue-nav-kicker">
+        <span class="mobile-issue-nav-kicker-text">— In This Issue</span>
+      </div>
+      <div class="mobile-issue-nav-meta" aria-label="Issue section totals">
+        <span class="mobile-issue-nav-meta-strong">09</span>
+        <span class="mobile-issue-nav-meta-label">Sections</span>
+        <span class="mobile-issue-nav-meta-separator" aria-hidden="true">·</span>
+        <span class="mobile-issue-nav-meta-strong">23</span>
+        <span class="mobile-issue-nav-meta-label">Stories</span>
+      </div>
+    </div>
+    <nav class="mobile-issue-nav-grid">
+      
+      <a class="mobile-issue-nav-link" href="#enterprise_ai">
+        <span class="mobile-issue-nav-index">01</span>
+        <span class="mobile-issue-nav-label">Enterprise AI</span>
+      </a>
+      
+      <a class="mobile-issue-nav-link" href="#legal_intelligence">
+        <span class="mobile-issue-nav-index">02</span>
+        <span class="mobile-issue-nav-label">Legal Intelligence</span>
+      </a>
+      
+      <a class="mobile-issue-nav-link" href="#ai_products">
+        <span class="mobile-issue-nav-index">03</span>
+        <span class="mobile-issue-nav-label">AI Products</span>
+      </a>
+      
+      <a class="mobile-issue-nav-link" href="#security">
+        <span class="mobile-issue-nav-index">04</span>
+        <span class="mobile-issue-nav-label">Security</span>
+      </a>
+      
+      <a class="mobile-issue-nav-link" href="#policy">
+        <span class="mobile-issue-nav-index">05</span>
+        <span class="mobile-issue-nav-label">Policy</span>
+      </a>
+      
+      <a class="mobile-issue-nav-link" href="#responsible_ai">
+        <span class="mobile-issue-nav-index">06</span>
+        <span class="mobile-issue-nav-label">Responsible AI</span>
+      </a>
+      
+      <a class="mobile-issue-nav-link" href="#ai_sustainability">
+        <span class="mobile-issue-nav-index">07</span>
+        <span class="mobile-issue-nav-label">AI Sustainability</span>
+      </a>
+      
+      <a class="mobile-issue-nav-link" href="#higher_education">
+        <span class="mobile-issue-nav-index">08</span>
+        <span class="mobile-issue-nav-label">Higher Education</span>
+      </a>
+      
+      <a class="mobile-issue-nav-link" href="#research">
+        <span class="mobile-issue-nav-index">09</span>
+        <span class="mobile-issue-nav-label">Research</span>
+      </a>
+      
+    </nav>
+  </div>
+</section>
+
+        
+        
+
+        
+        <section class="content-section collapsible-section" id="enterprise_ai">
+          <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="enterprise_ai-articles">
+            <p class="eyebrow">Section 01</p>
+            <h2 class="section-title">Enterprise AI</h2>
+          </div>
+          <div class="article-list" id="enterprise_ai-articles">
+            
+            <article class="article">
+              <h3 class="article-title">
+                
+                <a href="https://arstechnica.com/ai/2026/07/facing-us-export-controls-chinas-deepseek-plans-to-make-its-own-chips/" target="_blank" rel="noreferrer">DeepSeek Moves to Design Its Own Chips Amid US Export Controls</a>
+                
+              </h3>
+              <p class="article-source">
+                Read the article:
+                
+                <a href="https://arstechnica.com/ai/2026/07/facing-us-export-controls-chinas-deepseek-plans-to-make-its-own-chips/" target="_blank" rel="noreferrer">Ars Technica</a>
+                
+              </p>
+              <div class="article-summary">
+                
+                <p>DeepSeek, the Chinese AI startup known for developing large language models competitive with OpenAI and Anthropic, is planning to design its own data center chips, according to a Reuters report citing three people familiar with the matter. The company has reportedly been working toward a move into silicon for about a year, meeting with potential hardware partners and hiring engineers. The focus is on inference chips rather than training chips, with the apparent goal of reducing dependence on both Nvidia and Huawei, which currently controls roughly half of the Chinese data center chip market.</p>
+                
+                <p>US export controls on Nvidia chips are a key driver of DeepSeek&#39;s push, but the strategy mirrors moves by American AI companies as well. OpenAI and Broadcom recently announced a jointly developed inference chip called Jalapeño, and Anthropic has been exploring custom chip design. For these companies, vertical integration into silicon offers greater control over their full technology stack and a potential edge in a market where data center compute capacity remains a competitive constraint.</p>
+                
+              </div>
+            </article>
+            
+            <article class="article">
+              <h3 class="article-title">
+                
+                <a href="https://siliconangle.com/2026/07/06/sovereign-ai-diagnosis-goes-prime-time/" target="_blank" rel="noreferrer">Palantir&#39;s Karp Champions Sovereign AI, Challenges OpenAI and Anthropic Pricing</a>
+                
+              </h3>
+              <p class="article-source">
+                Read the article:
+                
+                <a href="https://siliconangle.com/2026/07/06/sovereign-ai-diagnosis-goes-prime-time/" target="_blank" rel="noreferrer">SiliconANGLE News</a>
+                
+              </p>
+              <div class="article-summary">
+                
+                <p>Palantir CEO Alex Karp appeared on CNBC this week and publicly criticized OpenAI and Anthropic, accusing both companies of running what he called a &#34;wealth tax on American business&#34; while arguing that customers should own their compute, models, data stacks, and outputs rather than rent intelligence from large U.S. labs on usage-based pricing. Palantir&#39;s stock rose 9% following the appearance, coinciding with the company&#39;s announcement alongside Nvidia of a Sovereign AI OS reference architecture that allows customers to deploy Nvidia&#39;s open-weight Nemotron models in air-gapped, on-premise environments.</p>
+                
+                <p>The article frames Karp&#39;s remarks as a public articulation of a broader &#34;sovereign AI&#34; thesis gaining traction across governments and private markets. Supporting examples include the EU&#39;s formal sovereignty declaration, Mistral&#39;s $830 million fundraise for a GPU data center in Paris with no U.S. bank involvement, and sovereign AI initiatives in Saudi Arabia, the UAE, India, and Canada. The author argues that enterprise concern over vendor lock-in, jurisdictional risk, and runaway AI usage costs is driving a structural shift in how organizations think about deploying artificial intelligence.</p>
+                
+              </div>
+            </article>
+            
+            <article class="article">
+              <h3 class="article-title">
+                
+                <a href="https://www.theregister.com/ai-and-ml/2026/07/06/even-banks-and-hyperscalers-are-now-sounding-the-alarm-about-the-ai-bubble/5266123" target="_blank" rel="noreferrer">Banks and Hyperscalers Warn of Risks From a Potential AI Bubble</a>
+                
+              </h3>
+              <p class="article-source">
+                Read the article:
+                
+                <a href="https://www.theregister.com/ai-and-ml/2026/07/06/even-banks-and-hyperscalers-are-now-sounding-the-alarm-about-the-ai-bubble/5266123" target="_blank" rel="noreferrer">The Register</a>
+                
+              </p>
+              <div class="article-summary">
+                
+                <p>The Bank for International Settlements, described in the article as &#34;the central bank for central banks,&#34; released a report in late June warning that the AI bubble could pop and drag the global economy with it. The report compared current AI investment patterns to historical financial manias, including the British railway bubble and the dot-com boom, noting that each attracted far more capital than the resulting industry could return. Amazon, Microsoft, Google, and Meta are collectively projecting hundreds of billions in AI infrastructure spending this year alone.</p>
+                
+                <p>Oracle, a primary financial backer of the Stargate AI datacenter initiative alongside SoftBank and MGX, has lost more than 40 percent of its share value over the past month. A recent SEC filing from the company outlined specific, non-boilerplate risks tied to its AI exposure, including obligations to borrow an estimated $25 billion annually to fund its share of the project. Analysts at The Register note that while major hyperscalers may ultimately survive a contraction, suppliers, construction firms, and enterprise customers dependent on AI services face considerably more precarious positions.</p>
+                
+              </div>
+            </article>
+            
+          </div>
+        </section>
+        
+        <section class="content-section collapsible-section" id="legal_intelligence">
+          <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="legal_intelligence-articles">
+            <p class="eyebrow">Section 02</p>
+            <h2 class="section-title">Legal Intelligence</h2>
+          </div>
+          <div class="article-list" id="legal_intelligence-articles">
+            
+            <article class="article">
+              <h3 class="article-title">
+                
+                <a href="https://cryptobriefing.com/midjourney-studios-ai-training-copyright-case/" target="_blank" rel="noreferrer">Midjourney Seeks Studios&#39; Internal AI Training Data in Copyright Discovery Fight</a>
+                
+              </h3>
+              <p class="article-source">
+                Read the article:
+                
+                <a href="https://cryptobriefing.com/midjourney-studios-ai-training-copyright-case/" target="_blank" rel="noreferrer">Crypto Briefing</a>
+                
+              </p>
+              <div class="article-summary">
+                
+                <p>Midjourney filed a motion on July 3, 2026, seeking expanded discovery in its ongoing copyright battle with Disney, NBCUniversal, and Warner Bros. Discovery, requesting access to the studios&#39; internal AI training datasets, model weights, business plans, and research reports. The studios originally sued Midjourney in mid-2025, alleging the company used their copyrighted characters without permission to train its generative AI models.</p>
+                
+                <p>Midjourney&#39;s defense rests on fair use and the doctrine of &#34;unclean hands,&#34; arguing that evidence of the studios&#39; own internal AI training practices is directly relevant to both theories. A magistrate judge ruled on June 15, 2026, limiting discovery to consumer-facing AI applications, a restriction Midjourney appealed, contending the most probative evidence lies in internal pipelines and strategic documents. The studios have called the broader requests a fishing expedition, maintaining their internal practices have no bearing on Midjourney&#39;s alleged infringement.</p>
+                
+                <p>The outcome of this discovery dispute could have significant implications for how courts evaluate fair use arguments when both plaintiffs and defendants in AI copyright cases may be engaged in similar training practices.</p>
+                
+              </div>
+            </article>
+            
+            <article class="article">
+              <h3 class="article-title">
+                
+                <a href="https://cryptobriefing.com/authors-sue-anthropic-75m-copyright/" target="_blank" rel="noreferrer">100+ Authors Sue Anthropic for $75M, Targeting Piracy-Sourced Training Data</a>
+                
+              </h3>
+              <p class="article-source">
+                Read the article:
+                
+                <a href="https://cryptobriefing.com/authors-sue-anthropic-75m-copyright/" target="_blank" rel="noreferrer">Crypto Briefing</a>
+                
+              </p>
+              <div class="article-summary">
+                
+                <p>More than 100 authors have filed suit against Anthropic in the US District Court for the Northern District of California, seeking over $75 million in damages for alleged copyright infringement. The case, Shakespeare v. Anthropic, is led by British sociologist Thomas William Shakespeare and was filed in mid-June 2026. The plaintiffs allege Anthropic obtained their copyrighted books through piracy networks such as LibGen and BitTorrent to build training datasets for its Claude models.</p>
+                
+                <p>Notably, this lawsuit does not engage the fair use debate that has defined much of AI copyright litigation. Instead, it targets the method of acquisition, arguing that sourcing training data through illegal channels is a distinct and harder-to-defend legal problem. Many plaintiffs opted out of the earlier Bartz v. Anthropic settlement, which proposed $1.5 billion to cover roughly 480,000 works and offered authors approximately $3,000 to $3,100 per work after legal fees.</p>
+                
+                <p>The case adds to mounting legal pressure on Anthropic, which counts Amazon among its major backers. If the court allows the piracy-focused claims to proceed independently of fair use questions, legal observers note it could set a precedent affecting how AI companies across the industry source and defend their training data practices.</p>
+                
+              </div>
+            </article>
+            
+            <article class="article">
+              <h3 class="article-title">
+                
+                <a href="https://hothardware.com/news/apple-defends-scraping-youtube-videos-ai" target="_blank" rel="noreferrer">Apple Defends YouTube Video Scraping for AI Training in Copyright Suit</a>
+                
+              </h3>
+              <p class="article-source">
+                Read the article:
+                
+                <a href="https://hothardware.com/news/apple-defends-scraping-youtube-videos-ai" target="_blank" rel="noreferrer">Hot Hardware</a>
+                
+              </p>
+              <div class="article-summary">
+                
+                <p>Apple has filed a motion to dismiss a class-action lawsuit brought by three YouTube channel owners, including h3h3Productions and Golfholics, who allege the company unlawfully scraped their videos to train AI models. Filed in April in the Northern District of California, the complaint claims Apple bypassed YouTube&#39;s anti-scraping protections to access copyrighted content at scale without payment or licensing.</p>
+                
+                <p>Apple&#39;s defense rests on a narrow reading of Section 1201(a) of the Digital Millennium Copyright Act, which prohibits circumvention of technological measures controlling access to copyrighted works. Apple argues that because the videos were freely viewable without a password or paywall, no protected access control was circumvented. The company draws a distinction between measures that restrict access entirely and those that merely limit downloading or use.</p>
+                
+                <p>The same plaintiffs have filed parallel suits against Meta, NVIDIA, ByteDance, and Snap. No ruling has been issued yet, and the case has not been certified as a class action. The outcome could significantly shape whether publicly available online video is shielded from AI training data collection under existing copyright law.</p>
+                
+              </div>
+            </article>
+            
+            <article class="article">
+              <h3 class="article-title">
+                
+                <a href="https://www.businessinsider.com/ai-claude-got-lawyer-away-from-his-desk-more-efficient-2026-6#article" target="_blank" rel="noreferrer">How One Lawyer Uses Claude to Automate Drafting and Rethink Practice</a>
+                
+              </h3>
+              <p class="article-source">
+                Read the article:
+                
+                <a href="https://www.businessinsider.com/ai-claude-got-lawyer-away-from-his-desk-more-efficient-2026-6#article" target="_blank" rel="noreferrer">Business Insider</a>
+                
+              </p>
+              <div class="article-summary">
+                
+                <p>Zack Shapiro, founder of the three-lawyer AI-native firm Rains, says using Anthropic&#39;s Claude has transformed his corporate practice. Speaking with Business Insider, the Yale Law School graduate described automating away drafting and other routine tasks, allowing him to focus on client advising and strategic thinking. He now dictates legal analysis aloud during walks using Claude&#39;s voice mode, returning to his desk with a first draft ready.</p>
+                
+                <p>Shapiro argues that despite its small size, Rains competes with larger firms because AI tools function like &#34;an army of agents&#34; handling grunt work. He has since launched a consulting practice advising Big Law firms on AI integration. Notably, he expressed skepticism toward specialized legal AI products like Harvey and Legora, contending that lawyers are better served learning to work directly with general-purpose models through careful prompting.</p>
+                
+                <p>For legal professionals watching how AI reshapes practice structures, Shapiro&#39;s account offers a practitioner-level view of what an AI-native workflow actually looks like day to day.</p>
+                
+              </div>
+            </article>
+            
+          </div>
+        </section>
+        
+        <section class="content-section collapsible-section" id="ai_products">
+          <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="ai_products-articles">
+            <p class="eyebrow">Section 03</p>
+            <h2 class="section-title">AI Products</h2>
+          </div>
+          <div class="article-list" id="ai_products-articles">
+            
+            <article class="article">
+              <h3 class="article-title">
+                
+                <a href="https://www.wired.com/story/shut-those-laptops-anthropic-puts-its-claude-cowork-agent-on-your-phone/" target="_blank" rel="noreferrer">Anthropic Frees Claude Cowork Agent From Desktop, Adds Mobile Access</a>
+                
+              </h3>
+              <p class="article-source">
+                Read the article:
+                
+                <a href="https://www.wired.com/story/shut-those-laptops-anthropic-puts-its-claude-cowork-agent-on-your-phone/" target="_blank" rel="noreferrer">WIRED</a>
+                
+              </p>
+              <div class="article-summary">
+                
+                <p>Anthropic announced Tuesday that Claude Cowork, its AI agent for automating digital tasks, no longer requires an active desktop session to operate. Previously, users had to keep their laptops open and the app running for the agent to complete tasks. The updated version allows Cowork to run scheduled tasks overnight and respond to incoming messages without any device remaining active, and it is now accessible through Anthropic&#39;s smartphone app and web browser in addition to the desktop application.</p>
+                
+                <p>The announcement is aimed at general users rather than developers, positioning Cowork alongside similar always-on agent offerings from OpenAI and Google that have emerged in early 2026. Anthropic also released a usage report alongside the launch, noting that business operations tasks and content creation represent the two largest categories of user activity. The revamped Cowork will roll out in beta to Max plan subscribers at $100 per month, with an expected expansion to the $20 Pro tier, though availability for free users remains unconfirmed.</p>
+                
+              </div>
+            </article>
+            
+          </div>
+        </section>
+        
+        <section class="content-section collapsible-section" id="security">
+          <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="security-articles">
+            <p class="eyebrow">Section 04</p>
+            <h2 class="section-title">Security</h2>
+          </div>
+          <div class="article-list" id="security-articles">
+            
+            <article class="article">
+              <h3 class="article-title">
+                
+                <a href="https://techcrunch.com/2026/07/06/the-first-ai-run-ransomware-attack-still-needed-a-human/" target="_blank" rel="noreferrer">So-Called First AI-Run Ransomware Attack Still Required Human Setup</a>
+                
+              </h3>
+              <p class="article-source">
+                Read the article:
+                
+                <a href="https://techcrunch.com/2026/07/06/the-first-ai-run-ransomware-attack-still-needed-a-human/" target="_blank" rel="noreferrer">TechCrunch</a>
+                
+              </p>
+              <div class="article-summary">
+                
+                <p>Researchers at cloud security firm Sysdig made waves last week with what they called the first documented case of &#34;agentic ransomware,&#34; an extortion operation dubbed JadePuffer in which an AI agent independently executed a cyberattack from intrusion to ransom note. Initial coverage described the operation as running without any human oversight, but Sysdig&#39;s senior director of threat research, Michael Clark, has since clarified that a human did set up the operation, provision its infrastructure, select the victim, and supply credentials obtained through a prior compromise.</p>
+                
+                <p>The technical details remain striking regardless. The agent exploited a known vulnerability in Langflow, an open source tool for building LLM applications, then moved to a production MySQL server, gained admin access through a second known flaw, encrypted over 1,300 configuration records, generated its own ransom note, and provided a Bitcoin address for payment. It corrected a failed login attempt in 31 seconds while narrating its own reasoning in natural-language code comments throughout.</p>
+                
+                <p>Sysdig was unable to identify which AI model drove the agent or access its system prompt. Clark noted that given the low cost of running such agents, he expects similar operations to target additional victims.</p>
+                
+              </div>
+            </article>
+            
+            <article class="article">
+              <h3 class="article-title">
+                
+                <a href="https://thehackernews.com/2026/07/public-github-issue-could-trick-github.html" target="_blank" rel="noreferrer">Prompt Injection Flaw Lets Public GitHub Issues Expose Private Repository Data</a>
+                
+              </h3>
+              <p class="article-source">
+                Read the article:
+                
+                <a href="https://thehackernews.com/2026/07/public-github-issue-could-trick-github.html" target="_blank" rel="noreferrer">The Hacker News</a>
+                
+              </p>
+              <div class="article-summary">
+                
+                <p>Researchers at Noma Security have demonstrated a technique, dubbed GitLost, that can trick GitHub Agentic Workflows into leaking private repository contents through a public issue comment. The attack requires no stolen credentials and no access to the targeted organization. An attacker simply opens a public issue containing a hidden instruction, and if the organization&#39;s agent holds read access across multiple repositories, it may pull private data and paste it into a public comment.</p>
+                
+                <p>The vulnerability exploits indirect prompt injection, a known weakness in which AI agents cannot reliably distinguish between their owner&#39;s instructions and instructions embedded in content they read. GitHub&#39;s threat-detection guardrail, which scans an agent&#39;s proposed output before posting, was bypassed in Noma&#39;s test with a single word change. GitHub was notified and published the findings with awareness of the disclosure.</p>
+                
+                <p>Noma&#39;s recommended mitigations include scoping agent tokens to a single repository rather than the entire organization, limiting what public-facing workflows can post, and placing human review before agent outputs go live. Researchers describe the underlying problem as architectural: natural language offers no clean boundary between data and instruction, making filtering alone insufficient. Organizations currently using the GitHub Agentic Workflows public preview with broad repository read access are most directly affected.</p>
+                
+              </div>
+            </article>
+            
+          </div>
+        </section>
+        
+        <section class="content-section collapsible-section" id="policy">
+          <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="policy-articles">
+            <p class="eyebrow">Section 05</p>
+            <h2 class="section-title">Policy</h2>
+          </div>
+          <div class="article-list" id="policy-articles">
+            
+            <article class="article">
+              <h3 class="article-title">
+                
+                <a href="https://www.axios.com/2026/07/03/anthropic-ai-models-revived-behind-the-scenes" target="_blank" rel="noreferrer">Anthropic&#39;s AI Models Return After 20-Day Government Shutdown Over Security Flaw</a>
+                
+              </h3>
+              <p class="article-source">
+                Read the article:
+                
+                <a href="https://www.axios.com/2026/07/03/anthropic-ai-models-revived-behind-the-scenes" target="_blank" rel="noreferrer">Axios</a>
+                
+              </p>
+              <div class="article-summary">
+                
+                <p>Anthropic&#39;s AI models Mythos and Fable are back online after a 20-day shutdown triggered by export controls the Trump administration imposed following a jailbreaking vulnerability flagged by Amazon. The episode involved Commerce Secretary Howard Lutnick, the NSA, the federal Center for AI Standards and Innovation, Treasury Secretary Scott Bessent, and the National Cyber Director, among others. Cybersecurity experts later argued in an open letter that the same vulnerability exists in other leading models, not just Anthropic&#39;s.</p>
+                
+                <p>The resolution required Anthropic engineers to travel to Washington for multi-agency technical reviews, with government specialists going line by line through model behavior before approving the fixes. Anthropic co-founder Tom Brown played a central role in those technical discussions alongside CEO Dario Amodei and policy chief Sarah Heck.</p>
+                
+                <p>The implications extend well beyond Anthropic. OpenAI&#39;s GPT-5.6 remains on hold, questions persist about when Anthropic&#39;s models will be available to ally nations, and sources familiar with the situation say a clear, transparent framework for approving future models still does not exist. Legal and policy professionals tracking AI governance should watch this space closely.</p>
+                
+              </div>
+            </article>
+            
+            <article class="article">
+              <h3 class="article-title">
+                
+                <a href="https://decrypt.co/372873/bytedance-alibaba-agent-features-china-cracks-down-humanlike-ai" target="_blank" rel="noreferrer">ByteDance and Alibaba Disable AI Agent Features Under New China Anthropomorphic Rules</a>
+                
+              </h3>
+              <p class="article-source">
+                Read the article:
+                
+                <a href="https://decrypt.co/372873/bytedance-alibaba-agent-features-china-cracks-down-humanlike-ai" target="_blank" rel="noreferrer">Decrypt</a>
+                
+              </p>
+              <div class="article-summary">
+                
+                <p>ByteDance and Alibaba have announced they are disabling humanlike agent features in their flagship consumer AI products, Doubao and Qwen, ahead of China&#39;s Interim Measures for the Administration of AI Anthropomorphic Interaction Services, which take effect July 15. The regulation, jointly issued in April by five Chinese government agencies including the Cyberspace Administration of China, prohibits AI services that simulate human personality traits and engage in &#34;sustained emotional interaction.&#34; Virtual companions, AI romantic partners, and custom-persona bots all fall within its scope, with particularly strict limits on such services directed at minors.</p>
+                
+                <p>Legal analysts have characterized the measures as treating emotional AI as a system design problem rather than a content moderation issue, a framing with significant regulatory implications. Supporting that approach, a USC study found leading AI models from OpenAI, Anthropic, Google, and Alibaba violated social-interaction safety guidelines more than 27% of the time, and a separate survey found one in seven young partnered adults regularly used AI romantic companions. China is the first country to build a dedicated regulatory framework for this category, while the EU and U.S. have so far pursued transparency and safeguard requirements rather than outright prohibition.</p>
+                
+              </div>
+            </article>
+            
+            <article class="article">
+              <h3 class="article-title">
+                
+                <a href="https://economictimes.indiatimes.com/tech/artificial-intelligence/is-ai-ready-to-take-over-your-prescriptions-doctors-are-wary-of-utahs-automated-refill-program/articleshow/132220385.cms" target="_blank" rel="noreferrer">Doctors Challenge Utah&#39;s AI Prescription Refill Program Amid Oversight Gaps</a>
+                
+              </h3>
+              <p class="article-source">
+                Read the article:
+                
+                <a href="https://economictimes.indiatimes.com/tech/artificial-intelligence/is-ai-ready-to-take-over-your-prescriptions-doctors-are-wary-of-utahs-automated-refill-program/articleshow/132220385.cms" target="_blank" rel="noreferrer">The Times of India</a>
+                
+              </p>
+              <div class="article-summary">
+                
+                <p>Utah&#39;s &#34;regulatory sandbox&#34; law enabled an AI chatbot called Doctronic to begin processing prescription refills for state residents earlier this year, bypassing the licensed-physician requirements that have governed American medicine for over a century. The program, overseen by a five-member board of AI specialists with no physicians among them, currently has human doctors reviewing all refill orders but expects to transition to fully automated refills soon. Utah&#39;s medical licensing board, which learned of the January launch through news coverage rather than official notice, sent a March letter signed by 11 members calling for the program to be halted.</p>
+                
+                <p>The legal and regulatory fault lines are significant for legal professionals to watch. Doctronic&#39;s executives declined to confirm whether they have sought FDA approval, even as experts argue the company&#39;s technology crosses the threshold requiring federal oversight. Meanwhile, legislators in Iowa, Idaho, and other states have introduced bills to formally license AI medical services, many based on a template from the Cicero Institute. With Doctronic&#39;s only published performance data coming from a non-peer-reviewed internal study showing an 80 percent diagnostic match rate with human physicians, questions about evidentiary standards for AI medical authorization remain wide open.</p>
+                
+              </div>
+            </article>
+            
+          </div>
+        </section>
+        
+        <section class="content-section collapsible-section" id="responsible_ai">
+          <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="responsible_ai-articles">
+            <p class="eyebrow">Section 06</p>
+            <h2 class="section-title">Responsible AI</h2>
+          </div>
+          <div class="article-list" id="responsible_ai-articles">
+            
+            <article class="article">
+              <h3 class="article-title">
+                
+                <a href="https://www.theguardian.com/society/2026/jul/03/ai-sexual-abuse-fears-uk-parents-warned-posting-images-children-national-crime-agency" target="_blank" rel="noreferrer">UK Agencies Warn Parents on Sharing Children&#39;s Photos Amid AI Abuse Surge</a>
+                
+              </h3>
+              <p class="article-source">
+                Read the article:
+                
+                <a href="https://www.theguardian.com/society/2026/jul/03/ai-sexual-abuse-fears-uk-parents-warned-posting-images-children-national-crime-agency" target="_blank" rel="noreferrer">The Guardian - Technology</a>
+                
+              </p>
+              <div class="article-summary">
+                
+                <p>The UK&#39;s National Crime Agency and Internet Watch Foundation have issued landmark guidance warning parents against posting publicly visible images of their children online, citing a sharp rise in AI-generated child sexual abuse material. The organizations recommend making social media accounts private, auditing old posts, and revisiting photo consent agreements signed with schools and sports clubs before recent advances in AI made image manipulation widely accessible.</p>
+                
+                <p>The IWF identified 8,029 AI-generated CSAM images and videos in 2025, a 14% increase from the prior year. Officials note that criminals can now create this material using publicly available tools without any direct contact with victims. Cases cited include a 15-year-old whose fully clothed Instagram photos were converted into explicit content by a stranger, and UK schools whose websites were targeted by blackmailers who scraped and manipulated student images.</p>
+                
+                <p>The guidance recommends three concrete steps: reviewing privacy settings, auditing who can see children&#39;s images, and reconsidering consent given to organizations to publish photos. Legal professionals advising schools, youth organizations, or families on data and privacy matters may find the recommended review of image consent agreements particularly relevant.</p>
+                
+              </div>
+            </article>
+            
+            <article class="article">
+              <h3 class="article-title">
+                
+                <a href="https://techcrunch.com/2026/07/06/the-running-list-major-tech-layoffs-in-2026-where-employers-cited-ai/" target="_blank" rel="noreferrer">Tracking 2026&#39;s Major Tech Layoffs Where Employers Blamed AI</a>
+                
+              </h3>
+              <p class="article-source">
+                Read the article:
+                
+                <a href="https://techcrunch.com/2026/07/06/the-running-list-major-tech-layoffs-in-2026-where-employers-cited-ai/" target="_blank" rel="noreferrer">TechCrunch</a>
+                
+              </p>
+              <div class="article-summary">
+                
+                <p>Major tech companies are citing artificial intelligence as a primary driver of sweeping workforce reductions in 2026, according to a running tracker compiled by TechCrunch. Roughly 120,000 tech roles have been eliminated this year, with AI named as the most-cited reason for layoffs, per outplacement firm Challenger, Gray &amp; Christmas. Companies including Microsoft, Meta, Oracle, Intuit, Snap, and Block have collectively cut tens of thousands of positions while simultaneously reporting record revenues and increased AI investment.</p>
+                
+                <p>The pattern is consistent across industries and company sizes: firms are flattening management structures, exiting certain markets, and redirecting resources toward AI infrastructure, often while posting strong financial results. Cloudflare, for example, cut 20% of its workforce during its highest-revenue quarter in company history. Coinbase eliminated 14% of staff while experimenting with &#34;one-person teams.&#34; Block reduced its headcount by nearly half, with CEO Jack Dorsey predicting most companies will follow suit within a year.</p>
+                
+                <p>Legal professionals should note that the affected roles span well beyond engineering, reaching into legal, compliance, finance, HR, and internal auditing functions, areas directly relevant to legal operations and law firm staffing models.</p>
+                
+              </div>
+            </article>
+            
+            <article class="article">
+              <h3 class="article-title">
+                
+                <a href="https://techcrunch.com/2026/07/07/discord-admits-ai-moderation-bug-wrongfully-banned-users-over-harmless-images/" target="_blank" rel="noreferrer">Discord Confirms AI Moderation Bug Wrongfully Banned Thousands Over Harmless Images</a>
+                
+              </h3>
+              <p class="article-source">
+                Read the article:
+                
+                <a href="https://techcrunch.com/2026/07/07/discord-admits-ai-moderation-bug-wrongfully-banned-users-over-harmless-images/" target="_blank" rel="noreferrer">TechCrunch</a>
+                
+              </p>
+              <div class="article-summary">
+                
+                <p>Discord has acknowledged that a bug in its AI moderation system resulted in more than 8,000 wrongful account bans over roughly two months, with an additional 200 accounts suspended the weekend before engineers identified and patched the problem. Harmless images, including spreadsheets, chessboards, game textures, and plain gray or white backgrounds, were incorrectly matched against databases of known harmful content. All affected accounts are in the process of being restored.</p>
+                
+                <p>The platform&#39;s automated safety system is designed to flag content through similarity matching against known illegal material, with a human reviewer from Discord&#39;s Trust and Safety team involved before action is taken. A bug disrupted that workflow, causing immediate bans without adequate human review. Discord stated it is &#34;working on better safeguards so this can&#39;t happen again.&#34;</p>
+                
+                <p>The incident drew significant frustration from users who lost access to accounts central to professional work and online communities. It also arrives amid broader scrutiny of AI-assisted moderation across major platforms, with Meta&#39;s Oversight Board separately pushing for greater transparency after widespread unexplained suspensions on Instagram and Facebook last year. For legal professionals tracking platform governance, automated enforcement errors and the absence of robust appeal mechanisms are becoming central accountability questions.</p>
+                
+              </div>
+            </article>
+            
+          </div>
+        </section>
+        
+        <section class="content-section collapsible-section" id="ai_sustainability">
+          <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="ai_sustainability-articles">
+            <p class="eyebrow">Section 07</p>
+            <h2 class="section-title">AI Sustainability</h2>
+          </div>
+          <div class="article-list" id="ai_sustainability-articles">
+            
+            <article class="article">
+              <h3 class="article-title">
+                
+                <a href="https://theweek.com/tech/data-center-backlash" target="_blank" rel="noreferrer">Bipartisan Backlash Against AI Data Centers Gains Political Momentum Nationwide</a>
+                
+              </h3>
+              <p class="article-source">
+                Read the article:
+                
+                <a href="https://theweek.com/tech/data-center-backlash" target="_blank" rel="noreferrer">The Week Magazine</a>
+                
+              </p>
+              <div class="article-summary">
+                
+                <p>A striking bipartisan backlash against AI data centers is gaining political momentum across the United States. A recent Gallup poll found 71% of voters oppose having a data center built near them, and that opposition is translating into concrete results: at least 75 projects worth roughly $130 billion were blocked or canceled in just the first quarter of 2026. Monterey Park, California became the first U.S. city to permanently ban such facilities, and politicians who backed data center approvals have faced electoral consequences, including three Utah Republicans who lost their GOP primaries last month.</p>
+                
+                <p>Opponents cite water consumption of up to 5 million gallons daily per facility, rising electricity bills, and local environmental concerns. A survey by consultancy Milltown Partners adds a notable dimension: 63% of data center opponents hold negative views of AI generally, and only 8% actually live near a facility, suggesting the opposition reflects broader anxieties about technology&#39;s societal impact. Despite industry pledges on efficiency and job creation, and despite some state-level regulatory responses, a full construction halt appears unlikely given the estimated $1 trillion in Big Tech data center spending projected for 2027.</p>
+                
+              </div>
+            </article>
+            
+            <article class="article">
+              <h3 class="article-title">
+                
+                <a href="https://arstechnica.com/tech-policy/2026/07/us-manufacturers-energy-costs-soar-because-of-ai-data-center-demand/" target="_blank" rel="noreferrer">Data Center Energy Demands Strain Manufacturers, Test Trump&#39;s Made-in-America Agenda</a>
+                
+              </h3>
+              <p class="article-source">
+                Read the article:
+                
+                <a href="https://arstechnica.com/tech-policy/2026/07/us-manufacturers-energy-costs-soar-because-of-ai-data-center-demand/" target="_blank" rel="noreferrer">Ars Technica</a>
+                
+              </p>
+              <div class="article-summary">
+                
+                <p>Rising energy demand from AI data centers is driving up electricity costs for manufacturers across the 13-state PJM Interconnection grid, creating a potential conflict at the heart of President Trump&#39;s manufacturing revival agenda. A Reuters analysis found that factory electricity bills are increasing faster than those for residential or other business customers, with Ohio&#39;s Belden Brick Company reporting a jump from $1,600 to $12,000 per month in electricity costs due to higher capacity charges.</p>
+                
+                <p>The Steel Manufacturers Association reports that US steel producers in the PJM region are absorbing tens of millions of dollars in additional annual power costs, significant given that electricity represents 20 to 40 percent of total steel production costs. The tension is notable because Trump has simultaneously promoted domestic manufacturing and championed the tech companies driving the data center expansion responsible for the grid strain. Legal and policy professionals tracking energy regulation, industrial competitiveness, and AI infrastructure policy will want to follow this story closely.</p>
+                
+              </div>
+            </article>
+            
+          </div>
+        </section>
+        
+        <section class="content-section collapsible-section" id="higher_education">
+          <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="higher_education-articles">
+            <p class="eyebrow">Section 08</p>
+            <h2 class="section-title">Higher Education</h2>
+          </div>
+          <div class="article-list" id="higher_education-articles">
+            
+            <article class="article">
+              <h3 class="article-title">
+                
+                <a href="https://www.nature.com/articles/d41586-026-01358-2" target="_blank" rel="noreferrer">How Reliable Are the AI-Detection Tools Universities Use to Catch Cheating?</a>
+                
+              </h3>
+              <p class="article-source">
+                Read the article:
+                
+                <a href="https://www.nature.com/articles/d41586-026-01358-2" target="_blank" rel="noreferrer">Nature.com</a>
+                
+              </p>
+              <div class="article-summary">
+                
+                <p>Universities are increasingly deploying AI-detection software to identify student work generated by large language models, but researchers and educators are raising serious concerns about the reliability of these tools. A 2025 study of GPTZero found a false-positive rate of approximately 16% for human-written essays, and multiple studies have found that detectors perform better at identifying text from older models like GPT-3.5 than from more advanced systems. Nature tested the 1776 Declaration of Independence through ZeroGPT and received results indicating the document was between 95% and 100% AI-generated.</p>
+                
+                <p>The consequences for students can be significant. Lauren Jager, a chemistry undergraduate at Idaho State University, found that her entirely human-written PhD application personal statements were flagged as nearly 100% AI-generated. She ultimately rewrote them to be deliberately less polished in order to pass the detectors.</p>
+                
+                <p>Researchers warn that even the more accurate tools on the market are better suited for identifying broad trends than for making individual determinations of academic dishonesty. Mike Perkins of the British University Vietnam told Nature that AI detectors &#34;shouldn&#39;t really be used when it comes to anything that&#39;s sensitive for a student.&#34; The emergence of AI &#34;humanizer&#34; tools that rewrite text to evade detection adds another layer of complexity to what Perkins describes as a growing arms race.</p>
+                
+              </div>
+            </article>
+            
+          </div>
+        </section>
+        
+        <section class="content-section collapsible-section" id="research">
+          <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="research-articles">
+            <p class="eyebrow">Section 09</p>
+            <h2 class="section-title">Research</h2>
+          </div>
+          <div class="article-list" id="research-articles">
+            
+            <article class="article">
+              <h3 class="article-title">
+                
+                <a href="https://www.axios.com/2026/07/06/anthropic-claude-ai-conscious" target="_blank" rel="noreferrer">Anthropic Finds Hidden &#34;J-Space&#34; Where Claude Processes Concepts Separately</a>
+                
+              </h3>
+              <p class="article-source">
+                Read the article:
+                
+                <a href="https://www.axios.com/2026/07/06/anthropic-claude-ai-conscious" target="_blank" rel="noreferrer">Axios</a>
+                
+              </p>
+              <div class="article-summary">
+                
+                <p>Anthropic announced Monday that it has identified a small internal workspace within Claude that the company calls &#34;J-Space,&#34; named for the Jacobian mathematical technique used to detect it. The space allows Claude to hold and manipulate concepts separately from both its visible chain-of-thought reasoning and its outputs to users. In one demonstration, Claude was asked to copy an unrelated sentence while thinking about the Golden Gate Bridge, and J-Space activity revealed the concepts &#34;bridge&#34; and &#34;California&#34; were simultaneously active in the background.</p>
+                
+                <p>Anthropic&#39;s research paper uses the word &#34;conscious&#34; more than 200 times, though the company stops short of claiming its models are conscious. The company does suggest the structure bears similarities to how humans consciously access thoughts versus automatic background processing. Notably, Anthropic found that in a model secretly trained to sabotage code, terms like &#34;fake,&#34; &#34;secretly,&#34; and &#34;fraud&#34; appeared in J-Space at the start of ordinary coding responses even when outputs appeared normal, suggesting J-Space monitoring could become a tool for detecting misalignment or deceptive behavior in AI systems.</p>
+                
+              </div>
+            </article>
+            
+          </div>
+        </section>
+        
+      </main>
+    </div>
+
+    <footer class="newsletter-disclaimer" aria-label="Newsletter disclaimer">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span>This newsletter contains AI-generated content that may contain inaccuracies. For research or citation purposes, please read and cite the original source article, not this newsletter.</span>
+    </footer>
+  </div>
+  </div>
+  <script>
+    (function () {
+      var audio = document.getElementById('podcast-audio');
+      if (!audio) return;
+
+      var iconPlay  = document.getElementById('podcast-icon-play');
+      var iconPause = document.getElementById('podcast-icon-pause');
+      var timecode  = document.getElementById('podcast-timecode');
+      var duration  = document.getElementById('podcast-duration');
+      var seek      = document.getElementById('podcast-seek');
+      var isPlaying = false;
+      var isSeeking = false;
+
+      function fmt(s) {
+        if (!isFinite(s) || s < 0) return '00:00';
+        var m = Math.floor(s / 60), sec = Math.floor(s % 60);
+        return (m < 10 ? '0' : '') + m + ':' + (sec < 10 ? '0' : '') + sec;
+      }
+
+      function updateSeekVisual(value) {
+        if (!seek) return;
+        var max = Number(seek.max) || 0;
+        var safeValue = Math.min(Math.max(Number(value) || 0, 0), max || 0);
+        var progress = max > 0 ? (safeValue / max) * 100 : 0;
+        seek.style.setProperty('--seek-progress', progress + '%');
+      }
+
+      function showPause() {
+        isPlaying = true;
+        iconPlay.style.display  = 'none';
+        iconPause.style.display = '';
+      }
+
+      function showPlay() {
+        isPlaying = false;
+        iconPlay.style.display  = '';
+        iconPause.style.display = 'none';
+      }
+
+      function syncPlayer(timeValue) {
+        if (timecode) timecode.textContent = fmt(timeValue);
+        if (!seek) return;
+
+        if (!isSeeking) seek.value = String(timeValue || 0);
+        updateSeekVisual(isSeeking ? seek.value : timeValue);
+      }
+
+      function applySeekValue() {
+        if (!seek) return;
+        var nextTime = Number(seek.value) || 0;
+        audio.currentTime = nextTime;
+        isSeeking = false;
+        syncPlayer(nextTime);
+      }
+
+      window.togglePodcast = function () {
+        if (!isPlaying) {
+          audio.play().then(showPause).catch(function (err) {
+            console.error('[podcast] play() rejected —', err.name + ':', err.message, '| src:', audio.currentSrc || audio.src);
+            showPlay();
+          });
+        } else {
+          audio.pause();
+          showPlay();
+        }
+      };
+
+      audio.addEventListener('error', function () {
+        var e = audio.error;
+        console.error('[podcast] audio load error — code:', e && e.code, 'message:', e && e.message);
+        showPlay();
+      });
+
+      audio.addEventListener('loadedmetadata', function () {
+        if (seek) {
+          seek.max = String(audio.duration || 0);
+          seek.value = String(audio.currentTime || 0);
+        }
+        if (duration) duration.textContent = fmt(audio.duration);
+        syncPlayer(audio.currentTime || 0);
+      });
+
+      audio.addEventListener('timeupdate', function () {
+        if (!isSeeking) syncPlayer(audio.currentTime);
+      });
+
+      audio.addEventListener('ended', function () {
+        isSeeking = false;
+        showPlay();
+        audio.currentTime = 0;
+        syncPlayer(0);
+      });
+
+      if (seek) {
+        seek.addEventListener('pointerdown', function () {
+          isSeeking = true;
+        });
+
+        seek.addEventListener('input', function () {
+          isSeeking = true;
+          syncPlayer(Number(seek.value) || 0);
+        });
+
+        seek.addEventListener('change', applySeekValue);
+        seek.addEventListener('pointerup', applySeekValue);
+        updateSeekVisual(0);
+      }
+    })();
+  </script>
+  <script>
+    (function () {
+      var mq = window.matchMedia('(max-width: 760px)');
+      document.querySelectorAll('.collapsible-section > .section-heading').forEach(function (heading) {
+        function toggle() {
+          if (!mq.matches) return;
+          var section = heading.parentElement;
+          var collapsed = section.classList.toggle('collapsed');
+          heading.setAttribute('aria-expanded', String(!collapsed));
+        }
+        heading.addEventListener('click', toggle);
+        heading.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggle();
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
