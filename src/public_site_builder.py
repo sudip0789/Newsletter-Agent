@@ -42,6 +42,27 @@ def _format_issue_date(issue_date: str) -> str:
     return resolved_date.strftime("%B ") + f"{day}{suffix}, {resolved_date.year}"
 
 
+def _latest_snapshot_date(root: Path) -> str | None:
+    """Newest issue date present in ``issue_snapshots/``, or None if there are none.
+
+    This is the source of truth for "which issue is the latest" when no explicit
+    date is passed — notably on Vercel, whose build command runs without --date.
+    Falling back to the build host's clock instead would date the home page to the
+    deploy day and, because that date matches no snapshot, both renumber it
+    (ISSUE n+1) and leave the real latest issue duplicated in /issues/.
+    """
+    issues_root = root / "issue_snapshots"
+    if not issues_root.exists():
+        return None
+
+    dated_dirs = [
+        path.name
+        for path in issues_root.iterdir()
+        if path.is_dir() and (path / "headline_picks.json").exists()
+    ]
+    return max(dated_dirs) if dated_dirs else None
+
+
 def _load_archive_headlines(root: Path) -> dict[str, str]:
     archive_path = root / "data" / "output" / "archive.json"
     if not archive_path.exists():
@@ -314,11 +335,16 @@ def build_public_site(
     root = (project_root or Path(__file__).resolve().parent.parent).resolve()
     source_assets = root / "assets"
     target_assets = root / "public" / "assets"
-    latest_issue_date = (
-        normalize_issue_date(publish_date)
-        if publish_date is not None and publish_date_is_resolved
-        else normalize_issue_date(resolve_publication_date(publish_date))
-    )
+    if publish_date is None:
+        # No explicit date (e.g. the Vercel build command): the latest issue is the
+        # newest snapshot, not whatever day the build happens to run on.
+        latest_issue_date = _latest_snapshot_date(root) or normalize_issue_date(
+            resolve_publication_date(None)
+        )
+    elif publish_date_is_resolved:
+        latest_issue_date = normalize_issue_date(publish_date)
+    else:
+        latest_issue_date = normalize_issue_date(resolve_publication_date(publish_date))
 
     # Normalize the generated headline image backgrounds to the headline-card
     # color before they are snapshotted and copied into public/, so the art
@@ -344,23 +370,13 @@ def build_public_site(
         issue for issue in issue_snapshots if issue["issue_date"] != latest_issue_date
     ]
 
-    # Load media.json for the latest issue: prefer the issue snapshot (when publish_date
-    # is known), fall back to data/output/media.json (committed alongside headline_picks.json).
-    if publish_date is not None:
-        if publish_date_is_resolved:
-            issue_date = normalize_issue_date(publish_date)
-        else:
-            issue_date = normalize_issue_date(resolve_publication_date(publish_date))
-        current_media = (
-            _load_media(root / "issue_snapshots" / issue_date / "media.json")
-            or _load_media(root / "data" / "output" / "media.json")
-            or load_media_inputs(root / "data" / "output" / MEDIA_INPUTS_FILENAME)
-        )
-    else:
-        current_media = (
-            _load_media(root / "data" / "output" / "media.json")
-            or load_media_inputs(root / "data" / "output" / MEDIA_INPUTS_FILENAME)
-        )
+    # Load media.json for the latest issue: prefer the issue snapshot, fall back to
+    # data/output/media.json (committed alongside headline_picks.json).
+    current_media = (
+        _load_media(root / "issue_snapshots" / latest_issue_date / "media.json")
+        or _load_media(root / "data" / "output" / "media.json")
+        or load_media_inputs(root / "data" / "output" / MEDIA_INPUTS_FILENAME)
+    )
     media_inputs = load_media_inputs(root / "data" / "output" / MEDIA_INPUTS_FILENAME)
     current_media = {**dict(current_media or {}), **media_inputs}
 
@@ -414,12 +430,14 @@ def build_public_site(
     latest_pdf_path = root / "public" / "newsletter.pdf"
     latest_pdf_name = f"ai-upload-weekly-digest-{latest_issue_date}.pdf"
     latest_html = assembler.run(
-        publish_date=publish_date,
+        # Render from the already-resolved date so the masthead, the archive
+        # exclusion above, and the media/audio paths all agree on one issue date.
+        publish_date=latest_issue_date,
         output_path=str(root / "public" / "index.html"),
         archive_url="issues/" if archive_issues else None,
         pdf_url="newsletter.pdf",
         pdf_download_name=latest_pdf_name,
-        publish_date_is_resolved=publish_date_is_resolved,
+        publish_date_is_resolved=True,
     )
     try:
         from src.pdf_renderer import PdfRenderError, render_html_to_pdf
